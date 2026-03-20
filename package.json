@@ -8,18 +8,23 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "format": "prettier --write .",
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.98",
     "@iconify-json/simple-icons": "^1.2.74",
+    "@nuxt/content": "^3.12.0",
     "@nuxt/ui": "^4.5.1",
+    "@nuxtjs/robots": "^5.7.1",
+    "@nuxtjs/sitemap": "^7.6.0",
     "nuxt": "^4.4.2",
     "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
     "eslint": "^10.0.3",
+    "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5"
   },
