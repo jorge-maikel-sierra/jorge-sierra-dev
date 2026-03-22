@@ -80,11 +80,7 @@ const fetchReadmeTitle = async (fullName: string) => {
   if (resolvedTitles[fullName]) return
 
   try {
-    const res = await fetch(`https://api.github.com/repos/${fullName}/readme`, {
-      headers: {
-        Accept: 'application/vnd.github.v3.raw'
-      }
-    })
+    const res = await fetch(`/api/readme/${fullName}`)
     if (res.status === 403) {
       console.warn(`GitHub API Rate limit hit for README: ${fullName}`)
       return
