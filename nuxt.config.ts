@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/content', '@nuxtjs/sitemap', '@nuxtjs/robots'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/content', '@nuxtjs/sitemap', '@nuxtjs/robots', '@vercel/analytics'],
 
   devtools: {
     enabled: true
@@ -46,10 +46,11 @@ export default defineNuxtConfig({
     }
   },
 
-  routeRules: {
-    '/': { prerender: true },
-    '/projects/**': { prerender: true },
-    '/blog/**': { prerender: true }
+  nitro: {
+    prerender: {
+      failOnError: false,
+      ignore: ['/__nuxt_content/**']
+    }
   },
 
   compatibilityDate: '2025-01-15',
