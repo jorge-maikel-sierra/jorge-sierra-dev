@@ -20,7 +20,7 @@ const props = defineProps<{
         :src="props.image"
         :alt="props.title"
         class="w-full h-48 object-cover rounded-t-lg"
-      />
+      >
     </template>
 
     <div class="flex-1">

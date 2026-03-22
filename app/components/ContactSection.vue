@@ -4,7 +4,10 @@
 </script>
 
 <template>
-  <section id="contact" class="py-24 px-6 text-center">
+  <section
+    id="contact"
+    class="py-24 px-6 text-center"
+  >
     <div class="max-w-2xl mx-auto">
       <h2 class="text-3xl font-bold mb-4">
         Hablemos

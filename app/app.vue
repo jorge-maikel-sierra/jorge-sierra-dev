@@ -1,18 +1,15 @@
 <script setup lang="ts">
 useHead({
-  meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico' }
-  ],
+  meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+  link: [{ rel: 'icon', href: '/favicon.ico' }],
   htmlAttrs: {
     lang: 'es'
   }
 })
 
 const title = 'Jorge Sierra — Desarrollador Full-Stack'
-const description = 'Portafolio profesional de Jorge Sierra. Desarrollo de aplicaciones web modernas con Nuxt, Vue, TypeScript y más.'
+const description
+  = 'Portafolio profesional de Jorge Sierra. Desarrollo de aplicaciones web modernas con Nuxt, Vue, TypeScript y más.'
 
 useSeoMeta({
   title,
@@ -28,9 +25,10 @@ useSeoMeta({
   <UApp>
     <UHeader>
       <template #left>
-        <NuxtLink to="/" class="font-semibold text-lg tracking-tight">
-          Jorge Sierra
-        </NuxtLink>
+        <NuxtLink
+          to="/"
+          class="font-semibold text-lg tracking-tight"
+        > Jorge Sierra </NuxtLink>
       </template>
 
       <template #right>

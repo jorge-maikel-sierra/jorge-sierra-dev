@@ -9,8 +9,8 @@
       Hola, soy Jorge Sierra
     </h1>
     <p class="mt-6 text-xl text-muted max-w-2xl mx-auto">
-      Desarrollador Full-Stack especializado en aplicaciones web modernas con
-      Nuxt, Vue y TypeScript.
+      Desarrollador Full-Stack especializado en aplicaciones web modernas con Nuxt, Vue y
+      TypeScript.
     </p>
     <div class="mt-10 flex gap-4 justify-center flex-wrap">
       <UButton

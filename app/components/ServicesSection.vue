@@ -22,16 +22,14 @@ const services: Service[] = [
   {
     icon: 'i-lucide-zap',
     title: 'Performance & Optimización',
-    description:
-      'Auditorías de rendimiento, SSR/SSG, Core Web Vitals y optimización de carga.',
+    description: 'Auditorías de rendimiento, SSR/SSG, Core Web Vitals y optimización de carga.',
     cta: 'Cotizar',
     ctaUrl: '#contact'
   },
   {
     icon: 'i-lucide-blocks',
     title: 'Consultoría Técnica',
-    description:
-      'Asesoría en arquitectura de proyectos, elección de stack y revisión de código.',
+    description: 'Asesoría en arquitectura de proyectos, elección de stack y revisión de código.',
     cta: 'Agendar llamada',
     ctaUrl: '#contact'
   }
@@ -39,9 +37,14 @@ const services: Service[] = [
 </script>
 
 <template>
-  <section id="services" class="py-20 px-6 bg-muted/40">
+  <section
+    id="services"
+    class="py-20 px-6 bg-muted/40"
+  >
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-4">Servicios</h2>
+      <h2 class="text-3xl font-bold mb-4">
+        Servicios
+      </h2>
       <p class="text-muted mb-12">
         Cómo puedo ayudarte a construir y crecer.
       </p>
