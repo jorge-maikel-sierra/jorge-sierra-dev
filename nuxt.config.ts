@@ -9,13 +9,17 @@ export default defineNuxtConfig({
 
   // Used by @nuxtjs/sitemap and @nuxtjs/robots
   site: {
-    url: 'https://jorge-sierra.dev',
+    // Nuxt automatically handles NUXT_PUBLIC_SITE_URL
     name: 'Jorge Sierra — Desarrollador Full-Stack'
   },
 
-  content: {
-    highlight: {
-      theme: 'github-dark'
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://jorge-sierra.dev',
+      githubUsername: process.env.NUXT_PUBLIC_GITHUB_USERNAME || 'jorge-maikel-sierra',
+      contactEmail: process.env.NUXT_PUBLIC_CONTACT_EMAIL || 'jorgemaikelsierraamaya@gmail.com',
+      linkedinUrl:
+        process.env.NUXT_PUBLIC_LINKEDIN_URL || 'https://www.linkedin.com/in/jorgemaikelsierra/'
     }
   },
 

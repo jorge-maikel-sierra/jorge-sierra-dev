@@ -7,6 +7,7 @@ useHead({
   }
 })
 
+const config = useRuntimeConfig()
 const title = 'Jorge Sierra — Desarrollador Full-Stack'
 const description =
   'Portafolio profesional de Jorge Sierra. Desarrollo de aplicaciones web modernas con Nuxt, Vue, TypeScript y más.'
@@ -16,7 +17,7 @@ useSeoMeta({
   description,
   ogTitle: title,
   ogDescription: description,
-  ogUrl: 'https://jorge-sierra.dev',
+  ogUrl: config.public.siteUrl,
   twitterCard: 'summary_large_image'
 })
 </script>
@@ -32,7 +33,7 @@ useSeoMeta({
         <UColorModeButton />
 
         <UButton
-          to="https://github.com/jorgesierra"
+          :to="`https://github.com/${config.public.githubUsername}`"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"
@@ -53,7 +54,7 @@ useSeoMeta({
 
       <template #right>
         <UButton
-          to="https://github.com/jorgesierra"
+          :to="`https://github.com/${config.public.githubUsername}`"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"
