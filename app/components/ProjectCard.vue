@@ -41,7 +41,7 @@ const getLanguageColor = (lang?: string) => {
             v-if="props.language"
             class="w-3 h-3 rounded-full shadow-sm"
             :style="{ backgroundColor: getLanguageColor(props.language) }"
-          ></span>
+          />
           <span class="text-xs font-medium text-muted-foreground uppercase tracking-wider">
             {{ props.language || 'Code' }}
           </span>

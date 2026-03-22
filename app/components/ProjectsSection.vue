@@ -1,25 +1,50 @@
 <script setup lang="ts">
 // ProjectsSection — grid de proyectos cargados desde GitHub
-import type { Project } from '~/types/project'
-
-const props = defineProps<{}>()
 
 const config = useRuntimeConfig()
 const visibleCount = ref(3)
 const resolvedTitles = reactive<Record<string, string>>({})
 
-const { data: repos, status } = await useFetch<any[]>(
+interface GitHubRepo {
+  name: string
+  full_name: string
+  description: string | null
+  topics?: string[]
+  language: string | null
+  homepage: string | null
+  html_url: string
+  stargazers_count?: number
+  forks_count?: number
+  updated_at: string
+  fork: boolean
+}
+
+export interface DisplayProject {
+  title: string
+  full_name: string
+  description: string
+  tags: string[]
+  url: string
+  repo: string
+  image: string | null
+  stars: number
+  forks: number
+  language?: string | null
+  updatedAt: string
+}
+
+const { data: repos, status } = await useFetch(
   `https://api.github.com/users/${config.public.githubUsername}/repos`,
   {
     query: {
       sort: 'updated',
       per_page: 100
     },
-    transform: (data) => {
-      return data
-        .filter((repo: any) => !repo.fork)
-        .sort((a: any, b: any) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
-        .map((repo: any) => ({
+    transform: (data: unknown) => {
+      return (data as GitHubRepo[])
+        .filter((repo) => !repo.fork)
+        .sort((a, b) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
+        .map((repo) => ({
           title: repo.name,
           full_name: repo.full_name,
           description: repo.description || 'Sin descripción disponible.',
@@ -32,9 +57,9 @@ const { data: repos, status } = await useFetch<any[]>(
           url: repo.homepage || repo.html_url,
           repo: repo.html_url,
           image: null,
-          stars: repo.stargazers_count,
-          forks: repo.forks_count,
-          language: repo.language,
+          stars: repo.stargazers_count || 0,
+          forks: repo.forks_count || 0,
+          language: repo.language || undefined,
           updatedAt: repo.updated_at
         }))
     }
@@ -71,7 +96,7 @@ const fetchReadmeTitle = async (fullName: string) => {
     if (match && match[1]) {
       resolvedTitles[fullName] = match[1].trim()
     }
-  } catch (e) {
+  } catch {
     // Silent fail for non-critical title enrichment
   }
 }
@@ -79,7 +104,7 @@ const fetchReadmeTitle = async (fullName: string) => {
 watch(
   displayItems,
   (newItems) => {
-    newItems.forEach((item: any) => {
+    newItems.forEach((item: DisplayProject) => {
       if (item.full_name) {
         fetchReadmeTitle(item.full_name)
       }
@@ -94,13 +119,18 @@ const loadMore = () => {
 </script>
 
 <template>
-  <section id="projects" class="py-20 px-6">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+  <section id="proyectos" class="pt-10 px-6">
+    <UContainer>
+      <div
+        class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4 border-b border-zinc-900 pb-8"
+      >
         <div>
-          <h2 class="text-3xl font-bold mb-4">Proyectos</h2>
-          <p class="text-muted-foreground">
-            Una selección de mis proyectos y experimentos de código abierto.
+          <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">
+            Portafolio
+          </h2>
+          <h3 class="text-4xl font-bold tracking-tight text-white mb-4">Proyectos destacados</h3>
+          <p class="text-zinc-400 text-lg max-w-2xl">
+            Una selección de mis proyectos más recientes y experimentos de código abierto.
           </p>
         </div>
       </div>
@@ -109,13 +139,13 @@ const loadMore = () => {
         <div
           v-for="i in 3"
           :key="i"
-          class="h-64 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse"
+          class="h-64 rounded-xl bg-zinc-900/50 border border-zinc-800 animate-pulse"
         />
       </div>
 
       <div
         v-else-if="status === 'error' || !items.length"
-        class="text-center py-12 border border-dashed border-gray-200 dark:border-gray-800 rounded-2xl"
+        class="text-center py-16 border border-dashed border-zinc-800 bg-zinc-900/20 rounded-2xl"
       >
         <UIcon
           name="i-lucide-alert-circle"
@@ -145,7 +175,7 @@ const loadMore = () => {
           Ver más proyectos
         </UButton>
       </div>
-    </div>
+    </UContainer>
   </section>
 </template>
 
