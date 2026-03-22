@@ -4,7 +4,8 @@ useSeoMeta({
   description:
     'Portafolio profesional de Jorge Sierra. Ingeniería de software de alto impacto centrado en resolver problemas complejos de negocio con soluciones tecnológicas escalables.',
   ogTitle: 'Jorge Sierra — Software Engineer & Full-Stack Developer',
-  ogDescription: 'Explora mi portafolio y descubre cómo transformo ideas en experiencias digitales de alto impacto.',
+  ogDescription:
+    'Explora mi portafolio y descubre cómo transformo ideas en experiencias digitales de alto impacto.',
   ogType: 'profile',
   keywords: 'Jorge Sierra, Software Engineer, Full-Stack, Vue, Nuxt, TypeScript, Portafolio'
 })

@@ -12,7 +12,8 @@ export default defineNuxtConfig({
   site: {
     url: process.env.NUXT_PUBLIC_SITE_URL || 'https://jorge-sierra.dev',
     name: 'Jorge Sierra — Desarrollador Full-Stack',
-    description: 'Ingeniería de software de alto impacto. Transformando problemas complejos en experiencias digitales memorables.',
+    description:
+      'Ingeniería de software de alto impacto. Transformando problemas complejos en experiencias digitales memorables.',
     defaultLocale: 'es'
   },
 
@@ -23,7 +24,11 @@ export default defineNuxtConfig({
       title: 'Jorge Sierra — Desarrollador Full-Stack',
       meta: [
         { name: 'author', content: 'Jorge Sierra' },
-        { name: 'keywords', content: 'Jorge Sierra, Software Engineer, Full-Stack Developer, Vue.js, Nuxt.js, TypeScript, Desarrollo Web, Colombia' },
+        {
+          name: 'keywords',
+          content:
+            'Jorge Sierra, Software Engineer, Full-Stack Developer, Vue.js, Nuxt.js, TypeScript, Desarrollo Web, Colombia'
+        },
         { name: 'theme-color', content: '#09090b' },
         { name: 'robots', content: 'index, follow' }
       ]
@@ -35,6 +40,7 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://jorge-sierra.dev',
       githubUsername: process.env.NUXT_PUBLIC_GITHUB_USERNAME || 'jorge-maikel-sierra',
       contactEmail: process.env.NUXT_PUBLIC_CONTACT_EMAIL || 'jorgemaikelsierraamaya@gmail.com',
+      contactPhone: process.env.NUXT_PUBLIC_CONTACT_PHONE || '+573187592616',
       linkedinUrl:
         process.env.NUXT_PUBLIC_LINKEDIN_URL || 'https://www.linkedin.com/in/jorgemaikelsierra/'
     }
