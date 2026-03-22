@@ -1,17 +1,18 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Jorge Sierra — Desarrollador Full-Stack',
+  title: 'Jorge Sierra — Software Engineer',
   description:
-    'Portafolio profesional de Jorge Sierra. Aplicaciones web modernas con Nuxt, Vue y TypeScript.'
+    'Portafolio profesional de Jorge Sierra. Transformando ideas en experiencias de alto impacto.'
 })
 </script>
 
 <template>
-  <div>
+  <div class="flex flex-col gap-24 sm:gap-32 pb-24">
     <HeroSection />
-    <SocialProofStrip />
     <ProjectsSection />
-    <ServicesSection />
+    <AboutMeSection />
+    <ExperienceSection />
+    <SkillsSection />
     <ContactSection />
   </div>
 </template>
