@@ -84,7 +84,7 @@ const submitForm = async () => {
               </h4>
               <form class="space-y-6" @submit.prevent="submitForm">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <UFormGroup label="Nombre completo" class="text-zinc-300 font-medium">
+                  <UFormField label="Nombre completo" class="text-zinc-300 font-medium">
                     <UInput
                       v-model="form.name"
                       placeholder="Ej. John Doe"
@@ -92,18 +92,18 @@ const submitForm = async () => {
                       required
                       class="mt-1"
                     />
-                  </UFormGroup>
-                  <UFormGroup label="Empresa (Opcional)" class="text-zinc-300 font-medium">
+                  </UFormField>
+                  <UFormField label="Empresa (Opcional)" class="text-zinc-300 font-medium">
                     <UInput
                       v-model="form.company"
                       placeholder="Ej. Acme Corp"
                       size="lg"
                       class="mt-1"
                     />
-                  </UFormGroup>
+                  </UFormField>
                 </div>
 
-                <UFormGroup label="Mensaje" class="text-zinc-300 font-medium">
+                <UFormField label="Mensaje" class="text-zinc-300 font-medium">
                   <UTextarea
                     v-model="form.message"
                     placeholder="Cuéntame brevemente sobre tu proyecto o el problema que deseas resolver..."
@@ -112,7 +112,7 @@ const submitForm = async () => {
                     required
                     class="mt-1"
                   />
-                </UFormGroup>
+                </UFormField>
 
                 <UButton
                   type="submit"
