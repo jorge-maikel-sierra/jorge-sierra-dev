@@ -74,56 +74,96 @@ const submitForm = async () => {
             </div>
           </div>
 
-          <!-- Simple Form -->
+          <!-- Redesigned Form Card -->
           <div class="lg:col-span-7">
-            <div
-              class="bg-zinc-900/80 border border-zinc-800 rounded-3xl p-8 sm:p-10 shadow-2xl backdrop-blur-sm"
-            >
-              <h4 class="text-2xl font-bold text-white mb-8 tracking-tight">
-                Déjame un mensaje directo
-              </h4>
-              <form class="space-y-6" @submit.prevent="submitForm">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <UFormField label="Nombre completo" class="text-zinc-300 font-medium">
-                    <UInput
-                      v-model="form.name"
-                      placeholder="Ej. John Doe"
-                      size="lg"
+            <div class="relative group">
+              <!-- Decorative background glow behind the card -->
+              <div
+                class="absolute -inset-1 bg-gradient-to-r from-primary/20 to-orange-500/10 rounded-3xl blur-2xl opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"
+              />
+
+              <div
+                class="relative bg-zinc-900/60 border border-zinc-800/80 rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-2xl overflow-hidden"
+              >
+                <!-- Subtle top edge highlight -->
+                <div
+                  class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-zinc-700/50 to-transparent"
+                />
+
+                <h4 class="text-3xl font-bold text-white mb-2 tracking-tight">
+                  Déjame un mensaje directo
+                </h4>
+                <p class="text-zinc-500 mb-10 text-base">
+                  Cuéntame sobre tu idea y hagámosla realidad.
+                </p>
+
+                <form class="space-y-8" @submit.prevent="submitForm">
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                    <UFormField
+                      label="Nombre completo"
+                      class="text-zinc-400 text-sm font-medium uppercase tracking-widest"
+                    >
+                      <UInput
+                        v-model="form.name"
+                        placeholder="Ej. John Doe"
+                        size="xl"
+                        icon="i-lucide-user"
+                        required
+                        class="mt-2 w-full transition-all duration-300 focus-within:scale-[1.01]"
+                        variant="subtle"
+                        color="primary"
+                      />
+                    </UFormField>
+
+                    <UFormField
+                      label="Empresa (Opcional)"
+                      class="text-zinc-400 text-sm font-medium uppercase tracking-widest"
+                    >
+                      <UInput
+                        v-model="form.company"
+                        placeholder="Ej. Acme Corp"
+                        size="xl"
+                        icon="i-lucide-building-2"
+                        class="mt-2 w-full transition-all duration-300 focus-within:scale-[1.01]"
+                        variant="subtle"
+                        color="neutral"
+                      />
+                    </UFormField>
+                  </div>
+
+                  <UFormField
+                    label="Mensaje"
+                    class="text-zinc-400 text-sm font-medium uppercase tracking-widest"
+                  >
+                    <UTextarea
+                      v-model="form.message"
+                      placeholder="Cuéntame brevemente sobre tu proyecto o el problema que deseas resolver..."
+                      :rows="6"
+                      size="xl"
                       required
-                      class="mt-1"
+                      class="mt-2 w-full transition-all duration-300 focus-within:scale-[1.005]"
+                      variant="subtle"
+                      color="primary"
                     />
                   </UFormField>
-                  <UFormField label="Empresa (Opcional)" class="text-zinc-300 font-medium">
-                    <UInput
-                      v-model="form.company"
-                      placeholder="Ej. Acme Corp"
-                      size="lg"
-                      class="mt-1"
-                    />
-                  </UFormField>
-                </div>
 
-                <UFormField label="Mensaje" class="text-zinc-300 font-medium">
-                  <UTextarea
-                    v-model="form.message"
-                    placeholder="Cuéntame brevemente sobre tu proyecto o el problema que deseas resolver..."
-                    :rows="5"
-                    size="lg"
-                    required
-                    class="mt-1"
-                  />
-                </UFormField>
-
-                <UButton
-                  type="submit"
-                  size="xl"
-                  color="neutral"
-                  class="w-full flex justify-center font-bold text-zinc-950 bg-white py-4 mt-8 hover:bg-zinc-200 transition-colors"
-                  :loading="isLoading"
-                >
-                  Enviar Mensaje
-                </UButton>
-              </form>
+                  <div class="pt-4">
+                    <UButton
+                      type="submit"
+                      size="xl"
+                      color="primary"
+                      class="w-full flex justify-center font-bold text-base py-5 rounded-2xl shadow-lg hover:shadow-primary/20 transition-all active:scale-95 disabled:opacity-50"
+                      :loading="isLoading"
+                      trailing-icon="i-lucide-send"
+                    >
+                      Enviar Mensaje
+                    </UButton>
+                    <p class="text-center text-xs text-zinc-600 mt-6 tracking-wide uppercase">
+                      Respondemos usualmente en menos de 24 horas.
+                    </p>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
