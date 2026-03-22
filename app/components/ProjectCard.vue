@@ -20,7 +20,7 @@ const props = defineProps<{
         :src="props.image"
         :alt="props.title"
         class="w-full h-48 object-cover rounded-t-lg"
-      >
+      />
     </template>
 
     <div class="flex-1">
@@ -31,13 +31,7 @@ const props = defineProps<{
         {{ props.description }}
       </p>
       <div class="flex flex-wrap gap-2">
-        <UBadge
-          v-for="tag in props.tags"
-          :key="tag"
-          :label="tag"
-          variant="subtle"
-          size="sm"
-        />
+        <UBadge v-for="tag in props.tags" :key="tag" :label="tag" variant="subtle" size="sm" />
       </div>
     </div>
 

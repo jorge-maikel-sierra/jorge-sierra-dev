@@ -9,7 +9,7 @@ export default defineContentConfig({
       schema: z.object({
         title: z.string(),
         description: z.string().optional(),
-        date: z.string().transform(str => new Date(str)),
+        date: z.string().transform((str) => new Date(str)),
         tags: z.array(z.string()).default([]),
         image: z.string().optional(),
         featured: z.boolean().default(false)
@@ -23,7 +23,7 @@ export default defineContentConfig({
       schema: z.object({
         title: z.string(),
         description: z.string().optional(),
-        date: z.string().transform(str => new Date(str)),
+        date: z.string().transform((str) => new Date(str)),
         tags: z.array(z.string()).default([]),
         url: z.string().optional(),
         repo: z.string().optional(),

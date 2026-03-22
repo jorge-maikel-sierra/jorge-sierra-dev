@@ -8,8 +8,8 @@ useHead({
 })
 
 const title = 'Jorge Sierra — Desarrollador Full-Stack'
-const description
-  = 'Portafolio profesional de Jorge Sierra. Desarrollo de aplicaciones web modernas con Nuxt, Vue, TypeScript y más.'
+const description =
+  'Portafolio profesional de Jorge Sierra. Desarrollo de aplicaciones web modernas con Nuxt, Vue, TypeScript y más.'
 
 useSeoMeta({
   title,
@@ -25,10 +25,7 @@ useSeoMeta({
   <UApp>
     <UHeader>
       <template #left>
-        <NuxtLink
-          to="/"
-          class="font-semibold text-lg tracking-tight"
-        > Jorge Sierra </NuxtLink>
+        <NuxtLink to="/" class="font-semibold text-lg tracking-tight"> Jorge Sierra </NuxtLink>
       </template>
 
       <template #right>
@@ -51,9 +48,7 @@ useSeoMeta({
 
     <UFooter>
       <template #left>
-        <p class="text-sm text-muted">
-          © {{ new Date().getFullYear() }} Jorge Sierra
-        </p>
+        <p class="text-sm text-muted">© {{ new Date().getFullYear() }} Jorge Sierra</p>
       </template>
 
       <template #right>

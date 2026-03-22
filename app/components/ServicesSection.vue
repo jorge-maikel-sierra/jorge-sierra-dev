@@ -37,23 +37,12 @@ const services: Service[] = [
 </script>
 
 <template>
-  <section
-    id="services"
-    class="py-20 px-6 bg-muted/40"
-  >
+  <section id="services" class="py-20 px-6 bg-muted/40">
     <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-4">
-        Servicios
-      </h2>
-      <p class="text-muted mb-12">
-        Cómo puedo ayudarte a construir y crecer.
-      </p>
+      <h2 class="text-3xl font-bold mb-4">Servicios</h2>
+      <p class="text-muted mb-12">Cómo puedo ayudarte a construir y crecer.</p>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <ServiceCard
-          v-for="service in services"
-          :key="service.title"
-          v-bind="service"
-        />
+        <ServiceCard v-for="service in services" :key="service.title" v-bind="service" />
       </div>
     </div>
   </section>

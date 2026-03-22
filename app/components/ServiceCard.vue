@@ -14,10 +14,7 @@ const props = defineProps<{
 <template>
   <UCard class="flex flex-col h-full">
     <div class="flex-1">
-      <UIcon
-        :name="props.icon"
-        class="text-primary w-8 h-8 mb-4"
-      />
+      <UIcon :name="props.icon" class="text-primary w-8 h-8 mb-4" />
       <h3 class="text-lg font-semibold mb-2">
         {{ props.title }}
       </h3>
@@ -26,10 +23,7 @@ const props = defineProps<{
       </p>
     </div>
 
-    <template
-      v-if="props.cta"
-      #footer
-    >
+    <template v-if="props.cta" #footer>
       <UButton
         :to="props.ctaUrl ?? '#contact'"
         size="sm"
