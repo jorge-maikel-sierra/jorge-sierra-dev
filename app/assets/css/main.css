@@ -2,17 +2,30 @@
 @import '@nuxt/ui';
 
 @theme static {
-  --font-sans: 'Public Sans', sans-serif;
+  --font-sans: 'Inter', 'Montserrat', sans-serif;
+  --color-orange-50: #fff4ed;
+  --color-orange-100: #ffe6d5;
+  --color-orange-200: #fecca7;
+  --color-orange-300: #fdac71;
+  --color-orange-400: #fb823c;
+  --color-orange-500: #f86014;
+  --color-orange-600: #e9480b; /* This matches the copper from image */
+  --color-orange-700: #c2330a;
+  --color-orange-800: #9a290f;
+  --color-orange-900: #7c2410;
+  --color-orange-950: #431006;
+}
 
-  --color-green-50: #effdf5;
-  --color-green-100: #d9fbe8;
-  --color-green-200: #b3f5d1;
-  --color-green-300: #75edae;
-  --color-green-400: #00dc82;
-  --color-green-500: #00c16a;
-  --color-green-600: #00a155;
-  --color-green-700: #007f45;
-  --color-green-800: #016538;
-  --color-green-900: #0a5331;
-  --color-green-950: #052e16;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-zinc-950 text-zinc-50;
+  }
+
+  ::selection {
+    @apply bg-orange-500/30 text-white;
+  }
 }
