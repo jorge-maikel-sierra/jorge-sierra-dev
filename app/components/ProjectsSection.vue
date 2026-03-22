@@ -8,6 +8,7 @@ const props = defineProps<{
 
 const config = useRuntimeConfig()
 const visibleCount = ref(3)
+const resolvedTitles = reactive<Record<string, string>>({})
 
 const { data: repos, status } = await useFetch<any[]>(
   `https://api.github.com/users/${config.public.githubUsername}/repos`,
@@ -22,11 +23,12 @@ const { data: repos, status } = await useFetch<any[]>(
         .sort((a: any, b: any) => (b.stargazers_count || 0) - (a.stargazers_count || 0))
         .map((repo: any) => ({
           title: repo.name,
+          full_name: repo.full_name,
           description: repo.description || 'Sin descripción disponible.',
           tags: repo.language ? [repo.language] : [],
           url: repo.homepage || repo.html_url,
           repo: repo.html_url,
-          image: null // GitHub repos don't have images by default
+          image: null
         }))
     }
   }
@@ -34,11 +36,47 @@ const { data: repos, status } = await useFetch<any[]>(
 
 const items = computed(() => {
   if (props.projects) return props.projects
-  return repos.value || []
+  return (repos.value || []).map((item) => ({
+    ...item,
+    title: resolvedTitles[item.full_name] || item.title
+  }))
 })
 
 const displayItems = computed(() => items.value.slice(0, visibleCount.value))
 const hasMore = computed(() => visibleCount.value < items.value.length)
+
+const fetchReadmeTitle = async (fullName: string) => {
+  if (resolvedTitles[fullName]) return
+
+  try {
+    const res = await fetch(`https://api.github.com/repos/${fullName}/readme`, {
+      headers: {
+        Accept: 'application/vnd.github.v3.raw'
+      }
+    })
+    if (!res.ok) return
+
+    const text = await res.text()
+    const match = text.match(/^#\s+(.*)/m)
+    if (match && match[1]) {
+      resolvedTitles[fullName] = match[1].trim()
+    }
+  } catch (e) {
+    console.error(`Error fetching README for ${fullName}:`, e)
+  }
+}
+
+watch(
+  displayItems,
+  (newItems) => {
+    newItems.forEach((item: any) => {
+      if (item.full_name) {
+        fetchReadmeTitle(item.full_name)
+      }
+    })
+  },
+  { immediate: true }
+)
 
 const loadMore = () => {
   visibleCount.value += 3
