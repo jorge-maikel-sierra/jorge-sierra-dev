@@ -18,12 +18,20 @@ useSeoMeta({
   ogTitle: title,
   ogDescription: description,
   ogUrl: config.public.siteUrl,
-  twitterCard: 'summary_large_image'
+  ogSiteName: title,
+  ogImage: `${config.public.siteUrl}/hero.png`,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
+  twitterCard: 'summary_large_image',
+  twitterTitle: title,
+  twitterDescription: description,
+  twitterImage: `${config.public.siteUrl}/hero.png`
 })
 </script>
 
 <template>
   <UApp>
+    <StructuredData />
     <NuxtLayout>
       <!-- Configured with glassmorphism for better depth -->
       <UHeader class="border-b border-zinc-800/50 bg-zinc-950/70 backdrop-blur-xl sticky top-0 z-50">
