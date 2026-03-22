@@ -2,9 +2,7 @@
 // ProjectsSection — grid de proyectos cargados desde GitHub
 import type { Project } from '~/types/project'
 
-const props = defineProps<{
-  projects?: Project[]
-}>()
+const props = defineProps<{}>()
 
 const config = useRuntimeConfig()
 const visibleCount = ref(3)
@@ -25,17 +23,25 @@ const { data: repos, status } = await useFetch<any[]>(
           title: repo.name,
           full_name: repo.full_name,
           description: repo.description || 'Sin descripción disponible.',
-          tags: repo.language ? [repo.language] : [],
+          tags:
+            repo.topics && repo.topics.length > 0
+              ? repo.topics
+              : repo.language
+                ? [repo.language]
+                : [],
           url: repo.homepage || repo.html_url,
           repo: repo.html_url,
-          image: null
+          image: null,
+          stars: repo.stargazers_count,
+          forks: repo.forks_count,
+          language: repo.language,
+          updatedAt: repo.updated_at
         }))
     }
   }
 )
 
 const items = computed(() => {
-  if (props.projects) return props.projects
   return (repos.value || []).map((item) => ({
     ...item,
     title: resolvedTitles[item.full_name] || item.title
@@ -54,6 +60,10 @@ const fetchReadmeTitle = async (fullName: string) => {
         Accept: 'application/vnd.github.v3.raw'
       }
     })
+    if (res.status === 403) {
+      console.warn(`GitHub API Rate limit hit for README: ${fullName}`)
+      return
+    }
     if (!res.ok) return
 
     const text = await res.text()
@@ -62,7 +72,7 @@ const fetchReadmeTitle = async (fullName: string) => {
       resolvedTitles[fullName] = match[1].trim()
     }
   } catch (e) {
-    console.error(`Error fetching README for ${fullName}:`, e)
+    // Silent fail for non-critical title enrichment
   }
 }
 
@@ -103,8 +113,31 @@ const loadMore = () => {
         />
       </div>
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ProjectCard v-for="project in displayItems" :key="project.title" v-bind="project" />
+      <div
+        v-else-if="status === 'error' || !items.length"
+        class="text-center py-12 border border-dashed border-gray-200 dark:border-gray-800 rounded-2xl"
+      >
+        <UIcon
+          name="i-lucide-alert-circle"
+          class="w-10 h-10 mx-auto mb-4 text-muted-foreground opacity-20"
+        />
+        <p class="text-muted-foreground">
+          No se pudieron cargar los proyectos de GitHub en este momento.
+          <br />
+          <span class="text-xs uppercase tracking-widest opacity-50"
+            >Consulta el límite de la API o verifica tu conexión</span
+          >
+        </p>
+      </div>
+
+      <div v-else>
+        <TransitionGroup
+          name="project-list"
+          tag="div"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <ProjectCard v-for="project in displayItems" :key="project.title" v-bind="project" />
+        </TransitionGroup>
       </div>
 
       <div v-if="hasMore" class="mt-12 text-center">
@@ -115,3 +148,18 @@ const loadMore = () => {
     </div>
   </section>
 </template>
+
+<style scoped>
+.project-list-enter-active,
+.project-list-leave-active {
+  transition: all 0.5s ease;
+}
+.project-list-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.project-list-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
+</style>
