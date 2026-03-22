@@ -1,15 +1,9 @@
 <script setup lang="ts">
 // ProjectCard — tarjeta de proyecto individual
 // Reutilizable: recibe datos vía props, no tiene estado propio
+import type { Project } from '~/types/project'
 
-const props = defineProps<{
-  title: string
-  description: string
-  tags: string[]
-  url?: string
-  repo?: string
-  image?: string
-}>()
+const props = defineProps<Project>()
 </script>
 
 <template>
