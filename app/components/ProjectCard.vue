@@ -66,10 +66,13 @@ const getLanguageColor = (lang?: string) => {
       </div>
 
       <div class="flex-1">
-        <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300">
+        <h3 class="text-xl font-bold mb-2 group-hover:text-primary transition-colors duration-300 text-white">
           {{ props.title }}
         </h3>
-        <p class="text-muted-foreground text-sm line-clamp-3 mb-6 leading-relaxed">
+        <p
+          class="text-sm line-clamp-3 mb-6 leading-relaxed"
+          :class="props.description === 'Sin descripción disponible.' ? 'text-zinc-500 italic' : 'text-zinc-400'"
+        >
           {{ props.description }}
         </p>
 

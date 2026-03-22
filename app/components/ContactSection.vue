@@ -31,7 +31,7 @@ const submitForm = async () => {
 <template>
   <section
     id="contacto"
-    class="py-24 px-6 border-t border-zinc-900/80 bg-gradient-to-b from-transparent to-zinc-950"
+    class="py-12 sm:py-18 px-6 border-t border-zinc-900/80 bg-gradient-to-b from-transparent to-zinc-950"
   >
     <UContainer>
       <div class="max-w-5xl mx-auto">

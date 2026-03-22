@@ -24,7 +24,7 @@ const skillCategories = [
 </script>
 
 <template>
-  <section id="habilidades" class="py-24 px-6 relative">
+  <section id="habilidades" class="py-12 sm:py-18 px-6 relative">
     <UContainer>
       <div class="text-center mb-16 max-w-2xl mx-auto">
         <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">

@@ -25,7 +25,10 @@ const experiences = [
 </script>
 
 <template>
-  <section id="experiencia" class="py-24 px-6 border-t border-zinc-900/50 relative overflow-hidden">
+  <section
+    id="experiencia"
+    class="py-12 sm:py-18 px-6 border-t border-zinc-900/50 relative overflow-hidden"
+  >
     <UContainer>
       <div class="text-center mb-20 max-w-2xl mx-auto">
         <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">

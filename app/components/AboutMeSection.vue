@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <section id="historia" class="py-24 px-6 relative overflow-hidden">
+  <section id="historia" class="py-12 sm:py-18 px-6 relative overflow-hidden">
     <!-- Copper Glow Accent -->
     <div
       class="absolute left-[-10%] top-[40%] w-[500px] h-[500px] bg-primary-600/10 rounded-full blur-[120px] mix-blend-screen -z-10 pointer-events-none"

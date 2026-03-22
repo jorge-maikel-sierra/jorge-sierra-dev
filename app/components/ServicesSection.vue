@@ -37,7 +37,7 @@ const services: Service[] = [
 </script>
 
 <template>
-  <section id="services" class="py-20 px-6 bg-muted/40">
+  <section id="services" class="py-10 sm:py-18 px-6 bg-muted/40">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-3xl font-bold mb-4">Servicios</h2>
       <p class="text-muted mb-12">Cómo puedo ayudarte a construir y crecer.</p>

@@ -4,7 +4,7 @@
 
 <template>
   <section
-    class="relative min-h-[90vh] flex items-center pt-20 overflow-hidden border-b border-zinc-900/50"
+    class="relative min-h-[90vh] flex items-center pt-6 sm:pt-18 overflow-hidden border-b border-zinc-900/50"
   >
     <!-- Background Gradient & Image -->
     <div class="absolute inset-0 z-0">
@@ -43,7 +43,7 @@
         </div>
 
         <h1
-          class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-[1.1] mb-6"
+          class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-[1.1] mb-6"
         >
           Ingeniería de software de
           <span
@@ -53,16 +53,16 @@
         </h1>
 
         <p class="text-lg md:text-2xl text-zinc-400 mb-10 max-w-2xl leading-relaxed font-light">
-          Transformo problemas complejos en experiencias digitales memorables, rápídas y escalables.
+          Transformo problemas complejos en experiencias digitales memorables, rápidas y escalables.
           Este es el nivel de calidad que tu próximo proyecto merece.
         </p>
 
-        <div class="flex flex-wrap gap-4 items-center">
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
           <UButton
             to="#contacto"
             size="xl"
             color="primary"
-            class="font-semibold px-8 py-3.5 shadow-[0_0_30px_rgba(248,96,20,0.25)] hover:shadow-[0_0_40px_rgba(248,96,20,0.4)] transition-shadow duration-300"
+            class="w-full sm:w-auto font-semibold px-8 py-3.5 shadow-[0_0_30px_rgba(248,96,20,0.25)] hover:shadow-[0_0_40px_rgba(248,96,20,0.4)] transition-shadow duration-300"
           >
             Hablemos ahora
           </UButton>
@@ -70,8 +70,8 @@
             to="#proyectos"
             size="xl"
             color="neutral"
-            variant="ghost"
-            class="font-medium px-8 py-3.5 hover:bg-zinc-900/80 transition-colors"
+            variant="subtle"
+            class="w-full sm:w-auto font-medium px-8 py-3.5 bg-white/5 hover:bg-white/10 text-white transition-colors"
           >
             Ver mis proyectos <UIcon name="i-lucide-arrow-right" class="ml-2 w-5 h-5" />
           </UButton>

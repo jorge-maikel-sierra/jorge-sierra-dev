@@ -115,7 +115,7 @@ const loadMore = () => {
 </script>
 
 <template>
-  <section id="proyectos" class="pt-10 px-6">
+  <section id="proyectos" class="pt-6 sm:pt-10 px-6">
     <UContainer>
       <div
         class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4 border-b border-zinc-900 pb-8"
