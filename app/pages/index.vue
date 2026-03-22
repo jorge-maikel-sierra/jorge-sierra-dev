@@ -9,6 +9,7 @@ useSeoMeta({
 <template>
   <div>
     <HeroSection />
+    <SocialProofStrip />
     <ProjectsSection />
     <ServicesSection />
     <ContactSection />
