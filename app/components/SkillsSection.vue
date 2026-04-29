@@ -1,24 +1,24 @@
 <script setup lang="ts">
 const skillCategories = [
   {
+    name: 'Automatización & IA',
+    icon: 'i-lucide-bot',
+    skills: ['n8n', 'OpenAI APIs', 'LangChain', 'Make (Integromat)', 'Webhooks & Events']
+  },
+  {
+    name: 'Backend & APIs',
+    icon: 'i-lucide-server-cog',
+    skills: ['Node.js', 'NestJS', 'PostgreSQL', 'Redis', 'REST / GraphQL']
+  },
+  {
     name: 'Frontend',
     icon: 'i-lucide-layout-template',
-    skills: ['Vue.js', 'Nuxt 3', 'TypeScript', 'Tailwind CSS', 'React']
+    skills: ['Vue.js', 'Nuxt 4', 'TypeScript', 'Tailwind CSS', 'Nuxt UI']
   },
   {
-    name: 'Backend',
-    icon: 'i-lucide-server-cog',
-    skills: ['Node.js', 'Python', 'NestJS', 'PostgreSQL', 'Redis']
-  },
-  {
-    name: 'IA / Automatización',
-    icon: 'i-lucide-bot',
-    skills: ['OpenAI APIs', 'LangChain', 'Python Scripts', 'n8n', 'Make']
-  },
-  {
-    name: 'Infraestructura',
+    name: 'Infraestructura & DevOps',
     icon: 'i-lucide-cloud',
-    skills: ['Docker', 'AWS', 'Vercel', 'CI/CD GitHub Actions']
+    skills: ['Docker', 'AWS', 'Vercel', 'CI/CD GitHub Actions', 'Linux / VPS']
   }
 ]
 </script>
@@ -31,11 +31,11 @@ const skillCategories = [
           Dominio Técnico
         </h2>
         <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
-          Stack Especializado
+          Stack especializado en producción.
         </h3>
         <p class="text-zinc-400 text-lg">
-          Tecnologías que utilizo en producción para construir soluciones robustas y de alto
-          rendimiento.
+          Tecnologías que uso diariamente para construir sistemas escalables, automatizados y de
+          alto rendimiento.
         </p>
       </div>
 

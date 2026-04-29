@@ -1,18 +1,18 @@
 <script setup lang="ts">
 const stats = [
-  { label: 'Años de Experiencia', value: '+5', icon: 'i-lucide-calendar' },
-  { label: 'Proyectos Completados', value: '+20', icon: 'i-lucide-check-circle' }
+  { label: 'Años de Experiencia', value: '+6', icon: 'i-lucide-calendar' },
+  { label: 'Proyectos Completados', value: '+25', icon: 'i-lucide-check-circle' }
 ]
 
 const techs = [
-  { name: 'JavaScript', icon: 'i-simple-icons-javascript' },
+  { name: 'Node.js', icon: 'i-simple-icons-nodedotjs' },
+  { name: 'NestJS', icon: 'i-simple-icons-nestjs' },
   { name: 'TypeScript', icon: 'i-simple-icons-typescript' },
+  { name: 'PostgreSQL', icon: 'i-simple-icons-postgresql' },
+  { name: 'n8n', icon: 'i-simple-icons-n8n' },
   { name: 'Vue.js', icon: 'i-simple-icons-vuedotjs' },
   { name: 'Nuxt.js', icon: 'i-simple-icons-nuxtdotjs' },
-  { name: 'React', icon: 'i-simple-icons-react' },
-  { name: 'NestJS', icon: 'i-simple-icons-nestjs' },
-  { name: 'Tailwind CSS', icon: 'i-simple-icons-tailwindcss' },
-  { name: 'PostgreSQL', icon: 'i-simple-icons-postgresql' }
+  { name: 'Docker', icon: 'i-simple-icons-docker' }
 ]
 </script>
 

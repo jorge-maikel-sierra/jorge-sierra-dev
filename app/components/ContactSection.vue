@@ -10,7 +10,8 @@ const isLoading = ref(false)
 
 // Configurar con variable de entorno real en el futuro
 const wppNumber = '1234567890'
-const wppMessage = 'Hola Jorge, me interesa hablar sobre un proyecto.'
+const wppMessage =
+  'Hola Jorge, me interesa hablar sobre automatización / arquitectura de mi sistema.'
 const whatsappUrl = computed(
   () => `https://wa.me/${wppNumber}?text=${encodeURIComponent(wppMessage)}`
 )
@@ -42,11 +43,11 @@ const submitForm = async () => {
               Conversemos
             </h2>
             <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
-              Iniciemos tu próximo gran proyecto.
+              Cuéntame tu problema de negocio.
             </h3>
             <p class="text-zinc-400 text-lg mb-10 leading-relaxed font-light">
-              La comunicación rápida es clave. Escríbeme a WhatsApp para obtener una respuesta casi
-              inmediata, o envíame un correo si prefieres detallar tu idea.
+              Si tienes procesos manuales que escalar, un sistema lento que optimizar o una API que
+              construir desde cero — hablemos. Respondo rápido por WhatsApp.
             </p>
 
             <div class="space-y-4">

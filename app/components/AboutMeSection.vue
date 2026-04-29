@@ -27,10 +27,10 @@
 
             <div class="relative z-20">
               <p class="text-4xl sm:text-5xl font-extrabold text-white mb-2">
-                Impacto <span class="text-primary-500 font-medium tracking-tight">Real</span>
+                Impacto <span class="text-primary-500 font-medium tracking-tight">Medible</span>
               </p>
               <p class="text-zinc-400 font-medium text-lg">
-                Impulsando métricas con código escalable.
+                Sistemas más rápidos, procesos más inteligentes.
               </p>
             </div>
           </div>
@@ -39,27 +39,29 @@
         <!-- Story Container -->
         <div class="lg:col-span-7 flex flex-col justify-center order-1 lg:order-2">
           <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">
-            La Historia
+            Sobre mí
           </h2>
           <h3 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-8">
-            Del problema a la solución integral.
+            Transformo caos en arquitectura.
           </h3>
 
           <div class="space-y-6 text-zinc-300 text-lg sm:text-xl leading-relaxed font-light">
             <p>
-              No me considero solo un "picador de código". Soy un ingeniero enfocado en resolver
-              problemas complejos de negocio. Mi viaje comenzó construyendo herramientas para
-              automatizar procesos y ahí entendí el verdadero poder del software:
-              <strong>la capacidad de escalar el impacto.</strong>
+              Soy un <strong>AI Engineer & Senior Full-Stack</strong> especializado en convertir
+              sistemas fragmentados y procesos manuales en soluciones robustas, automatizadas y
+              escalables. Mi stack principal gira alrededor de
+              <strong>Node.js, NestJS, PostgreSQL y n8n</strong>.
             </p>
             <p>
-              Me he especializado en tomar sistemas frágiles y caóticos y transformarlos en
-              arquitecturas modernas, ultra-rápidas y resilientes.
+              Me diferencio por pensar primero en el problema de negocio y después en la
+              tecnología. Antes de escribir una línea de código, entiendo el flujo operativo,
+              identifico los cuellos de botella reales y diseño la solución más eficiente para el
+              contexto —no la más sofisticada.
             </p>
             <p>
-              Más que simplemente dominar nuevos frameworks, domino la capacidad de entender el
-              producto, definir la mejor estrategia tecnológica y construir exactamente la
-              experiencia que el usuario final necesita y la empresa requiere para crecer.
+              Si tu empresa tiene procesos que aún dependen de hojas de cálculo, tareas manuales
+              o sistemas que no se hablan entre sí, ese es exactamente el tipo de problema que
+              <strong>disfruto resolver.</strong>
             </p>
           </div>
         </div>

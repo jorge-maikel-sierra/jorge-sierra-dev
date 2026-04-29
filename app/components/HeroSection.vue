@@ -45,16 +45,16 @@
         <h1
           class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tighter text-white leading-[1.1] mb-6"
         >
-          Ingeniería de software de
+          Automatizo procesos.<br />
           <span
             class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600"
-            >alto impacto</span
-          >.
+            >Escalo negocios.</span
+          >
         </h1>
 
         <p class="text-lg md:text-2xl text-zinc-400 mb-10 max-w-2xl leading-relaxed font-light">
-          Transformo problemas complejos en experiencias digitales memorables, rápidas y escalables.
-          Este es el nivel de calidad que tu próximo proyecto merece.
+          AI Engineer & Senior Full-Stack. Transformo sistemas caóticos en arquitecturas modernas,
+          rápidas y resilientes con foco en impacto real sobre el negocio.
         </p>
 
         <div class="flex flex-col sm:flex-row gap-4 items-center">
@@ -64,7 +64,7 @@
             color="primary"
             class="w-full sm:w-auto font-semibold px-8 py-3.5 shadow-[0_0_30px_rgba(248,96,20,0.25)] hover:shadow-[0_0_40px_rgba(248,96,20,0.4)] transition-shadow duration-300"
           >
-            Hablemos ahora
+            Agendar consulta
           </UButton>
           <UButton
             to="#proyectos"

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Jorge Sierra — Software Engineer & Full-Stack Developer',
+  title: 'Jorge Sierra — AI Engineer & Senior Full-Stack Developer',
   description:
-    'Portafolio profesional de Jorge Sierra. Ingeniería de software de alto impacto centrado en resolver problemas complejos de negocio con soluciones tecnológicas escalables.',
-  ogTitle: 'Jorge Sierra — Software Engineer & Full-Stack Developer',
+    'AI Engineer y Senior Full-Stack especializado en automatización de procesos con n8n, APIs escalables con NestJS y arquitectura de sistemas modernos. Transformo sistemas caóticos en soluciones robustas orientadas al negocio.',
+  ogTitle: 'Jorge Sierra — AI Engineer & Senior Full-Stack Developer',
   ogDescription:
-    'Explora mi portafolio y descubre cómo transformo ideas en experiencias digitales de alto impacto.',
+    'Automatizo procesos, escalo sistemas y genero impacto real de negocio. Especialista en n8n, NestJS, Node.js y PostgreSQL.',
   ogType: 'profile',
-  keywords: 'Jorge Sierra, Software Engineer, Full-Stack, Vue, Nuxt, TypeScript, Portafolio'
+  keywords:
+    'Jorge Sierra, AI Engineer, automatización n8n, NestJS, Node.js, PostgreSQL, Full-Stack, APIs escalables, arquitectura de sistemas'
 })
 </script>
 

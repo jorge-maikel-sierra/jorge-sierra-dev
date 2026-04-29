@@ -1,25 +1,32 @@
 <script setup lang="ts">
 const experiences = [
   {
-    role: 'Senior Software Engineer',
-    company: 'Empresa Confidencial',
-    period: '2022 - Presente',
+    role: 'AI Engineer — Automatización de Procesos',
+    company: 'Proyecto Empresarial (Confidencial)',
+    period: '2024 - Presente',
     description:
-      'Liderazgo técnico en el diseño y arquitectura de soluciones escalables. Migración de monolitos a ecosistemas modernos, mejorando los tiempos de respuesta y la experiencia de usuario.'
+      'Diseño e implementación de flujos de automatización con n8n e IA generativa. Eliminé procesos manuales críticos logrando trazabilidad del 100% en operaciones antes opacas. Integré sistemas heterogéneos que antes operaban en silos, reduciendo errores operativos en un 20% en los primeros 60 días.'
   },
   {
-    role: 'Desarrollador Full-Stack',
-    company: 'Agencia Digital / Freelance',
-    period: '2019 - 2022',
+    role: 'Senior Full-Stack Engineer',
+    company: 'Empresa de Software / Consultoría',
+    period: '2022 - 2024',
     description:
-      'Desarrollo de proyectos end-to-end, incluyendo plataformas de reservas, e-commerce y sistemas internos. Implementación de APIs robustas y automatización de procesos clave.'
+      'Lideré el rediseño de módulos administrativos críticos, migrando de arquitecturas monolíticas frágiles a APIs REST con NestJS y PostgreSQL. Mejoré los tiempos de respuesta del sistema en un 60% y reduje los ciclos de despliegue de días a horas mediante CI/CD con GitHub Actions.'
+  },
+  {
+    role: 'Full-Stack Developer — Backend & Frontend',
+    company: 'Agencia Digital / Freelance',
+    period: '2020 - 2022',
+    description:
+      'Desarrollo end-to-end de plataformas de gestión, e-commerce y sistemas internos para clientes de distintos sectores. Implementé automatizaciones clave que redujeron el tiempo de procesamiento de pedidos en un 40%, liberando capacidad operativa para el equipo.'
   },
   {
     role: 'Frontend Developer',
     company: 'Startup Tecnológica',
-    period: '2018 - 2019',
+    period: '2018 - 2020',
     description:
-      'Construcción de interfaces de usuario interactivas y dinámicas, enfocadas en la retención del cliente y la performance.'
+      'Construcción de interfaces administrativas y dashboards de analítica con Vue.js. Optimicé el rendimiento de carga logrando una reducción del 35% en el tiempo de interacción inicial, contribuyendo directamente a mejorar la retención de usuarios activos.'
   }
 ]
 </script>
