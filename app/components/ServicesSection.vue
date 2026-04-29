@@ -49,9 +49,9 @@ const services: Service[] = [
 <template>
   <section id="servicios" class="py-10 sm:py-18 px-6 bg-muted/40">
     <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-16 max-w-2xl mx-auto">
+      <div class="text-center mb-8 sm:mb-14 max-w-2xl mx-auto">
         <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">Servicios</h2>
-        <h3 class="text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
+        <h3 class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-4">
           Soluciones que mueven métricas.
         </h3>
         <p class="text-zinc-400 text-lg leading-relaxed">

@@ -118,14 +118,16 @@ const loadMore = () => {
   <section id="proyectos" class="pt-6 sm:pt-10 px-6">
     <UContainer>
       <div
-        class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4 border-b border-zinc-900 pb-8"
+        class="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4 border-b border-zinc-900 pb-6 sm:pb-8"
       >
         <div>
           <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">
             Portafolio
           </h2>
-          <h3 class="text-4xl font-bold tracking-tight text-white mb-4">Proyectos destacados</h3>
-          <p class="text-zinc-400 text-lg max-w-2xl">
+          <h3 class="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-3 sm:mb-4">
+            Proyectos destacados
+          </h3>
+          <p class="text-zinc-400 text-base sm:text-lg max-w-2xl">
             Una selección de mis proyectos más recientes y experimentos de código abierto.
           </p>
         </div>

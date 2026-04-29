@@ -6,7 +6,7 @@
   <section id="historia" class="py-12 sm:py-18 px-6 relative overflow-hidden">
     <!-- Copper Glow Accent -->
     <div
-      class="absolute left-[-10%] top-[40%] w-[500px] h-[500px] bg-primary-600/10 rounded-full blur-[120px] mix-blend-screen -z-10 pointer-events-none"
+      class="absolute left-[-10%] top-[40%] w-125 h-125 bg-primary-600/10 rounded-full blur-[120px] mix-blend-screen -z-10 pointer-events-none"
     />
 
     <UContainer>
@@ -17,7 +17,7 @@
             class="aspect-square rounded-3xl bg-zinc-900 border border-zinc-800/80 p-8 flex flex-col justify-end relative z-10 overflow-hidden group shadow-2xl"
           >
             <div
-              class="absolute inset-0 bg-gradient-to-br from-primary-900/30 via-zinc-900 to-zinc-950 opacity-60 group-hover:opacity-100 transition-opacity duration-700"
+              class="absolute inset-0 bg-linear-to-br from-primary-900/30 via-zinc-900 to-zinc-950 opacity-60 group-hover:opacity-100 transition-opacity duration-700"
             />
 
             <UIcon
@@ -41,11 +41,15 @@
           <h2 class="text-sm font-semibold tracking-widest uppercase text-primary mb-3">
             Sobre mí
           </h2>
-          <h3 class="text-4xl sm:text-5xl font-bold tracking-tight text-white mb-8">
+          <h3
+            class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white mb-6 sm:mb-8"
+          >
             Transformo caos en arquitectura.
           </h3>
 
-          <div class="space-y-6 text-zinc-300 text-lg sm:text-xl leading-relaxed font-light">
+          <div
+            class="space-y-4 sm:space-y-6 text-zinc-300 text-base sm:text-lg leading-relaxed font-light"
+          >
             <p>
               Soy un <strong>AI Engineer & Senior Full-Stack</strong> especializado en convertir
               sistemas fragmentados y procesos manuales en soluciones robustas, automatizadas y
@@ -53,14 +57,14 @@
               <strong>Node.js, NestJS, PostgreSQL y n8n</strong>.
             </p>
             <p>
-              Me diferencio por pensar primero en el problema de negocio y después en la
-              tecnología. Antes de escribir una línea de código, entiendo el flujo operativo,
-              identifico los cuellos de botella reales y diseño la solución más eficiente para el
-              contexto —no la más sofisticada.
+              Me diferencio por pensar primero en el problema de negocio y después en la tecnología.
+              Antes de escribir una línea de código, entiendo el flujo operativo, identifico los
+              cuellos de botella reales y diseño la solución más eficiente para el contexto —no la
+              más sofisticada.
             </p>
             <p>
-              Si tu empresa tiene procesos que aún dependen de hojas de cálculo, tareas manuales
-              o sistemas que no se hablan entre sí, ese es exactamente el tipo de problema que
+              Si tu empresa tiene procesos que aún dependen de hojas de cálculo, tareas manuales o
+              sistemas que no se hablan entre sí, ese es exactamente el tipo de problema que
               <strong>disfruto resolver.</strong>
             </p>
           </div>

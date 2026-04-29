@@ -13,7 +13,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="flex flex-col gap-24 sm:gap-32 pb-24">
+  <div>
     <HeroSection />
     <ProjectsSection />
     <AboutMeSection />
