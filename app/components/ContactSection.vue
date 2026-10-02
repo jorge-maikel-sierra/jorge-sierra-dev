@@ -8,8 +8,7 @@ const form = reactive({
 
 const isLoading = ref(false)
 
-// Configurar con variable de entorno real en el futuro
-const wppNumber = '1234567890'
+const wppNumber = config.public.contactPhone.replace(/\D/g, '')
 const wppMessage =
   'Hola Jorge, me interesa hablar sobre automatización / arquitectura de mi sistema.'
 const whatsappUrl = computed(
@@ -160,7 +159,7 @@ const submitForm = async () => {
                       Enviar Mensaje
                     </UButton>
                     <p class="text-center text-xs text-zinc-600 mt-6 tracking-wide uppercase">
-                      Respondemos usualmente en menos de 24 horas.
+                      Respondo usualmente en menos de 24 horas.
                     </p>
                   </div>
                 </form>

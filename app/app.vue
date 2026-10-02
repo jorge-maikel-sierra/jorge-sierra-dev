@@ -8,9 +8,9 @@ useHead({
 })
 
 const config = useRuntimeConfig()
-const title = 'Jorge Sierra — Desarrollador Full-Stack'
+const title = 'Jorge Sierra — AI Engineer & Senior Full-Stack Developer'
 const description =
-  'Portafolio profesional de Jorge Sierra. Desarrollo de aplicaciones web modernas con Nuxt, Vue, TypeScript y más.'
+  'Automatizo procesos, escalo sistemas y genero impacto real de negocio. Especialista en n8n, NestJS, Node.js y PostgreSQL.'
 
 useSeoMeta({
   title,
@@ -18,7 +18,7 @@ useSeoMeta({
   ogTitle: title,
   ogDescription: description,
   ogUrl: config.public.siteUrl,
-  ogSiteName: title,
+  ogSiteName: 'Jorge Sierra',
   ogImage: `${config.public.siteUrl}/hero.png`,
   ogImageWidth: 1200,
   ogImageHeight: 630,

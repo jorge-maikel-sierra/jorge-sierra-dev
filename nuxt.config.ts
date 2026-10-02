@@ -18,9 +18,9 @@ export default defineNuxtConfig({
   // Used by @nuxtjs/sitemap and @nuxtjs/robots
   site: {
     url: process.env.NUXT_PUBLIC_SITE_URL || 'https://jorge-sierra.dev',
-    name: 'Jorge Sierra — Desarrollador Full-Stack',
+    name: 'Jorge Sierra — AI Engineer & Senior Full-Stack Developer',
     description:
-      'Ingeniería de software de alto impacto. Transformando problemas complejos en experiencias digitales memorables.',
+      'Automatizo procesos, escalo sistemas y genero impacto real de negocio. Especialista en n8n, NestJS, Node.js y PostgreSQL.',
     defaultLocale: 'es'
   },
 
@@ -28,13 +28,13 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
-      title: 'Jorge Sierra — Desarrollador Full-Stack',
+      title: 'Jorge Sierra — AI Engineer & Senior Full-Stack Developer',
       meta: [
         { name: 'author', content: 'Jorge Sierra' },
         {
           name: 'keywords',
           content:
-            'Jorge Sierra, Software Engineer, Full-Stack Developer, Vue.js, Nuxt.js, TypeScript, Desarrollo Web, Colombia'
+            'Jorge Sierra, AI Engineer, Full-Stack Developer, automatización n8n, NestJS, Node.js, PostgreSQL, Colombia'
         },
         { name: 'theme-color', content: '#09090b' },
         { name: 'robots', content: 'index, follow' }

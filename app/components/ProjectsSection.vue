@@ -24,7 +24,7 @@ export interface DisplayProject {
   full_name: string
   description: string
   tags: string[]
-  url: string
+  url?: string
   repo: string
   image: string | null
   stars: number
@@ -54,7 +54,7 @@ const { data: repos, status } = await useFetch(
               : repo.language
                 ? [repo.language]
                 : [],
-          url: repo.homepage || repo.html_url,
+          url: repo.homepage || undefined,
           repo: repo.html_url,
           image: null,
           stars: repo.stargazers_count || 0,
