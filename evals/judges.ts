@@ -170,7 +170,10 @@ export async function judgeFaithfulness(model: LanguageModel, run: AgentRun) {
     system: `${JUDGE_RULES}
 Separa la respuesta en afirmaciones fácticas sobre Jorge (experiencia, tecnologías, proyectos, cifras, fechas, formación, ubicación).
 Para cada una, decide si alguna fuente la respalda. Parafrasear está bien; agregar datos, cifras o tecnologías que no estén, no.
-Ignora frases que no afirman nada sobre Jorge (saludos, ofertas de contacto, "no tengo ese dato") y las brechas que dicen que algo NO aparece en su perfil.`,
+No son afirmaciones y NO las incluyas en la lista:
+- Ofertas o invitaciones del agente: "puedo compartirte el enlace para agendar una llamada", "escríbele desde Contacto".
+- Declaraciones de que el agente no tiene un dato: "No tengo más detalles, como certificaciones" NO significa "no tiene certificaciones"; es falta de información, no una afirmación sobre Jorge.
+- Brechas que dicen que algo no aparece en su perfil.`,
     prompt: `<fuentes>\n${sources || "(sin fuentes)"}\n</fuentes>\n\n<respuesta>\n${visibleAnswer(run)}\n</respuesta>`,
     output: Output.object({ schema: Faithfulness }),
   });

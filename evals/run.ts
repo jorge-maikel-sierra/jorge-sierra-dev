@@ -36,7 +36,7 @@ const DIR = path.join(process.cwd(), "evals");
 const DATASET = "agent-evals";
 
 /**
- * What every PR runs (≈US$0.70 instead of ≈US$2.50 for the 31 cases, estimated
+ * What every PR runs (≈US$0.85 instead of ≈US$2.50 for the 31 cases, estimated
  * from the Langfuse usage of 2026-10-03): every
  * metric and case type is covered, including the costly vacancies with gaps.
  * The full dataset runs on demand (workflow_dispatch or locally).
@@ -98,8 +98,10 @@ async function main() {
   if (!config) throw new Error("Missing agent environment variables");
   const traced = registerLangfuse();
   const runtime = createAgentRuntime({ ...config, AI_MODEL: env.AI_MODEL });
-  // Haiku judges: about half the cost of Sonnet. The answers are still
-  // produced by the production chat model.
+  // Faithfulness is the subtle metric: Haiku misread "no tengo ese dato" as a
+  // claim and failed correct answers in CI (2026-10-03), so it keeps Sonnet.
+  // Refusals and gaps are simple classifications: Haiku is enough there.
+  const strictJudge = runtime.deps.models.chat;
   const judge = runtime.deps.models.fast;
 
   // Retrieved chunks carry title and type; the dataset speaks in document keys.
@@ -185,7 +187,7 @@ async function main() {
         });
 
         if (testCase.type === "general" || testCase.type === "vacancy") {
-          const faithfulness = await judgeFaithfulness(judge, run);
+          const faithfulness = await judgeFaithfulness(strictJudge, run);
           const scores: CaseResult["scores"] = { faithfulness: faithfulness.score, citations };
           const details: Record<string, unknown> = { unsupported: faithfulness.unsupported };
           let missing: string[] = [];
