@@ -101,6 +101,21 @@ export const CONTACT_ENV = [
   "UPSTASH_REDIS_REST_TOKEN",
 ] as const satisfies readonly EnvKey[];
 
+/** Variables the agent needs (task 4.5). AI_MODEL and CAL_BOOKING_URL are optional. */
+export const AGENT_ENV = [
+  "AI_PROVIDER",
+  "ANTHROPIC_API_KEY",
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "SUPABASE_SERVICE_ROLE_KEY",
+  "EMBEDDING_PROVIDER",
+  "EMBEDDING_MODEL",
+  "EMBEDDING_DIMENSIONS",
+  "EMBEDDING_API_KEY",
+  "UPSTASH_REDIS_REST_URL",
+  "UPSTASH_REDIS_REST_TOKEN",
+  "AGENT_DAILY_BUDGET_USD",
+] as const satisfies readonly EnvKey[];
+
 /**
  * Optional automation (task 3.3). Jorge has no n8n instance for this project
  * yet: without these the lead is stored and nothing else is called.

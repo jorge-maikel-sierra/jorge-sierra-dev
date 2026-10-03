@@ -71,8 +71,9 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - `0004_retrieval_relevance.sql`, medido sobre la base real: el puntaje RRF no sirve como umbral (preguntas ajenas al perfil sacaban los mismos 0,0164/0,0161/0,0159 que las relevantes), así que la función devuelve también la similitud coseno, y el umbral es 0,35 (relevantes 0,377–0,591; ajenas 0,130–0,335). Además, `websearch_to_tsquery` exigía todas las palabras y la rama léxica casi nunca coincidía; ahora usa OR entre términos.
 - [x] **4.4 Clasificación de modo, prompts y herramientas** (`lib/ai/*`) según `docs/agent-spec.md` §2, §6 y §8.
   - Modelos: `claude-sonnet-5-5` para generar (configurable con `AI_MODEL`) y `claude-haiku-4-5` para clasificar. AI SDK v7: `generateText` + `Output.choice/object` (`generateObject` está deprecado). `createLead` verifica el consentimiento en el último mensaje del visitante (su correo literal + un sí explícito), no en lo que diga el modelo.
-- [ ] **4.5 `POST /api/agent`**: guardas de entrada, streaming, data parts `data-trace` y `data-report`, verificación de citas, redacción de PII, tope de costo.
+- [x] **4.5 `POST /api/agent`**: guardas de entrada, streaming, data parts `data-trace` y `data-report`, verificación de citas, redacción de PII, tope de costo.
   - Acepta si: test de integración con modelo simulado cubre los cuatro modos.
+  - Las citas inválidas se filtran dentro del stream (`experimental_transform`), incluso cuando llegan partidas entre fragmentos. En el reporte de vacante, un encaje sin fuentes válidas se descarta. El modo `out_of_scope` no consulta la base ni usa herramientas. Sin las variables del agente, la ruta responde 503.
 - [ ] **4.6 UI del agente**: `AgentBox` en el hero, mensajes con fuentes enlazadas, `MatchReport`, `TracePanel` plegable, estados de carga, error, rate limit y presupuesto agotado.
   - Acepta si: el e2e de "pegar vacante → ver reporte con fuentes" pasa; todo funciona con teclado y lector de pantalla.
 
