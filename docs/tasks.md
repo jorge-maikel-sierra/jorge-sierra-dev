@@ -38,7 +38,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 ## Fase 2 — Hero 3D
 
-- [ ] **2.1 `buildGraph.ts`** con tests: 15 nodos en 5 capas, cada nodo con al menos una arista entrante o saliente, retrasos crecientes de izquierda a derecha.
+- [x] **2.1 `buildGraph.ts`** con tests: 15 nodos en 5 capas, cada nodo con al menos una arista entrante o saliente, retrasos crecientes de izquierda a derecha.
 - [ ] **2.2 Partículas en GPU**: `Points` con atributos y shaders de `docs/design.md §4`; `uProgress` controlado por un slider de desarrollo.
   - Acepta si: 20 000 partículas a 60 fps en un portátil con GPU integrada moderna.
 - [ ] **2.3 Aristas, pulsos, etiquetas de capa y tokens de caos**, con sus umbrales de aparición.
