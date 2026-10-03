@@ -1,6 +1,7 @@
 import type { TraceData } from "@/lib/ai/agent";
 import type { MatchReport as Report } from "@/lib/ai/mode";
 import type { Messages } from "@/lib/messages";
+import { inline } from "./AgentMessage";
 
 const heading = "font-mono text-[11px] uppercase tracking-[0.08em] text-text-3";
 
@@ -42,7 +43,9 @@ export function MatchReport({
       <div className="flex flex-col gap-1">
         <p className={heading}>{t.title}</p>
         <h3 className="text-lg font-bold text-text">{report.roleTitle}</h3>
-        <p className="text-[15px] leading-[1.55] text-text-2">{report.summary}</p>
+        <p className="text-[15px] leading-[1.55] text-text-2">
+          {inline(report.summary, sources, "summary")}
+        </p>
       </div>
 
       {report.matches.length > 0 && (
@@ -75,7 +78,7 @@ export function MatchReport({
                 className="rounded-control border border-dashed border-border-strong px-3 py-2.5 text-sm leading-[1.5]"
               >
                 <p className="font-semibold text-text">{gap.requirement}</p>
-                <p className="text-text-2">{gap.note}</p>
+                <p className="text-text-2">{inline(gap.note, sources, `gap-${gap.requirement}`)}</p>
               </li>
             ))}
           </ul>
@@ -87,7 +90,7 @@ export function MatchReport({
           <h4 className={heading}>{t.questions}</h4>
           <ol className="flex list-decimal flex-col gap-1 pl-5 text-sm leading-[1.5] text-text-2 marker:text-text-muted">
             {report.interviewQuestions.map((question) => (
-              <li key={question}>{question}</li>
+              <li key={question}>{inline(question, sources, `q-${question}`)}</li>
             ))}
           </ol>
         </div>

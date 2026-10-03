@@ -1,5 +1,6 @@
 import { generateText, Output, type LanguageModel } from "ai";
 import { z } from "zod";
+import { filterCitations } from "./guardrails";
 import { wrapVisitorInput } from "./prompts";
 
 // docs/agent-spec.md §2: the mode is detected on the first message and kept.
@@ -72,22 +73,41 @@ export const MatchReportDraftSchema = z.object({
 export type MatchReport = z.infer<typeof MatchReportDraftSchema>;
 
 /** Keeps only evidence with a real source and trims lists to what the UI shows. */
+const INLINE_CITATION = /\[(?:fuente:)?(\d+)\]/g;
+
 export function finalizeReport(draft: MatchReport, validIds: Set<number>) {
   let invalidCitations = 0;
+  // The model also cites inside the texts ("… Fly.io [fuente:5][2]"): same
+  // normalization and check as the streamed prose.
+  const clean = (text: string) =>
+    filterCitations(text, validIds, () => {
+      invalidCitations += 1;
+    })
+      .replace(/\s{2,}/g, " ")
+      .trim();
   const matches = draft.matches
     .map((match) => {
-      const sourceIds = match.sourceIds.filter((id) => validIds.has(id));
-      invalidCitations += match.sourceIds.length - sourceIds.length;
-      return { ...match, sourceIds };
+      // Evidence links come from sourceIds: inline citations move there.
+      const inline = [...match.evidence.matchAll(INLINE_CITATION)].map((m) => Number(m[1]));
+      const cited = [...new Set([...match.sourceIds, ...inline])];
+      const sourceIds = cited.filter((id) => validIds.has(id));
+      invalidCitations += cited.length - sourceIds.length;
+      const evidence = match.evidence.replace(INLINE_CITATION, "").replace(/\s{2,}/g, " ").trim();
+      return { ...match, evidence, sourceIds };
     })
     // Evidence without a real source is not evidence.
     .filter((match) => match.sourceIds.length > 0)
     .slice(0, REPORT_LIMITS.matches);
   const report: MatchReport = {
     ...draft,
+    summary: clean(draft.summary),
     matches,
-    gaps: draft.gaps.slice(0, REPORT_LIMITS.gaps),
-    interviewQuestions: draft.interviewQuestions.slice(0, REPORT_LIMITS.interviewQuestions),
+    gaps: draft.gaps
+      .slice(0, REPORT_LIMITS.gaps)
+      .map((gap) => ({ ...gap, note: clean(gap.note) })),
+    interviewQuestions: draft.interviewQuestions
+      .slice(0, REPORT_LIMITS.interviewQuestions)
+      .map(clean),
   };
   return { report, invalidCitations };
 }
