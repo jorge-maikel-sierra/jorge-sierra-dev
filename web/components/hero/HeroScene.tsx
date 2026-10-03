@@ -30,6 +30,8 @@ export type HeroSceneProps = {
   motion: RefObject<HeroMotion>;
   variant: HeroVariant;
   particleCount: number;
+  /** Stops the render loop while the hero is off screen. */
+  paused?: boolean;
   layers: { label: string; sub: string }[];
   tokens: string[];
   /** Mobile strip status ("CAOS · 12%"), updated in place without re-renders. */
@@ -508,6 +510,7 @@ export default function HeroScene(props: HeroSceneProps) {
       <Canvas
         aria-hidden="true"
         dpr={[1, 2]}
+        frameloop={props.paused ? "never" : "always"}
         camera={{ position: [0, 0, CAMERA_Z], near: 0.1, far: 20 }}
         gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
         onCreated={() => props.onReady?.()}

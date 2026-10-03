@@ -2,11 +2,15 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { detectGpuTier } from "./gpuTier";
 import { useHeroProgress, type HeroVariant } from "./useHeroProgress";
 
 const HeroScene = dynamic(() => import("./HeroScene"), { ssr: false });
 
-const PARTICLES: Record<HeroVariant, number> = { desktop: 20_000, mobile: 8_000 };
+// docs/design.md §4: 20 000 on desktop with GPU tier ≥ 2; 8 000 on tier 1 and
+// on mobile; static fallback on tier 0 and with prefers-reduced-motion.
+const particlesFor = (variant: HeroVariant, tier: number) =>
+  variant === "desktop" && tier >= 2 ? 20_000 : 8_000;
 const MEDIA: Record<HeroVariant, string> = {
   desktop: "(min-width: 640px)",
   mobile: "(max-width: 639.98px)",
@@ -21,7 +25,7 @@ type Labels = {
 
 // Shows the static fallback until the WebGL scene is ready. Desktop: canvas
 // behind the hero copy, pinned scroll. Mobile: its own strip with the status
-// line and "Volver al caos". GPU tiers and deferred mounting: tasks 2.5 and 2.6.
+// line and "Volver al caos". Deferred mounting after the LCP: task 2.6.
 export function HeroVisual({
   variant,
   fallback,
@@ -37,24 +41,61 @@ export function HeroVisual({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const status = useRef<HTMLSpanElement>(null);
-  const [active, setActive] = useState(false);
+  const [matches, setMatches] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  const [tier, setTier] = useState<number | null>(null);
+  const [visible, setVisible] = useState(true);
   const [ready, setReady] = useState(false);
+  const active = matches && !reducedMotion && tier !== null && tier > 0;
   const [scrub, setScrub] = useState(0);
   const { motion, reset, scrubTo } = useHeroProgress({ variant, enabled: active, root });
 
   useEffect(() => {
-    const query = window.matchMedia(MEDIA[variant]);
-    const update = () => setActive(query.matches);
+    const viewport = window.matchMedia(MEDIA[variant]);
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      setMatches(viewport.matches);
+      setReducedMotion(motion.matches);
+    };
     update();
-    query.addEventListener("change", update);
-    return () => query.removeEventListener("change", update);
+    viewport.addEventListener("change", update);
+    motion.addEventListener("change", update);
+    return () => {
+      viewport.removeEventListener("change", update);
+      motion.removeEventListener("change", update);
+    };
   }, [variant]);
+
+  // Only probe the GPU when this variant can actually show the scene.
+  useEffect(() => {
+    if (!matches || reducedMotion || tier !== null) return;
+    let cancelled = false;
+    void detectGpuTier().then((value) => {
+      if (!cancelled) setTier(value);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [matches, reducedMotion, tier]);
+
+  // Pause rendering while the scene is off screen.
+  useEffect(() => {
+    const target =
+      variant === "desktop" ? root.current?.closest("section") : root.current;
+    if (!active || !target) return;
+    const observer = new IntersectionObserver(([entry]) =>
+      setVisible(entry.isIntersecting),
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, [active, variant]);
 
   const scene = active && (
     <HeroScene
       motion={motion}
       variant={variant}
-      particleCount={PARTICLES[variant]}
+      particleCount={particlesFor(variant, tier ?? 1)}
+      paused={!visible}
       layers={layers}
       tokens={tokens}
       status={
@@ -76,7 +117,7 @@ export function HeroVisual({
   if (variant === "mobile") {
     return (
       <div ref={root} className="absolute inset-0 touch-pan-y">
-        {!ready && (
+        {!(active && ready) && (
           <div className="flex h-full items-center justify-center">{fallback}</div>
         )}
         {scene && (
@@ -84,7 +125,7 @@ export function HeroVisual({
             {scene}
           </div>
         )}
-        {ready && (
+        {active && ready && (
           <div className="absolute inset-x-4 bottom-2 flex items-center justify-between gap-3 font-mono text-[11px] tracking-[0.06em] text-text-3">
             <span ref={status} aria-hidden="true" className="group flex items-center gap-2">
               <span className="size-2 rounded-full bg-chaos group-data-[state=architecture]:bg-accent group-data-[state=ordering]:bg-text" />
@@ -105,7 +146,7 @@ export function HeroVisual({
 
   return (
     <div ref={root} className="contents">
-      {!ready && fallback}
+      {!(active && ready) && fallback}
       {scene && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0">
           {scene}

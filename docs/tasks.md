@@ -43,7 +43,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: 20 000 partículas a 60 fps en un portátil con GPU integrada moderna.
 - [x] **2.3 Aristas, pulsos, etiquetas de capa y tokens de caos**, con sus umbrales de aparición.
 - [x] **2.4 Control por scroll** (ScrollTrigger con pin en escritorio), autoplay a 1,3 s, rotación con puntero/arrastre suavizada, botón "Volver al caos" en móvil.
-- [ ] **2.5 Degradación**: `detect-gpu` (tier 0 → fallback; tier 1 → 8 000 partículas sin bloom), `prefers-reduced-motion` → estado final estático, pausa fuera de pantalla.
+- [x] **2.5 Degradación**: `detect-gpu` (tier 0 → fallback; tier 1 → 8 000 partículas sin bloom), `prefers-reduced-motion` → estado final estático, pausa fuera de pantalla.
 - [ ] **2.6 Carga diferida**: `next/dynamic` + montaje tras idle; generar la imagen de `HeroFallback` desde la escena.
   - Acepta si: JS inicial < 170 KB gzip sin el chunk 3D; CLS = 0; Lighthouse móvil ≥ 90.
 
