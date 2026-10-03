@@ -19,7 +19,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 ## Fase 1 — Secciones estáticas (sin 3D ni IA)
 
-- [ ] **1.1 Layout y navegación**: header con logo, enlaces a secciones y selector ES/EN (inactivo hasta Fase 6). Menú desplegable bajo 640 px como en `design-reference/Mobile-Hero.dc.html`.
+- [x] **1.1 Layout y navegación**: header con logo, enlaces a secciones y selector ES/EN (inactivo hasta Fase 6). Menú desplegable bajo 640 px como en `design-reference/Mobile-Hero.dc.html`.
 - [ ] **1.2 Hero estático**: titular, subtítulo, indicador de disponibilidad, caja del agente (sin funcionar aún), CTAs y línea de stack. `HeroFallback` con imagen temporal.
   - Acepta si: coincide con `Main.dc.html` y `Mobile-Hero.dc.html` en copy, colores y jerarquía; LCP < 2 s en Lighthouse móvil.
 - [ ] **1.3 Componente `Placeholder`** y regla global: cualquier string de contenido que empiece por `[` se renderiza con él.

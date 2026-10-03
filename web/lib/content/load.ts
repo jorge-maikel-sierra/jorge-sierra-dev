@@ -11,7 +11,11 @@ import {
   type Profile,
 } from "./schema";
 
-export type Locale = "es";
+export const locales = ["es"] as const;
+export type Locale = (typeof locales)[number];
+
+export const isLocale = (value: string): value is Locale =>
+  (locales as readonly string[]).includes(value);
 
 // Only Spanish exists in v1. English is added in Phase 6 with a fallback to "es".
 const sources = {

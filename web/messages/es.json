@@ -1,0 +1,13 @@
+{
+  "nav": {
+    "label": "Principal",
+    "home": "Jorge Sierra, inicio",
+    "menu": "Menú",
+    "cases": "Casos",
+    "agent": "Agente",
+    "experience": "Trayectoria",
+    "contact": "Contacto",
+    "language": "ES / EN",
+    "languageSoon": "La versión en inglés llega pronto"
+  }
+}
