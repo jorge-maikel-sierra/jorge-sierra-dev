@@ -47,12 +47,14 @@ const db = ready
 
 type Received = { signatureOk: boolean; body: Record<string, unknown> };
 const received: Received[] = [];
-let server: Server;
+let server: Server | undefined;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const fakeIp = () => `10.${randomInt(255)}.${randomInt(255)}.${randomInt(1, 255)}`;
 
-test.beforeAll(async () => {
+test.beforeAll(async ({}, testInfo) => {
+  // Skipped tests still run beforeAll: only the desktop worker owns port 3401.
+  if (!ready || testInfo.project.name !== "desktop") return;
   server = createServer((request, response) => {
     let raw = "";
     request.on("data", (chunk) => (raw += chunk));
@@ -76,11 +78,11 @@ test.beforeAll(async () => {
       }
     });
   });
-  await new Promise<void>((resolve) => server.listen(3401, "127.0.0.1", resolve));
+  await new Promise<void>((resolve) => server!.listen(3401, "127.0.0.1", resolve));
 });
 
 test.afterAll(async () => {
-  await new Promise((resolve) => server?.close(resolve));
+  if (server) await new Promise((resolve) => server!.close(resolve));
   await db?.from("leads").delete().like("name", `${NAME}%`);
 });
 
@@ -120,7 +122,8 @@ test("a real submission lights the five steps in order through Realtime", async 
   await expect(page.getByText("Intención: proyecto · prioridad alta")).toBeVisible();
   await expect(page.getByText("Confirmación enviada a e2e@example.com")).toBeVisible();
 
-  const call = received.at(-1);
+  // Other suites may submit in parallel: find this test's own webhook call.
+  const call = received.find((entry) => entry.body.name === `${NAME} UI`);
   expect(call?.signatureOk).toBe(true);
   expect(call?.body).toMatchObject({ kind: "proyecto", email: "e2e@example.com" });
 });

@@ -2,6 +2,11 @@ import { expect, test } from "@playwright/test";
 
 test.describe("contact", () => {
   test("shows the three validation messages in order", async ({ page }) => {
+    // Client-side validation only: the final valid submission must not reach
+    // the real API (it would store a lead in Supabase on every run).
+    await page.route("**/api/contact", (route) =>
+      route.fulfill({ status: 200, json: { leadId: "00000000-0000-4000-8000-000000000000" } }),
+    );
     await page.goto("/es#contacto");
     const form = page.locator("#contacto form");
     const send = form.getByRole("button", { name: "Enviar mensaje" });
