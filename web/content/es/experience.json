@@ -9,7 +9,7 @@
     {
       "id": "soaint",
       "current": true,
-      "years": "[AÑO] — Hoy",
+      "years": "2025 — Hoy",
       "role": "Ingeniero de IA & Automatización",
       "org": "SOAINT",
       "areas": ["ia", "backend"],
@@ -29,12 +29,13 @@
     {
       "id": "ix-colombia",
       "current": false,
-      "years": "[AÑOS]",
+      "years": "2023 — 2025",
       "role": "Desarrollador Full Stack",
       "org": "IX Colombia",
       "areas": ["backend", "cloud"],
       "bullets": [
-        "[Qué construiste, para quién y con qué resultado]"
+        "Desarrollé módulos administrativos para la gestión de pacientes en una plataforma de salud.",
+        "Logré trazabilidad del 100 % en los flujos de pacientes y reduje los errores operativos en un 20 % con validaciones y mejoras en la lógica de interfaz."
       ],
       "stack": [
         { "label": "GraphQL", "area": "backend" },
