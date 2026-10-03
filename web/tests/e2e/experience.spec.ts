@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+const MUTED = "rgb(138, 144, 153)";
+const TEXT = "rgb(236, 237, 239)";
+
 const roleCard = (page: import("@playwright/test").Page, org: string) =>
   page.locator("[data-role]").filter({ hasText: org });
 
@@ -14,7 +17,9 @@ test.describe("experience", () => {
     await expect(current.locator("[data-placeholder]").first()).toBeVisible();
   });
 
-  test("the area filter dims roles and highlights chips", async ({ page }) => {
+  test("the area filter dims roles with AA colors and highlights chips", async ({
+    page,
+  }) => {
     await page.goto("/es");
     const filters = page.getByRole("group", { name: "Filtrar por área" });
 
@@ -22,14 +27,15 @@ test.describe("experience", () => {
     await expect(
       filters.getByRole("button", { name: "Frontend" }),
     ).toHaveAttribute("aria-pressed", "true");
-    await expect(roleCard(page, "SOAINT")).toHaveCSS("opacity", "0.32");
-    await expect(roleCard(page, "clínicas")).toHaveCSS("opacity", "1");
+    const title = (org: string) => roleCard(page, org).getByRole("heading");
+    await expect(title("SOAINT")).toHaveCSS("color", MUTED);
+    await expect(title("clínicas")).toHaveCSS("color", TEXT);
     await expect(
       roleCard(page, "clínicas").locator('[data-chip="frontend"]').first(),
     ).toHaveCSS("color", "rgb(110, 240, 176)");
 
     await filters.getByRole("button", { name: "Todo" }).click();
-    await expect(roleCard(page, "SOAINT")).toHaveCSS("opacity", "1");
+    await expect(title("SOAINT")).toHaveCSS("color", TEXT);
   });
 
   test("shows the side cards and a pending CV link as a placeholder", async ({

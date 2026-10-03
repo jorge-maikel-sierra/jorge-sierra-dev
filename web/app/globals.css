@@ -144,13 +144,29 @@ html {
   }
 }
 
-/* AreaFilter: dim roles outside the selected area and highlight its chips
-   (design-reference/Trayectoria.dc.html). Areas come from experience.json. */
-[data-filter="ia"] [data-role]:not([data-areas~="ia"]),
-[data-filter="backend"] [data-role]:not([data-areas~="backend"]),
-[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]),
-[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) {
-  opacity: 0.32;
+/* AreaFilter (design-reference/Trayectoria.dc.html). Roles outside the selected
+   area are dimmed with AA-compliant colors instead of the prototype's
+   opacity: 0.32, which left text at 1.6:1 (WCAG 1.4.3, task 1.8). */
+[data-role] *,
+[data-role] *::marker {
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-role] *,
+  [data-role] *::marker {
+    transition: none;
+  }
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) *,
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) *,
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) *,
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) * {
+  color: var(--text-muted);
 }
 
 [data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-role-dot],
@@ -158,6 +174,22 @@ html {
 [data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-role-dot],
 [data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-role-dot] {
   border-color: var(--border-strong);
+  background-color: var(--surface-2);
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-current-badge],
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-current-badge],
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-current-badge],
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-current-badge] {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-chip],
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-chip],
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-chip],
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-chip] {
+  border-color: var(--rail);
 }
 
 [data-filter="ia"] [data-chip="ia"],

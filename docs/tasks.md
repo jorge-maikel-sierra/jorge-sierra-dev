@@ -32,8 +32,9 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: replica `Contacto.dc.html` y su versión móvil; un e2e prueba los tres mensajes de validación.
 - [x] **1.7 SEO base**: `generateMetadata`, OG generado, JSON-LD `Person`, sitemap y robots.
   - Acepta si: Lighthouse SEO = 100 y las etiquetas Open Graph y Twitter dicen lo mismo.
-- [ ] **1.8 Accesibilidad**: e2e con axe en las cuatro secciones, escritorio y móvil.
+- [x] **1.8 Accesibilidad**: e2e con axe en las cuatro secciones, escritorio y móvil.
   - Acepta si: cero violaciones serias o críticas.
+  - Decisión de Jorge (2026-10-02): el filtro de Trayectoria atenúa con `--text-muted` en lugar de `opacity: 0.32` del prototipo, que dejaba el texto en 1,6:1. El e2e también cubre estados interactivos (caso "soon", filtro activo, error de formulario, menú móvil).
 
 ## Fase 2 — Hero 3D
 
