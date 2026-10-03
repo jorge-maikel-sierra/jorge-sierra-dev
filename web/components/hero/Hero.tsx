@@ -3,6 +3,7 @@ import { ContentText } from "@/components/ui/ContentText";
 import type { Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 import { HeroFallback } from "./HeroFallback";
+import { HeroVisual } from "./HeroVisual";
 
 // Colors the last word of each title line: "caos" in chaos, "arquitectura." in accent.
 function TitleLine({ text, color }: { text: string; color: string }) {
@@ -32,9 +33,13 @@ export function Hero({
       aria-labelledby="hero-title"
       className="relative flex flex-col overflow-hidden sm:min-h-[calc(100svh-96px)]"
     >
-      <HeroFallback
-        layers={hero.graphLayers}
-        className="pointer-events-none absolute left-1/2 top-[68%] hidden w-[min(68vw,520px)] -translate-x-1/2 -translate-y-1/2 opacity-50 sm:block min-[900px]:left-[71%] min-[900px]:top-1/2 min-[900px]:w-[min(52vw,86vh)] min-[900px]:opacity-100"
+      <HeroVisual
+        fallback={
+          <HeroFallback
+            layers={hero.graphLayers}
+            className="pointer-events-none absolute left-1/2 top-[68%] hidden w-[min(68vw,520px)] -translate-x-1/2 -translate-y-1/2 opacity-50 sm:block min-[900px]:left-[71%] min-[900px]:top-1/2 min-[900px]:w-[min(52vw,86vh)] min-[900px]:opacity-100"
+          />
+        }
       />
 
       <div className="relative flex flex-1 items-center px-4 pb-10 pt-2 sm:px-[clamp(16px,5vw,72px)] sm:pb-[150px] sm:pt-6">
