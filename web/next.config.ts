@@ -11,10 +11,6 @@ const nextConfig: NextConfig = {
     // Hero shaders live in .glsl files and are imported as strings.
     rules: { "*.glsl": { loaders: [require.resolve("raw-loader")], as: "*.js" } },
   },
-  // Only Spanish exists until Phase 6, when next-intl negotiates the locale.
-  async redirects() {
-    return [{ source: "/", destination: "/es", permanent: false }];
-  },
 };
 
 export default nextConfig;

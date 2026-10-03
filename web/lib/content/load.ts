@@ -1,4 +1,7 @@
 import type { z } from "zod";
+import casesEn from "@/content/en/cases.json";
+import experienceEn from "@/content/en/experience.json";
+import profileEn from "@/content/en/profile.json";
 import casesEs from "@/content/es/cases.json";
 import experienceEs from "@/content/es/experience.json";
 import profileEs from "@/content/es/profile.json";
@@ -11,15 +14,16 @@ import {
   type Profile,
 } from "./schema";
 
-export const locales = ["es"] as const;
+export const locales = ["es", "en"] as const;
+export const defaultLocale: Locale = "es";
 export type Locale = (typeof locales)[number];
 
 export const isLocale = (value: string): value is Locale =>
   (locales as readonly string[]).includes(value);
 
-// Only Spanish exists in v1. English is added in Phase 6 with a fallback to "es".
 const sources = {
   es: { profile: profileEs, experience: experienceEs, cases: casesEs },
+  en: { profile: profileEn, experience: experienceEn, cases: casesEn },
 } satisfies Record<Locale, Record<string, unknown>>;
 
 export function parseContent<T extends z.ZodType>(

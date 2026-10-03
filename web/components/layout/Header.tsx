@@ -1,5 +1,5 @@
 import { ContentText } from "@/components/ui/ContentText";
-import { loadProfile, type Locale } from "@/lib/content/load";
+import { loadProfile, locales, type Locale } from "@/lib/content/load";
 import { getMessages } from "@/lib/messages";
 import { MobileMenu, type NavItem } from "./MobileMenu";
 
@@ -14,6 +14,8 @@ const initials = (name: string) =>
 export function Header({ locale }: { locale: Locale }) {
   const { name } = loadProfile(locale);
   const { nav } = getMessages(locale);
+  const other = locales.find((value) => value !== locale) ?? locale;
+  const language = { href: `/${other}`, hrefLang: other, label: nav.language, title: nav.switchLanguage };
 
   const items: NavItem[] = [
     { href: "#casos", label: nav.cases },
@@ -53,21 +55,23 @@ export function Header({ locale }: { locale: Locale }) {
               {item.label}
             </a>
           ))}
-          <span
-            aria-disabled="true"
-            title={nav.languageSoon}
-            className="rounded-full border border-border-strong px-3.5 py-3 text-text"
+          <a
+            href={language.href}
+            hrefLang={language.hrefLang}
+            lang={language.hrefLang}
+            aria-label={language.title}
+            title={language.title}
+            className="rounded-full border border-border-strong px-3.5 py-3 text-text hover:border-accent hover:text-white"
           >
-            {nav.language}
-          </span>
+            {language.label}
+          </a>
         </nav>
 
         <MobileMenu
           items={items}
           label={nav.label}
           menuLabel={nav.menu}
-          language={nav.language}
-          languageSoon={nav.languageSoon}
+          language={language}
         />
       </div>
     </header>

@@ -16,6 +16,8 @@ export function stripPlaceholders(text: string): string {
     .split(/(?<=[.!?\]])\s+/)
     .filter((sentence) => !BRACKETED.test(sentence))
     .join(" ")
+    // "[EMPRESA] · Software…" must not leave a dangling separator behind.
+    .replace(/^[\s·•|,;:—–-]+/, "")
     .trim();
 }
 

@@ -1,5 +1,6 @@
 import { AgentBox } from "@/components/agent/AgentBox";
 import { ContentText } from "@/components/ui/ContentText";
+import type { Locale } from "@/lib/content/load";
 import type { Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 import { HeroFallback } from "./HeroFallback";
@@ -23,10 +24,12 @@ export function Hero({
   profile,
   t,
   agent,
+  locale,
 }: {
   profile: Profile;
   t: Messages["hero"];
   agent: Messages["agent"];
+  locale: Locale;
 }) {
   const { hero } = profile;
 
@@ -89,7 +92,7 @@ export function Hero({
             </p>
           </div>
 
-          <AgentBox t={t} agent={agent} />
+          <AgentBox t={t} agent={agent} locale={locale} />
 
           <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7 sm:gap-y-1">
             <a href="#casos" className={ctaClass}>

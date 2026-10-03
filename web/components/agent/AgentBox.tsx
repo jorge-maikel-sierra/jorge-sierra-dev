@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useRef, useState, type FormEvent } from "react";
 import { MAX_MESSAGE_CHARS } from "@/lib/ai/guardrails";
+import type { Locale } from "@/lib/content/load";
 import type { Messages } from "@/lib/messages";
 import type { ConversationHandle } from "./AgentConversation";
 
@@ -10,7 +11,15 @@ import type { ConversationHandle } from "./AgentConversation";
 // the page: the hero stays inside the initial JS budget (RNF-2).
 const AgentConversation = dynamic(() => import("./AgentConversation"), { ssr: false });
 
-export function AgentBox({ t, agent }: { t: Messages["hero"]; agent: Messages["agent"] }) {
+export function AgentBox({
+  t,
+  agent,
+  locale,
+}: {
+  t: Messages["hero"];
+  agent: Messages["agent"];
+  locale: Locale;
+}) {
   const [input, setInput] = useState("");
   const [first, setFirst] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -78,7 +87,13 @@ export function AgentBox({ t, agent }: { t: Messages["hero"]; agent: Messages["a
         </div>
       </form>
       {first !== null && (
-        <AgentConversation ref={conversation} firstMessage={first} onBusy={onBusy} t={agent} />
+        <AgentConversation
+          ref={conversation}
+          firstMessage={first}
+          onBusy={onBusy}
+          locale={locale}
+          t={agent}
+        />
       )}
     </div>
   );

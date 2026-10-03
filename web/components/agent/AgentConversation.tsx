@@ -17,6 +17,7 @@ import {
   type TraceData,
 } from "@/lib/ai/agent";
 import type { AgentMode } from "@/lib/ai/mode";
+import type { Locale } from "@/lib/content/load";
 import type { Messages } from "@/lib/messages";
 import { AgentMessage } from "./AgentMessage";
 import { MatchReport } from "./MatchReport";
@@ -132,11 +133,13 @@ function AssistantMessage({ message, t }: { message: AgentUIMessage; t: T }) {
 export default function AgentConversation({
   firstMessage,
   onBusy,
+  locale,
   t,
   ref,
 }: {
   firstMessage: string;
   onBusy: (busy: boolean) => void;
+  locale: Locale;
   t: T;
   ref: Ref<ConversationHandle>;
 }) {
@@ -146,8 +149,8 @@ export default function AgentConversation({
 
   const transport = useMemo(
     () =>
-      new DefaultChatTransport<AgentUIMessage>({ api: "/api/agent", body: { locale: "es" } }),
-    [],
+      new DefaultChatTransport<AgentUIMessage>({ api: "/api/agent", body: { locale } }),
+    [locale],
   );
 
   const { messages, sendMessage, status, error } = useChat<AgentUIMessage>({

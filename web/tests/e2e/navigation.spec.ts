@@ -2,16 +2,27 @@ import { expect, test } from "@playwright/test";
 
 const sections = ["Casos", "Agente", "Trayectoria", "Contacto"];
 
-test("root redirects to the Spanish home", async ({ page }) => {
-  await page.goto("/");
-  await expect(page).toHaveURL(/\/es$/);
-  await expect(page.locator("html")).toHaveAttribute("lang", "es");
-});
+// docs/design.md §7: "/" is negotiated from Accept-Language.
+// Chromium derives Accept-Language from the context locale.
+for (const [browserLocale, locale] of [
+  ["es-CO", "es"],
+  ["en-US", "en"],
+  ["fr-FR", "es"],
+] as const) {
+  test(`root sends a ${browserLocale} browser to /${locale}`, async ({ browser }) => {
+    const context = await browser.newContext({ locale: browserLocale });
+    const page = await context.newPage();
+    await page.goto("/");
+    await expect(page).toHaveURL(new RegExp(`/${locale}$`));
+    await expect(page.locator("html")).toHaveAttribute("lang", locale);
+    await context.close();
+  });
+}
 
 test.describe("desktop", () => {
   test.skip(({ isMobile }) => isMobile, "desktop layout only");
 
-  test("shows the inline navigation and an inactive language switch", async ({
+  test("shows the inline navigation and a working language switch", async ({
     page,
   }) => {
     await page.goto("/es");
@@ -19,11 +30,14 @@ test.describe("desktop", () => {
     for (const label of sections) {
       await expect(nav.getByRole("link", { name: label })).toBeVisible();
     }
-    await expect(nav.getByText("ES / EN")).toHaveAttribute(
-      "aria-disabled",
-      "true",
-    );
     await expect(page.getByRole("button", { name: "Menú" })).toBeHidden();
+
+    await nav.getByRole("link", { name: "Read this site in English" }).click();
+    await expect(page).toHaveURL(/\/en$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(
+      page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Ver el sitio en español" }),
+    ).toHaveAttribute("href", "/es");
   });
 });
 

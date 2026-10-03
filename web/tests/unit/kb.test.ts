@@ -23,6 +23,9 @@ describe("placeholders never reach the knowledge base", () => {
       stripPlaceholders("Calcula la red. [Añade: para quién es] Exporta a Excel."),
     ).toBe("Calcula la red. Exporta a Excel.");
     expect(stripPlaceholders("[Enlace al CV en PDF]")).toBe("");
+    expect(stripPlaceholders("[EMPRESA] · Software de gestión de clínicas")).toBe(
+      "Software de gestión de clínicas",
+    );
     expect(stripPlaceholders("Sin marcadores.")).toBe("Sin marcadores.");
   });
 

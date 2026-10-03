@@ -94,7 +94,9 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 ## Fase 6 — Pulido y lanzamiento
 
-- [ ] **6.1 Inglés**: `messages/en.json`, contenido traducido en `content/en/`, selector ES/EN activo, `hreflang`, re-ingesta con `lang = 'en'`.
+- [x] **6.1 Inglés**: `messages/en.json`, contenido traducido en `content/en/`, selector ES/EN activo, `hreflang`, re-ingesta con `lang = 'en'`.
+  - Nota: next-intl se usa para el ruteo y la negociación (`proxy.ts`: `/` va a `/es` o `/en` según la cookie `NEXT_LOCALE` y luego `Accept-Language`; cualquier otro idioma cae en `/es`). Los textos siguen siendo props tipadas desde `messages/*.json`: el proveedor de cliente de next-intl no se usa, así que el JS inicial no cambia (204,5 KB contra 204,6 KB del commit anterior, medido igual: gzip de los scripts del HTML prerenderizado). Los marcadores `[ ]` se tradujeron como marcadores, sin inventar datos; `_verify` y `_agentNote` quedan en español porque son notas internas. `hreflang` (es, en, x-default) en metadata y sitemap; el agente recibe el idioma de la página.
+  - Migración `0005`: los README de GitHub solo existen en español y ahora se recuperan desde cualquier idioma. Limitación medida: en inglés la similitud contra esos README baja unos 0,05 y algunos fragmentos quedan bajo el umbral de 0,35 (por ejemplo, el patrón Strategy de notificaciones-challenge). El agente responde con honestidad que no tiene el dato. Recalibrar requiere casos de eval en inglés.
 - [ ] **6.2 Lighthouse CI** con los umbrales de RNF-4 en cada PR.
 - [ ] **6.3 Revisión de marcadores**: listar todos los `[ ]` y campos `_verify` que quedan en `content/` y pedírselos a Jorge. No lanzar con marcadores en cargos, años de SOAINT, WhatsApp ni enlace al CV, ni con campos `_verify` sin resolver.
 - [ ] **6.4 Corte**: mover `web/` a la raíz, archivar el código Nuxt en la rama `legacy-nuxt`, apuntar jorge-sierra.dev al nuevo proyecto en Vercel, verificar redirecciones y que el formulario y el agente funcionen en producción.

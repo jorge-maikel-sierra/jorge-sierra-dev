@@ -3,13 +3,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 
 export type NavItem = { href: string; label: string };
+export type LanguageLink = { href: string; hrefLang: string; label: string; title: string };
 
 type Props = {
   items: NavItem[];
   label: string;
   menuLabel: string;
-  language: string;
-  languageSoon: string;
+  language: LanguageLink;
 };
 
 // Dropdown navigation below 640 px (design-reference/Mobile-Hero.dc.html).
@@ -18,7 +18,6 @@ export function MobileMenu({
   label,
   menuLabel,
   language,
-  languageSoon,
 }: Props) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
@@ -88,13 +87,15 @@ export function MobileMenu({
             <span aria-hidden="true">→</span>
           </a>
         ))}
-        <span
-          aria-disabled="true"
-          title={languageSoon}
-          className="flex min-h-12 items-center px-3 text-text-3"
+        <a
+          href={language.href}
+          hrefLang={language.hrefLang}
+          lang={language.hrefLang}
+          aria-label={language.title}
+          className="flex min-h-12 items-center px-3 text-text-2 hover:text-white"
         >
-          {language}
-        </span>
+          {language.label}
+        </a>
       </nav>
     </>
   );

@@ -1,0 +1,373 @@
+{
+  "cases": [
+    {
+      "slug": "paga-diario",
+      "num": "01",
+      "title": "Paga Diario",
+      "type": "Fintech SaaS",
+      "status": "done",
+      "statusLabel": "Finished · live demo",
+      "context": "",
+      "kicker": "From notebooks and Excel to a real-time collections platform",
+      "problem": "Daily-collection microloan portfolios are usually kept in notebooks and Excel sheets. Paga Diario automates payment recording, late-fee calculation and reports, and organizes the collectors' routes.",
+      "flow": [
+        {
+          "tag": "FIELD",
+          "name": "Collectors",
+          "sub": "GPS collection routes"
+        },
+        {
+          "tag": "API",
+          "name": "Node.js + Express",
+          "sub": "JWT · sessions"
+        },
+        {
+          "tag": "QUEUES",
+          "name": "BullMQ + Redis",
+          "sub": "background jobs"
+        },
+        {
+          "tag": "DATA",
+          "name": "PostgreSQL 16",
+          "sub": "Prisma ORM"
+        },
+        {
+          "tag": "OUTPUT",
+          "name": "Live dashboard",
+          "sub": "Socket.io · Telegram alerts",
+          "badge": "REAL TIME"
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Late fees under Colombian regulation",
+          "text": "The calculation is automatic and follows the regulation instead of relying on manual math."
+        },
+        {
+          "title": "Real time without blocking the API",
+          "text": "BullMQ on Redis and Socket.io for the live dashboard. Redis is optional: basic operation works without it."
+        },
+        {
+          "title": "Tested and deployed",
+          "text": "Tests with Jest and Supertest, Docker containers and deployment on Fly.io."
+        }
+      ],
+      "results": [
+        "Live demo with public credentials.",
+        "Complete modules: loans, payments, collectors, expenses, bulk import, reports and Telegram alerts.",
+        "[Next step: an AI assistant that prioritizes the day's route and flags clients at risk of late payment]"
+      ],
+      "stack": [
+        "Node.js",
+        "Express",
+        "PostgreSQL",
+        "Prisma",
+        "BullMQ",
+        "Socket.io",
+        "Fly.io"
+      ],
+      "links": [
+        {
+          "label": "Demo",
+          "href": "https://paga-diario.fly.dev/"
+        },
+        {
+          "label": "Code",
+          "href": "https://github.com/jorge-maikel-sierra/paga-diario"
+        }
+      ],
+      "note": ""
+    },
+    {
+      "slug": "superlikers-whatsapp",
+      "num": "02",
+      "title": "WhatsApp chatbot with vision",
+      "type": "Automation + AI",
+      "status": "done",
+      "statusLabel": "Finished · technical challenge",
+      "context": "Technical test for SuperLikers",
+      "kicker": "An agent that reads purchase receipts and awards points on its own",
+      "problem": "The challenge: register campaign participants and process their purchase receipts with no human involvement. The chatbot identifies the person on WhatsApp, reads the photo of the receipt with AI and awards the points on the platform.",
+      "flow": [
+        {
+          "tag": "CHANNEL",
+          "name": "WhatsApp Business",
+          "sub": "messages and photos"
+        },
+        {
+          "tag": "ORCHESTRATION",
+          "name": "n8n",
+          "sub": "14 conversation states"
+        },
+        {
+          "tag": "VISION",
+          "name": "GPT-4o Vision",
+          "sub": "reading the receipt",
+          "badge": "AI"
+        },
+        {
+          "tag": "BUSINESS",
+          "name": "SuperLikers API",
+          "sub": "participants and sales"
+        },
+        {
+          "tag": "STATE",
+          "name": "n8n DataTable",
+          "sub": "persistence"
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Explicit state machine",
+          "text": "The conversation is modeled as 14 states, with 10 error cases handled."
+        },
+        {
+          "title": "Vision to read receipts",
+          "text": "GPT-4o Vision extracts the data from the receipt the user photographs."
+        },
+        {
+          "title": "Iterate with tests",
+          "text": "11 automated tests and 12 critical fixes in version 2.0.0."
+        }
+      ],
+      "results": [
+        "Delivered with 96% compliance and a 10/10 validation checklist.",
+        "[VIDEO: 30 s of the chat reading a real receipt]"
+      ],
+      "stack": [
+        "n8n",
+        "WhatsApp Business",
+        "GPT-4o Vision",
+        "Docker"
+      ],
+      "links": [
+        {
+          "label": "Code",
+          "href": "https://github.com/jorge-maikel-sierra/superlikers-ai-automation-challenge"
+        }
+      ],
+      "note": ""
+    },
+    {
+      "slug": "netplan",
+      "num": "03",
+      "title": "NetPlan",
+      "type": "SaaS + algorithms",
+      "status": "partial",
+      "statusLabel": "Code ready · demo pending",
+      "context": "",
+      "kicker": "Network planning with minimum spanning trees",
+      "problem": "NetPlan is a SaaS for planning network infrastructure: it computes the lowest-cost connection between points with MST algorithms on an interactive map. [Add: who it is for and what concrete problem it saves them]",
+      "flow": [
+        {
+          "tag": "MAP",
+          "name": "React + Leaflet",
+          "sub": "Vite · Tailwind"
+        },
+        {
+          "tag": "API",
+          "name": "FastAPI",
+          "sub": "single gateway to the data"
+        },
+        {
+          "tag": "ALGORITHM",
+          "name": "NetworkX",
+          "sub": "minimum spanning tree",
+          "badge": "CORE"
+        },
+        {
+          "tag": "DATA",
+          "name": "Supabase",
+          "sub": "Postgres · Auth · RLS"
+        },
+        {
+          "tag": "EXPORT",
+          "name": "OpenPyXL",
+          "sub": "Excel reports"
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Every query goes through FastAPI",
+          "text": "The frontend never talks to Supabase directly: a single control point for validation and business logic."
+        },
+        {
+          "title": "Spec-Driven Development",
+          "text": "requirements.md → design.md → tasks.md → gap-analysis.md before writing code."
+        },
+        {
+          "title": "Production-ready containers",
+          "text": "Multi-stage Docker, nginx with SPA routing and docker-compose with healthchecks; deployment on Vercel and Render."
+        }
+      ],
+      "results": [
+        "[DEMO: link or GIF of the map computing the network]",
+        "[Repo README: today it only has the title]"
+      ],
+      "stack": [
+        "React",
+        "Leaflet",
+        "FastAPI",
+        "NetworkX",
+        "Supabase",
+        "Docker"
+      ],
+      "links": [
+        {
+          "label": "Code",
+          "href": "https://github.com/jorge-maikel-sierra/netplan"
+        }
+      ],
+      "note": "[Public demo]"
+    },
+    {
+      "slug": "horebs",
+      "num": "04",
+      "title": "Pizzería Horebs",
+      "type": "Full-stack + data",
+      "status": "building",
+      "statusLabel": "In progress",
+      "context": "Real business",
+      "kicker": "From WooCommerce to a business run on data",
+      "problem": "The business lives on WordPress + WooCommerce, hosted on Hostinger. Orders, products and customers are all there, but nobody used them to make decisions. The goal: a new site with cart and checkout that is also the control center for the whole business.",
+      "flow": [
+        {
+          "tag": "SOURCE",
+          "name": "WooCommerce",
+          "sub": "MariaDB on Hostinger"
+        },
+        {
+          "tag": "EXTRACTION",
+          "name": "MCP server",
+          "sub": "AI over the live database",
+          "badge": "AI"
+        },
+        {
+          "tag": "API",
+          "name": "NestJS",
+          "sub": "REST"
+        },
+        {
+          "tag": "DATA",
+          "name": "Supabase",
+          "sub": "Postgres"
+        },
+        {
+          "tag": "CLIENT",
+          "name": "Next.js",
+          "sub": "Store + dashboard on Vercel"
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Data before design",
+          "text": "I connected an MCP server to the production MariaDB database to work with real orders and products from day one."
+        },
+        {
+          "title": "NestJS + Next.js + Supabase monorepo",
+          "text": "API and web in a single repository, frontend on Vercel and free tiers to validate before paying for infrastructure."
+        },
+        {
+          "title": "New site first, migration later",
+          "text": "Migrating historical customers and orders will be decided once the new site is running."
+        }
+      ],
+      "results": [
+        "The data contradicted the brand: the best-selling product is the Ham and Cheese Pizza, not the one everyone assumed.",
+        "Done: monorepo, Supabase connection and /health endpoint. In progress: catalog, cart and checkout.",
+        "[METRIC: online orders or management time after launch]"
+      ],
+      "stack": [
+        "NestJS",
+        "Next.js",
+        "Supabase",
+        "Vercel",
+        "MCP",
+        "MariaDB"
+      ],
+      "links": [
+        {
+          "label": "Demo",
+          "href": "https://horebs-web.vercel.app"
+        },
+        {
+          "label": "Code",
+          "href": "https://github.com/jorge-maikel-sierra/horebs-app"
+        }
+      ],
+      "note": ""
+    },
+    {
+      "slug": "ai-support-platform",
+      "num": "05",
+      "title": "AI Support Automation Platform",
+      "type": "AI engineering",
+      "status": "soon",
+      "statusLabel": "Coming soon",
+      "context": "Project in design",
+      "kicker": "A support agent that classifies, answers and acts",
+      "problem": "A platform that receives support tickets, classifies them by topic and urgency, answers with RAG over a knowledge base and takes actions with tool calling. When the agent is not sure, it escalates to a human.",
+      "labels": {
+        "flow": "PLANNED FLOW",
+        "decisions": "DESIGN DECISIONS",
+        "results": "HOW IT WILL BE MEASURED"
+      },
+      "flow": [
+        {
+          "tag": "INPUT",
+          "name": "Tickets",
+          "sub": "email · chat · form"
+        },
+        {
+          "tag": "TRIAGE",
+          "name": "Classifier agent",
+          "sub": "topic and urgency",
+          "badge": "AI"
+        },
+        {
+          "tag": "KNOWLEDGE",
+          "name": "RAG",
+          "sub": "vector search",
+          "badge": "AI"
+        },
+        {
+          "tag": "ACTIONS",
+          "name": "Tool calling",
+          "sub": "look up · escalate · close"
+        },
+        {
+          "tag": "OUTPUT",
+          "name": "Notifications",
+          "sub": "Email · SMS · Push"
+        }
+      ],
+      "decisions": [
+        {
+          "title": "Reuse what already works",
+          "text": "The output uses the multichannel Strategy pattern from notificaciones-challenge, and the flows run on n8n-local."
+        },
+        {
+          "title": "Evals from day one",
+          "text": "Traces and evaluations with Langfuse to measure classification accuracy and answer quality."
+        },
+        {
+          "title": "Human in the loop",
+          "text": "If the agent's confidence is low, the ticket is escalated instead of answered."
+        }
+      ],
+      "results": [
+        "[Goal: classification accuracy and % of tickets resolved without a human, measured with evals]"
+      ],
+      "stack": [
+        "LLM",
+        "RAG",
+        "Tool calling",
+        "Langfuse",
+        "n8n"
+      ],
+      "links": [],
+      "note": "[Repo in development]",
+      "_agentNote": "Es un proyecto planeado: el agente debe presentarlo como plan, nunca como algo construido."
+    }
+  ]
+}

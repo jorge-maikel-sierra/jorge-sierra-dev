@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import type { Locale } from "@/lib/content/load";
+import { defaultLocale, locales, type Locale } from "@/lib/content/load";
 import type { Profile } from "@/lib/content/schema";
 
 export const SITE_URL = "https://jorge-sierra.dev";
 
-const ogLocale: Record<Locale, string> = { es: "es_CO" };
+const ogLocale: Record<Locale, string> = { es: "es_CO", en: "en_US" };
+
+/** hreflang alternates for every locale plus x-default (docs/design.md §7). */
+export function languageAlternates() {
+  return {
+    ...Object.fromEntries(locales.map((locale) => [locale, `/${locale}`])),
+    "x-default": `/${defaultLocale}`,
+  };
+}
 
 // One title and one description for <title>, Open Graph and Twitter, so shared
 // links never contradict each other (docs/design.md §8).
@@ -23,12 +31,13 @@ export function buildMetadata(profile: Profile, locale: Locale): Metadata {
     metadataBase: new URL(SITE_URL),
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: url, languages: languageAlternates() },
     openGraph: {
       type: "profile",
       url,
       siteName: profile.name,
       locale: ogLocale[locale],
+      alternateLocale: locales.filter((value) => value !== locale).map((value) => ogLocale[value]),
       title,
       description,
     },

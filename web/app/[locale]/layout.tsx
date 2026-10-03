@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
 import { isLocale, loadProfile, locales } from "@/lib/content/load";
+import { getMessages } from "@/lib/messages";
 import { buildMetadata, personJsonLd } from "@/lib/seo/site";
 import "../globals.css";
 
@@ -62,7 +63,7 @@ export default async function LocaleLayout({
           href="#contenido"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-surface focus:px-4 focus:py-3"
         >
-          Saltar al contenido
+          {getMessages(locale).skipToContent}
         </a>
         <Header locale={locale} />
         {children}

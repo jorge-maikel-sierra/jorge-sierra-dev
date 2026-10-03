@@ -7,7 +7,7 @@
     "experience": "Trayectoria",
     "contact": "Contacto",
     "language": "ES / EN",
-    "languageSoon": "La versión en inglés llega pronto"
+    "switchLanguage": "Read this site in English"
   },
   "hero": {
     "agentLabel": "Pregúntale a mi agente",
@@ -189,5 +189,6 @@
     "caseCard": "Ver caso",
     "bookCall": "Agendar una llamada",
     "leadCreated": "Listo: Jorge recibió tus datos y te contactará."
-  }
+  },
+  "skipToContent": "Saltar al contenido"
 }
