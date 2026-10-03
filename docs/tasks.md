@@ -28,7 +28,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: replica `Casos.dc.html` y `Mobile-Casos.dc.html`, incluido el carrusel horizontal en móvil y los bordes punteados del caso "soon"; navegación con teclado entre casos.
 - [x] **1.5 Trayectoria**: `Timeline`, `AreaFilter`, `SideCards`, desde `experience.json` y `profile.json`.
   - Acepta si: replica `Trayectoria.dc.html` y su versión móvil; el filtro atenúa roles y resalta chips.
-- [ ] **1.6 Contacto (solo UI)**: `ContactForm` con validación zod en cliente y mensajes de error; `PipelineView` en estado de espera; `Channels`.
+- [x] **1.6 Contacto (solo UI)**: `ContactForm` con validación zod en cliente y mensajes de error; `PipelineView` en estado de espera; `Channels`.
   - Acepta si: replica `Contacto.dc.html` y su versión móvil; un e2e prueba los tres mensajes de validación.
 - [ ] **1.7 SEO base**: `generateMetadata`, OG generado, JSON-LD `Person`, sitemap y robots.
   - Acepta si: Lighthouse SEO = 100 y las etiquetas Open Graph y Twitter dicen lo mismo.

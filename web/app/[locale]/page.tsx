@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CasesSection } from "@/components/cases/CasesSection";
+import { ContactSection } from "@/components/contact/ContactSection";
 import { ExperienceSection } from "@/components/experience/ExperienceSection";
 import { Hero } from "@/components/hero/Hero";
 import {
@@ -32,8 +33,12 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         opensInNewTab={t.cases.opensInNewTab}
         backToTop={t.cases.backToTop}
       />
-      {/* Built in task 1.6. */}
-      <section id="contacto" aria-label={t.nav.contact} />
+      <ContactSection
+        profile={profile}
+        t={t.contact}
+        opensInNewTab={t.cases.opensInNewTab}
+        backToTop={t.cases.backToTop}
+      />
     </main>
   );
 }

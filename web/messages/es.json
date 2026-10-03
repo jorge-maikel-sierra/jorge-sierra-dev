@@ -59,5 +59,51 @@
     "closingQuestion": "¿Encajo con lo que buscas? Hablemos.",
     "closingMobile": "¿Encajo con lo que buscas? Hablemos",
     "closingCta": "Ir a contacto"
+  },
+  "contact": {
+    "eyebrow": "04 · Contacto",
+    "title": "Cuéntame tu problema de negocio.",
+    "intro": "Escríbeme y mira lo que pasa con tu mensaje: es el mismo tipo de automatización que construyo para otros.",
+    "kindLabel": "¿Qué traes?",
+    "kinds": {
+      "vacante": "Una vacante",
+      "proyecto": "Un proyecto",
+      "otro": "Otra cosa"
+    },
+    "name": "Nombre",
+    "namePlaceholder": "Cómo te llamas",
+    "email": "Correo",
+    "emailPlaceholder": "tu@empresa.com",
+    "company": "Empresa",
+    "optional": "(opcional)",
+    "companyPlaceholder": "Dónde trabajas",
+    "message": "Mensaje",
+    "messagePlaceholder": "El proceso manual, el sistema lento o la vacante que tienes en mente",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "errors": {
+      "name": "Escribe tu nombre para saber a quién respondo.",
+      "email": "Revisa tu correo: así te llega la confirmación.",
+      "message": "Cuéntame un poco del problema o la vacante.",
+      "tooLong": "Es un poco largo: acórtalo, por favor."
+    },
+    "pipelineTitle": "Lo que pasa cuando envías",
+    "pipelineNote": "DEMO · EN PRODUCCIÓN CORRE EN n8n",
+    "waiting": "En espera",
+    "logIdle": "$ esperando un mensaje…",
+    "steps": [
+      "Webhook recibido",
+      "Clasificación con IA",
+      "Registro en el CRM",
+      "Aviso a Jorge",
+      "Respuesta automática"
+    ],
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "email": "Correo",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "or": "o"
   }
 }

@@ -40,7 +40,7 @@ test.describe("experience", () => {
     await expect(page.getByText("Cómo trabajo")).toBeVisible();
     await expect(page.getByText("[Enlace al CV en PDF]")).toBeVisible();
     await expect(
-      page.getByRole("link", { name: /LinkedIn/ }),
+      page.locator("#trayectoria").getByRole("link", { name: /LinkedIn/ }),
     ).toHaveAttribute("href", "https://www.linkedin.com/in/jorgemaikelsierra/");
   });
 });
