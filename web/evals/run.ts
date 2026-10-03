@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { LangfuseClient } from "@langfuse/client";
 import { getActiveTraceId, startActiveObservation } from "@langfuse/tracing";
@@ -227,11 +227,18 @@ async function main() {
   ) as Record<Metric, number[]>;
   const summary = summarize(byMetric);
 
-  console.log("\n| Métrica | Valor | Umbral | Casos | |\n|---|---|---|---|---|");
-  for (const row of summary) {
-    console.log(
-      `| ${METRIC_LABELS[row.metric]} | ${(row.value * 100).toFixed(1)} % | ${(row.threshold * 100).toFixed(0)} % | ${row.cases} | ${row.passed ? "✓" : "✗"} |`,
-    );
+  const table = [
+    "| Métrica | Valor | Umbral | Casos | |",
+    "|---|---|---|---|---|",
+    ...summary.map(
+      (row) =>
+        `| ${METRIC_LABELS[row.metric]} | ${(row.value * 100).toFixed(1)} % | ${(row.threshold * 100).toFixed(0)} % | ${row.cases} | ${row.passed ? "✓" : "✗"} |`,
+    ),
+  ].join("\n");
+  console.log(`\n${table}`);
+  // GitHub Actions renders the same table on the job page.
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    appendFileSync(process.env.GITHUB_STEP_SUMMARY, `## Evals del agente\n\n${table}\n`);
   }
   const weak = results.filter((result) => result.missing.length);
   if (weak.length) {
@@ -251,9 +258,17 @@ async function main() {
     await publishToLangfuse(dataset, results, runName);
   }
 
+  // A crash is not a quality verdict: say so instead of blaming a metric.
+  const crashed = results.filter((result) => result.error);
+  if (crashed.length) {
+    console.error(`\n✗ ${crashed.length} casos no se pudieron evaluar (errores de ejecución, no de calidad):`);
+    for (const result of crashed) console.error(`  ${result.id}: ${result.error}`);
+  }
   const failed = summary.filter((row) => !row.passed);
-  if (failed.length) {
-    console.error(`\n✗ Umbral no alcanzado: ${failed.map((row) => METRIC_LABELS[row.metric]).join(", ")}`);
+  if (failed.length || crashed.length) {
+    if (failed.length) {
+      console.error(`\n✗ Umbral no alcanzado: ${failed.map((row) => METRIC_LABELS[row.metric]).join(", ")}`);
+    }
     process.exit(1);
   }
   console.log("\n✓ Todos los umbrales se cumplen");

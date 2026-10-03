@@ -90,6 +90,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Pendiente menor (no bloquea umbrales): el juez marca exageraciones sutiles como "en producción" para el challenge de SuperLikers o "tienda construida" para Horebs, que sigue en construcción. Vale endurecer el prompt cuando haya más casos.
 - [ ] **5.4 Job de evals en CI** cuando cambien `lib/ai/**`, `content/**` o `evals/**`.
   - Acepta si: romper a propósito el prompt (quitar la regla 1) hace fallar el job.
+  - Estado: workflow `web-evals.yml` listo (filtros de rutas nativos, `workflow_dispatch`, tabla en el resumen del job, `report.json` como artefacto). Falta: (1) cargar los secretos del agente en el repo; (2) verificar la aceptación. El intento local se invalidó a mitad de corrida porque se agotó el crédito de Anthropic; desde entonces el runner separa los errores de ejecución de los fallos de calidad.
 
 ## Fase 6 — Pulido y lanzamiento
 
