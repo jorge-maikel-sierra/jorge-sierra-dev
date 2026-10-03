@@ -30,7 +30,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: replica `Trayectoria.dc.html` y su versión móvil; el filtro atenúa roles y resalta chips.
 - [x] **1.6 Contacto (solo UI)**: `ContactForm` con validación zod en cliente y mensajes de error; `PipelineView` en estado de espera; `Channels`.
   - Acepta si: replica `Contacto.dc.html` y su versión móvil; un e2e prueba los tres mensajes de validación.
-- [ ] **1.7 SEO base**: `generateMetadata`, OG generado, JSON-LD `Person`, sitemap y robots.
+- [x] **1.7 SEO base**: `generateMetadata`, OG generado, JSON-LD `Person`, sitemap y robots.
   - Acepta si: Lighthouse SEO = 100 y las etiquetas Open Graph y Twitter dicen lo mismo.
 - [ ] **1.8 Accesibilidad**: e2e con axe en las cuatro secciones, escritorio y móvil.
   - Acepta si: cero violaciones serias o críticas.

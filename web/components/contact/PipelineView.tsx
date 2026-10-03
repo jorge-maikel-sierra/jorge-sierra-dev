@@ -36,7 +36,7 @@ export function PipelineView({ t }: { t: Messages["contact"] }) {
               <span className="text-base font-bold text-text-faint sm:text-[17px]">
                 {step}
               </span>
-              <span className="font-mono text-xs leading-[1.5] text-[#5e646d]">
+              <span className="font-mono text-xs leading-[1.5] text-text-faint">
                 {t.waiting}
               </span>
             </div>

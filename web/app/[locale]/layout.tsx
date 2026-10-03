@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/Header";
-import { isLocale, locales } from "@/lib/content/load";
+import { isLocale, loadProfile, locales } from "@/lib/content/load";
+import { buildMetadata, personJsonLd } from "@/lib/seo/site";
 import "../globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -21,11 +22,13 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-export const metadata: Metadata = {
-  title: "Jorge Sierra — AI Engineer & Senior Full-Stack Developer",
-  description:
-    "Automatizo procesos, escalo sistemas y genero impacto real de negocio.",
-};
+export async function generateMetadata({
+  params,
+}: LayoutProps<"/[locale]">): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return buildMetadata(loadProfile(locale), locale);
+}
 
 export const dynamicParams = false;
 
@@ -46,6 +49,15 @@ export default async function LocaleLayout({
       className={`${bricolage.variable} ${jetbrainsMono.variable}`}
     >
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personJsonLd(loadProfile(locale))).replace(
+              /</g,
+              "\\u003c",
+            ),
+          }}
+        />
         <a
           href="#contenido"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-surface focus:px-4 focus:py-3"
