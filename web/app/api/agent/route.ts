@@ -9,7 +9,7 @@ import { AGENT_ENV, env, pickEnv } from "@/lib/env";
 import { flushLangfuse } from "@/lib/observability/langfuse";
 import { createAgentLimiter } from "@/lib/ratelimit";
 
-export const maxDuration = 60;
+export const maxDuration = 120;
 
 const MAX_BODY_BYTES = 128 * 1024;
 

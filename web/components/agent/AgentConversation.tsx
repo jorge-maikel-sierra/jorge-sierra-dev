@@ -71,13 +71,14 @@ function AssistantMessage({ message, t }: { message: AgentUIMessage; t: T }) {
     | TraceData
     | undefined;
   const sources = trace?.retrieved ?? [];
+  // The report and the prose stream in parallel: the report always goes first.
+  const report = message.parts.find((part) => part.type === "data-report")?.data;
 
   return (
     <div className="flex flex-col gap-3">
+      {report && <MatchReport report={report} sources={sources} t={t.report} />}
       {message.parts.map((part, i) => {
         switch (part.type) {
-          case "data-report":
-            return <MatchReport key={i} report={part.data} sources={sources} t={t.report} />;
           case "text":
             return part.text.trim() ? (
               <AgentMessage key={i} text={part.text} sources={sources} />

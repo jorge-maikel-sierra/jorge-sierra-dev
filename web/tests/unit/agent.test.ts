@@ -1,7 +1,13 @@
 import { MockLanguageModelV4 } from "ai/test";
 import { describe, expect, it, vi } from "vitest";
 import { loadCases } from "@/lib/content/load";
-import { classifyMode, extractRequirements, MatchReportSchema } from "@/lib/ai/mode";
+import {
+  classifyMode,
+  extractRequirements,
+  finalizeReport,
+  MatchReportDraftSchema,
+  REPORT_LIMITS,
+} from "@/lib/ai/mode";
 import { buildSystemPrompt, wrapVisitorInput } from "@/lib/ai/prompts";
 import { numberSources, type RetrievedChunk } from "@/lib/ai/retrieval";
 import { createAgentTools, LEAD_KIND, SourceRegistry, visitorConsented } from "@/lib/ai/tools";
@@ -88,17 +94,26 @@ describe("mode classification", () => {
     expect(requirements).toEqual(["Python", "RAG", "LangChain"]);
   });
 
-  it("MatchReport has no numeric fit score and requires evidence sources", () => {
-    expect(Object.keys(MatchReportSchema.shape)).not.toContain("score");
-    expect(
-      MatchReportSchema.safeParse({
+  it("MatchReport has no numeric fit score and keeps only evidence with real sources", () => {
+    expect(Object.keys(MatchReportDraftSchema.shape)).not.toContain("score");
+    const { report, invalidCitations } = finalizeReport(
+      {
         roleTitle: "AI Engineer",
         summary: "Encaja en automatización.",
-        matches: [{ requirement: "n8n", evidence: "Chatbot con n8n", sourceIds: [] }],
-        gaps: [],
-        interviewQuestions: [],
-      }).success,
-    ).toBe(false);
+        matches: [
+          { requirement: "n8n", evidence: "Chatbot con n8n", sourceIds: [1, 7] },
+          { requirement: "Rust", evidence: "Sin fuente", sourceIds: [] },
+        ],
+        gaps: Array.from({ length: 9 }, (_, i) => ({ requirement: `Brecha ${i}`, note: "No aparece." })),
+        interviewQuestions: ["a", "b", "c", "d", "e"],
+      },
+      new Set([1, 2]),
+    );
+    expect(report.matches).toEqual([{ requirement: "n8n", evidence: "Chatbot con n8n", sourceIds: [1] }]);
+    expect(invalidCitations).toBe(1);
+    // A long vacancy must not void the report: lists are trimmed, not rejected.
+    expect(report.gaps).toHaveLength(REPORT_LIMITS.gaps);
+    expect(report.interviewQuestions).toHaveLength(REPORT_LIMITS.interviewQuestions);
   });
 });
 

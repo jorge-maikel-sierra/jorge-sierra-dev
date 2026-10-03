@@ -56,17 +56,16 @@ async function agentStream(mode: string, text: string) {
     }),
   });
   const chat = new MockLanguageModelV4({
-    doGenerate: async () => ({
-      content: [{ type: "text", text: JSON.stringify(report) }],
-      finishReason: finish,
-      usage,
-      warnings: [],
-    }),
-    doStream: async () => ({
+    // Structured output (the fit report) is requested with a JSON response format.
+    doStream: async ({ responseFormat }) => ({
       stream: simulateReadableStream({
         chunks: [
           { type: "text-start", id: "t" },
-          { type: "text-delta", id: "t", delta: text },
+          {
+            type: "text-delta",
+            id: "t",
+            delta: responseFormat?.type === "json" ? JSON.stringify(report) : text,
+          },
           { type: "text-end", id: "t" },
           { type: "finish", finishReason: finish, usage },
         ],

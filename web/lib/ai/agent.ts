@@ -19,7 +19,8 @@ import {
   AGENT_MODES,
   classifyMode,
   extractRequirements,
-  MatchReportSchema,
+  finalizeReport,
+  MatchReportDraftSchema,
   type AgentMode,
   type MatchReport,
 } from "./mode";
@@ -37,7 +38,15 @@ import { createAgentTools, SourceRegistry, type AgentToolDeps } from "./tools";
 
 export const MAX_TOOL_STEPS = 5;
 export const MAX_OUTPUT_TOKENS = 1200;
+/**
+ * §14 "LLM caído o timeout (20 s)": a model that sends nothing for 20 s is
+ * down. A long fit report legitimately streams for longer, so the total cap
+ * is separate: a full report is ~2,500 output tokens (Spanish JSON), over
+ * 30 s when the API is slow. It stays under the route's maxDuration (120 s).
+ */
 export const LLM_TIMEOUT_MS = 20_000;
+export const LLM_TOTAL_TIMEOUT_MS = 90_000;
+const TIMEOUT = { firstChunkMs: LLM_TIMEOUT_MS, chunkMs: LLM_TIMEOUT_MS, totalMs: LLM_TOTAL_TIMEOUT_MS };
 
 /** §14: what the visitor sees when the model or a dependency fails. */
 export const AGENT_UNAVAILABLE = "El agente no responde ahora mismo. Escríbele a Jorge desde Contacto.";
@@ -185,80 +194,80 @@ export function runAgent(params: {
     const system = buildSystemPrompt({ mode, sources });
     const messages = toModelMessages(turns);
 
+    // 4. The fit report (vacancy, first turn) and the prose answer do not
+    // depend on each other: they run in parallel. The UI shows the report first.
+    const start = now();
+    progress("write");
     const answer = await startActiveObservation("generate", async () => {
-      // 4a. Vacancy: structured fit report (§7), with every source id checked.
-      if (mode === "vacancy" && firstTurn) {
-        const start = now();
-        const generated = await generateText({
+      const reportTask = async () => {
+        if (mode !== "vacancy" || !firstTurn) return;
+        const generated = streamText({
           model: deps.models.chat,
-          system: `${system}\n\nGenera el reporte de encaje estructurado. Cada encaje necesita al menos una fuente válida en sourceIds.`,
+          system: `${system}\n\nGenera el reporte de encaje estructurado: resumen de 2 o 3 frases, hasta 10 encajes y hasta 6 brechas, las más importantes primero. Sé breve: cada evidencia en una frase y cada nota de brecha en una frase. Cada encaje necesita al menos una fuente válida en sourceIds.`,
           messages,
-          output: Output.object({ schema: MatchReportSchema }),
-          abortSignal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+          output: Output.object({ schema: MatchReportDraftSchema }),
+          timeout: TIMEOUT,
           telemetry: { functionId: "match_report" },
         });
-        usages.push(toUsage(deps.models.chatModelId, generated.usage));
-        const valid = registry.ids();
-        const matches = generated.output.matches
-          .map((match) => {
-            const sourceIds = match.sourceIds.filter((id) => valid.has(id));
-            invalidCitations += match.sourceIds.length - sourceIds.length;
-            return { ...match, sourceIds };
-          })
-          // Evidence without a real source is not evidence.
-          .filter((match) => match.sourceIds.length > 0);
-        const report: MatchReport = { ...generated.output, matches };
-        hasGaps = report.gaps.length > 0;
-        writer.write({ type: "data-report", data: report });
-        steps.push({ name: "generate", ms: Math.round(now() - start) });
-      }
+        try {
+          const draft = await generated.output;
+          usages.push(toUsage(deps.models.chatModelId, await generated.totalUsage));
+          const final = finalizeReport(draft, registry.ids());
+          invalidCitations += final.invalidCitations;
+          hasGaps = final.report.gaps.length > 0;
+          writer.write({ type: "data-report", data: final.report });
+        } catch (error) {
+          // The prose answer still covers fit and gaps: degrade, do not fail.
+          console.error("[agent] match report", error instanceof Error ? `${error.name}: ${error.message}` : error);
+        }
+      };
 
-      // 4b. Streamed answer with tools; invalid citations removed on the fly.
-      progress("write");
-      const start = now();
-      const tools =
-        mode === "out_of_scope"
-          ? undefined
-          : createAgentTools({
-              mode,
-              lastVisitorMessage: lastVisitor,
-              cases: deps.cases,
-              calBookingUrl: deps.calBookingUrl,
-              registry,
-              // The registry renumbers tool results after the initial sources.
-              search: (query) => retrieve(query, deps.retrieval, { lang }),
-              createLead: async (input) => {
-                const leadId = await deps.createLead(input);
-                leadCreated = true;
-                return leadId;
-              },
-            });
+      // Streamed answer with tools; invalid citations removed on the fly.
+      const proseTask = async () => {
+        const tools =
+          mode === "out_of_scope"
+            ? undefined
+            : createAgentTools({
+                mode,
+                lastVisitorMessage: lastVisitor,
+                cases: deps.cases,
+                calBookingUrl: deps.calBookingUrl,
+                registry,
+                // The registry renumbers tool results after the initial sources.
+                search: (query) => retrieve(query, deps.retrieval, { lang }),
+                createLead: async (input) => {
+                  const leadId = await deps.createLead(input);
+                  leadCreated = true;
+                  return leadId;
+                },
+              });
 
-      const result = streamText({
-        model: deps.models.chat,
-        system,
-        messages,
-        tools,
-        stopWhen: isStepCount(MAX_TOOL_STEPS),
-        maxOutputTokens: MAX_OUTPUT_TOKENS,
-        abortSignal: AbortSignal.timeout(LLM_TIMEOUT_MS),
-        experimental_transform: citationTransform(
-          () => registry.ids(),
-          () => {
-            invalidCitations += 1;
-          },
-        ),
-        telemetry: { functionId: "answer" },
-      });
+        const result = streamText({
+          model: deps.models.chat,
+          system,
+          messages,
+          tools,
+          stopWhen: isStepCount(MAX_TOOL_STEPS),
+          maxOutputTokens: MAX_OUTPUT_TOKENS,
+          timeout: TIMEOUT,
+          experimental_transform: citationTransform(
+            () => registry.ids(),
+            () => {
+              invalidCitations += 1;
+            },
+          ),
+          telemetry: { functionId: "answer" },
+        });
 
-      writer.merge(toUIMessageStream({ stream: result.stream }));
-      usages.push(toUsage(deps.models.chatModelId, await result.totalUsage));
-      const generateMs = Math.round(now() - start);
-      const generateStep = steps.find((step) => step.name === "generate");
-      if (generateStep) generateStep.ms += generateMs;
-      else steps.push({ name: "generate", ms: generateMs });
-      return result.text;
+        writer.merge(toUIMessageStream({ stream: result.stream }));
+        usages.push(toUsage(deps.models.chatModelId, await result.totalUsage));
+        return result.text;
+      };
+
+      const [, text] = await Promise.all([reportTask(), proseTask()]);
+      return text;
     });
+    steps.push({ name: "generate", ms: Math.round(now() - start) });
 
     // 5. Citations were filtered while streaming; this span records the result
     // and carries the tags only known at the end (mode, gaps, lead).

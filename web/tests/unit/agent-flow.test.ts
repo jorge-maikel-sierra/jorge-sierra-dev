@@ -14,20 +14,16 @@ const usage = {
 };
 const finish = { unified: "stop" as const, raw: undefined };
 
-/** Chat model: JSON report on generate, streamed text (deltas) on stream. */
+/** Chat model: streams the JSON report when asked for structured output, prose otherwise. */
 const chatModel = (deltas: string[], report?: MatchReport) =>
   new MockLanguageModelV4({
-    doGenerate: async () => ({
-      content: [{ type: "text", text: JSON.stringify(report ?? {}) }],
-      finishReason: finish,
-      usage,
-      warnings: [],
-    }),
-    doStream: async () => ({
+    doStream: async ({ responseFormat }) => ({
       stream: simulateReadableStream({
         chunks: [
           { type: "text-start", id: "t1" },
-          ...deltas.map((delta) => ({ type: "text-delta" as const, id: "t1", delta })),
+          ...(responseFormat?.type === "json" ? [JSON.stringify(report ?? {})] : deltas).map(
+            (delta) => ({ type: "text-delta" as const, id: "t1", delta }),
+          ),
           { type: "text-end", id: "t1" },
           { type: "finish", finishReason: finish, usage },
         ],
@@ -142,7 +138,8 @@ describe("agent flow (mocked models)", () => {
     // One search per extracted requirement (top 3 each).
     expect(d.search).toHaveBeenCalledTimes(2);
     expect(d.search).toHaveBeenCalledWith(expect.objectContaining({ query: "n8n", matchCount: 3 }));
-    expect(out.types.indexOf("data-report")).toBeLessThan(out.types.indexOf("text-delta"));
+    // Report and prose ran in parallel: two chat calls, both counted.
+    expect(out.trace?.tokens).toEqual({ input: 400, output: 160 });
   });
 
   it("problem: retrieves for the visitor's description", async () => {
