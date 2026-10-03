@@ -11,8 +11,8 @@ export type ContactDeps = {
   verifyTurnstile(token: string, ip: string | null): Promise<boolean>;
   /** Inserts the lead and its "received" event; returns the new lead id. */
   store(input: ContactInput): Promise<string>;
-  /** Signed call to the n8n webhook. */
-  notify(payload: ContactInput & { leadId: string }): Promise<void>;
+  /** Signed call to the n8n webhook; null while no automation is configured. */
+  notify: ((payload: ContactInput & { leadId: string }) => Promise<void>) | null;
   /** Records a "failed" event so the browser shows the reassuring message. */
   recordFailure(leadId: string, failedStep: string): Promise<void>;
   /** Runs work after the response is sent (next/server `after`). */
@@ -73,13 +73,16 @@ export async function submitContact(
   }
 
   // The browser already has its lead id: n8n runs after the response.
-  deps.defer(async () => {
-    try {
-      await deps.notify({ ...parsed.data, leadId });
-    } catch {
-      await deps.recordFailure(leadId, "webhook").catch(() => undefined);
-    }
-  });
+  const notify = deps.notify;
+  if (notify) {
+    deps.defer(async () => {
+      try {
+        await notify({ ...parsed.data, leadId });
+      } catch {
+        await deps.recordFailure(leadId, "webhook").catch(() => undefined);
+      }
+    });
+  }
 
   return { status: 200, body: { leadId } };
 }

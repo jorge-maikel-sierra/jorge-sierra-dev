@@ -3,7 +3,7 @@ import { createN8nNotifier } from "@/lib/contact/n8n";
 import { createLeadStore } from "@/lib/contact/store";
 import { submitContact } from "@/lib/contact/submit";
 import { createTurnstileVerifier } from "@/lib/contact/turnstile";
-import { CONTACT_ENV, pickEnv } from "@/lib/env";
+import { CONTACT_ENV, N8N_ENV, pickEnv } from "@/lib/env";
 import { getMessages } from "@/lib/messages";
 import { createContactLimiter } from "@/lib/ratelimit";
 import { createServiceClient } from "@/lib/supabase/server";
@@ -29,6 +29,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "invalid_json" }, { status: 400 });
   }
 
+  const n8n = pickEnv(N8N_ENV);
   const leads = createLeadStore(
     createServiceClient(config.NEXT_PUBLIC_SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY),
   );
@@ -43,7 +44,9 @@ export async function POST(request: Request) {
       ),
       verifyTurnstile: createTurnstileVerifier(config.TURNSTILE_SECRET_KEY),
       store: leads.store,
-      notify: createN8nNotifier(config.N8N_CONTACT_WEBHOOK_URL, config.N8N_WEBHOOK_SECRET),
+      notify: n8n
+        ? createN8nNotifier(n8n.N8N_CONTACT_WEBHOOK_URL, n8n.N8N_WEBHOOK_SECRET)
+        : null,
       recordFailure: leads.recordFailure,
       defer: (task) => after(task),
       newId: () => crypto.randomUUID(),

@@ -147,6 +147,16 @@ describe("submitContact", () => {
   });
 });
 
+describe("without n8n configured", () => {
+  it("stores the lead and schedules nothing else", async () => {
+    const { deps } = fakeDeps({ notify: null });
+    const defer = vi.fn();
+    const result = await submitContact(valid, null, { ...deps, defer }, errors);
+    expect(result).toEqual({ status: 200, body: { leadId: "lead-1" } });
+    expect(defer).not.toHaveBeenCalled();
+  });
+});
+
 describe("pickEnv", () => {
   it("returns the values only when every key is present", () => {
     expect(pickEnv(["AI_PROVIDER"], { AI_PROVIDER: "anthropic" })).toEqual({

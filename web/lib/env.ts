@@ -92,15 +92,22 @@ export function parseEnv(
 
 export const env = parseEnv(process.env);
 
-/** Variables the contact pipeline needs (tasks 3.2–3.4). */
+/** Variables the contact form needs to accept and store a message (task 3.2). */
 export const CONTACT_ENV = [
   "NEXT_PUBLIC_SUPABASE_URL",
   "SUPABASE_SERVICE_ROLE_KEY",
   "TURNSTILE_SECRET_KEY",
-  "N8N_CONTACT_WEBHOOK_URL",
-  "N8N_WEBHOOK_SECRET",
   "UPSTASH_REDIS_REST_URL",
   "UPSTASH_REDIS_REST_TOKEN",
+] as const satisfies readonly EnvKey[];
+
+/**
+ * Optional automation (task 3.3). Jorge has no n8n instance for this project
+ * yet: without these the lead is stored and nothing else is called.
+ */
+export const N8N_ENV = [
+  "N8N_CONTACT_WEBHOOK_URL",
+  "N8N_WEBHOOK_SECRET",
 ] as const satisfies readonly EnvKey[];
 
 /** Returns the requested variables only when every one of them is set. */
