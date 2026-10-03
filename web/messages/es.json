@@ -15,7 +15,11 @@
     "agentSubmit": "Analizar",
     "ctaCases": "Ver casos de estudio",
     "ctaContact": "Agendar consulta",
-    "graphLabel": "Arquitectura en cinco capas"
+    "graphLabel": "Arquitectura en cinco capas",
+    "stateChaos": "CAOS",
+    "stateOrdering": "ORDENANDO",
+    "stateArchitecture": "ARQUITECTURA",
+    "backToChaos": "VOLVER AL CAOS"
   },
   "placeholder": {
     "pending": "Dato pendiente:"

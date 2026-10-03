@@ -20,22 +20,29 @@ import marksFragment from "./marks.frag.glsl";
 import marksVertex from "./marks.vert.glsl";
 import particlesFragment from "./particles.frag.glsl";
 import particlesVertex from "./particles.vert.glsl";
+import type { HeroMotion, HeroVariant } from "./useHeroProgress";
 
 const CAMERA_Z = 3.6;
 const POINT_SIZE = 1;
 
 export type HeroSceneProps = {
-  /** 0 = chaos, 1 = architecture. Read every frame, never causes a re-render. */
-  progress: RefObject<number>;
+  /** Shared motion state. Read every frame, never causes a re-render. */
+  motion: RefObject<HeroMotion>;
+  variant: HeroVariant;
   particleCount: number;
   layers: { label: string; sub: string }[];
   tokens: string[];
+  /** Mobile strip status ("CAOS · 12%"), updated in place without re-renders. */
+  status?: {
+    element: RefObject<HTMLElement | null>;
+    labels: StatusLabels;
+  };
   onReady?: () => void;
 };
 
 type LayerProps = {
   graph: Graph;
-  progress: RefObject<number>;
+  motion: RefObject<HeroMotion>;
   /** 1 on wide screens, 0.5 when the graph sits under the text. */
   opacity: number;
   colors: { accent: Color; chaos: Color };
@@ -53,35 +60,79 @@ const cssColor = (token: string, fallback: string) => {
   return new Color(value || fallback);
 };
 
-// Same framing as the prototype: on wide screens the graph sits at 71 % of the
-// width; below 900 px it moves under the text at half opacity.
-function useFraming(group: RefObject<Group | null>) {
+// Same framing as the prototypes. Desktop: the graph sits at 71 % of the width
+// on wide screens and under the text at half opacity below 900 px. Mobile: it
+// fills its own strip (design-reference/Mobile-Hero.dc.html).
+function framing(variant: HeroVariant, width: number, height: number) {
+  if (variant === "mobile") {
+    return { x: 0.5, y: 0.44, scale: Math.min(width * 0.27, height * 0.34), opacity: 1 };
+  }
+  const wide = width >= 900;
+  return wide
+    ? { x: 0.71, y: 0.5, scale: Math.min(width * 0.2, height * 0.33), opacity: 1 }
+    : { x: 0.5, y: 0.68, scale: Math.min(width * 0.34, height * 0.22), opacity: 0.5 };
+}
+
+function useFraming(group: RefObject<Group | null>, variant: HeroVariant) {
   const size = useThree((state) => state.size);
   const get = useThree((state) => state.get);
 
+  const frame = framing(variant, size.width, size.height);
+  const { scale } = frame;
+
   useLayoutEffect(() => {
-    const wide = size.width >= 900;
-    const scale = wide
-      ? Math.min(size.width * 0.2, size.height * 0.33)
-      : Math.min(size.width * 0.34, size.height * 0.22);
     const perspective = get().camera as PerspectiveCamera;
     perspective.fov =
       (2 * Math.atan(size.height / (2 * scale * CAMERA_Z)) * 180) / Math.PI;
     perspective.updateProjectionMatrix();
 
     group.current?.position.set(
-      ((wide ? 0.71 : 0.5) - 0.5) * (size.width / scale),
-      -((wide ? 0.5 : 0.68) - 0.5) * (size.height / scale),
+      (frame.x - 0.5) * (size.width / scale),
+      -(frame.y - 0.5) * (size.height / scale),
       0,
     );
-  }, [size, get, group]);
+  }, [size, get, group, frame.x, frame.y, scale]);
 
-  return size.width >= 900 ? 1 : 0.5;
+  return frame.opacity;
 }
+
+/** Eases progress toward its target and smooths the pointer (prototype rates). */
+function advanceMotion(state: HeroMotion, delta: number) {
+  const dt = Math.min(50, delta * 1000) / 16.667;
+  state.value += (state.target - state.value) * Math.min(1, 0.035 * dt);
+  state.smoothX += (state.pointerX - state.smoothX) * Math.min(1, 0.05 * dt);
+  state.smoothY += (state.pointerY - state.smoothY) * Math.min(1, 0.05 * dt);
+}
+
+type StatusLabels = { chaos: string; ordering: string; architecture: string };
+
+/** Writes "CAOS · 12%" and data-state on the strip status; returns the text. */
+function writeStatus(
+  element: HTMLElement,
+  value: number,
+  labels: StatusLabels,
+  previous: string,
+) {
+  const percent = Math.round(value * 100);
+  const state = percent < 30 ? "chaos" : percent < 90 ? "ordering" : "architecture";
+  const text = `${labels[state]} · ${percent}%`;
+  if (text !== previous) {
+    element.dataset.state = state;
+    const target = element.querySelector("[data-status-text]");
+    if (target) target.textContent = text;
+  }
+  return text;
+}
+
+// Rotation from design.md §4 (desktop) and Mobile-Hero.dc.html (mobile).
+const ROTATION: Record<HeroVariant, { amp: number; base: number; yawPointer: number; pitchPointer: number }> = {
+  desktop: { amp: 0.45, base: -0.28, yawPointer: 0.4, pitchPointer: 0.18 },
+  mobile: { amp: 0.4, base: -0.22, yawPointer: 0.35, pitchPointer: 0.15 },
+};
 
 function Particles({
   graph,
-  progress,
+  motion,
   opacity,
   colors,
   count,
@@ -106,7 +157,7 @@ function Particles({
     const current = material.current?.uniforms;
     if (!current) return;
     current.uTime.value = clock.elapsedTime;
-    current.uProgress.value = progress.current;
+    current.uProgress.value = motion.current.value;
     current.uPixelRatio.value = gl.getPixelRatio();
     current.uOpacity.value = opacity;
   });
@@ -135,7 +186,7 @@ function Particles({
 }
 
 /** Edges appear from progress 0.55. */
-function Edges({ graph, progress, opacity, colors }: LayerProps) {
+function Edges({ graph, motion, opacity, colors }: LayerProps) {
   const material = useRef<LineBasicMaterial>(null);
   const positions = useMemo(
     () =>
@@ -151,7 +202,7 @@ function Edges({ graph, progress, opacity, colors }: LayerProps) {
 
   useFrame(() => {
     if (!material.current) return;
-    material.current.opacity = 0.3 * ramp(progress.current, 0.55, 0.4) * opacity;
+    material.current.opacity = 0.3 * ramp(motion.current.value, 0.55, 0.4) * opacity;
   });
 
   return (
@@ -185,7 +236,7 @@ type MarksProps = LayerProps & {
 
 /** Screen-space node rings and edge pulses, drawn by marks.*.glsl. */
 function Marks({
-  progress,
+  motion,
   opacity,
   colors,
   from,
@@ -218,7 +269,7 @@ function Marks({
     current.uTime.value = clock.elapsedTime;
     current.uPixelRatio.value = gl.getPixelRatio();
     current.uOpacity.value =
-      strength * ramp(progress.current, start, length) * opacity;
+      strength * ramp(motion.current.value, start, length) * opacity;
   });
 
   return (
@@ -321,7 +372,7 @@ type OverlayRefs = {
  */
 function OverlayProjector({
   graph,
-  progress,
+  motion,
   opacity,
   overlay,
   tokenCount,
@@ -363,14 +414,14 @@ function OverlayProjector({
       element.style.opacity = String(alpha);
     };
 
-    const labelAlpha = ramp(progress.current, 0.86, 0.14) * opacity;
+    const labelAlpha = ramp(motion.current.value, 0.86, 0.14) * opacity;
     anchors.tops.forEach((anchor, i) => {
       point.copy(anchor);
       group.localToWorld(point);
       place(overlay.labels.current[i], labelAlpha);
     });
 
-    const tokenAlpha = (1 - clamp01(progress.current * 1.6)) * 0.75 * opacity;
+    const tokenAlpha = (1 - clamp01(motion.current.value * 1.6)) * 0.75 * opacity;
     anchors.tokens.forEach((token, i) => {
       const a = clock.elapsedTime * 0.4 + token.phase;
       point.set(
@@ -387,13 +438,16 @@ function OverlayProjector({
 }
 
 function Scene({
-  progress,
+  motion,
+  variant,
   particleCount,
   overlay,
   tokenCount,
+  status,
 }: HeroSceneProps & { overlay: OverlayRefs; tokenCount: number }) {
-  const group = useRef<Group>(null);
-  const opacity = useFraming(group);
+  const framed = useRef<Group>(null);
+  const rotating = useRef<Group>(null);
+  const opacity = useFraming(framed, variant);
   const graph = useMemo(() => buildGraph(), []);
   const colors = useMemo(
     () => ({
@@ -402,20 +456,45 @@ function Scene({
     }),
     [],
   );
-  const shared = { graph, progress, opacity, colors };
+  const lastStatus = useRef("");
+  const shared = { graph, motion, opacity, colors };
+
+  // Ease progress toward its target and smooth the pointer, as the prototype.
+  useFrame(({ clock }, delta) => {
+    const state = motion.current;
+    advanceMotion(state, delta);
+
+    const r = ROTATION[variant];
+    const yaw =
+      Math.sin(clock.elapsedTime * 0.18) * r.amp + r.base + state.smoothX * r.yawPointer;
+    const pitch = 0.2 + state.smoothY * r.pitchPointer;
+    rotating.current?.rotation.set(pitch, yaw, 0);
+
+    const element = status?.element.current;
+    if (element) {
+      lastStatus.current = writeStatus(
+        element,
+        state.value,
+        status.labels,
+        lastStatus.current,
+      );
+    }
+  });
 
   return (
-    <group ref={group}>
-      <Edges {...shared} />
-      <Particles {...shared} count={particleCount} />
-      <Pulses {...shared} />
-      <Nodes {...shared} />
-      <OverlayProjector
-        {...shared}
-        overlay={overlay}
-        tokenCount={tokenCount}
-        root={group}
-      />
+    <group ref={framed}>
+      <group ref={rotating}>
+        <Edges {...shared} />
+        <Particles {...shared} count={particleCount} />
+        <Pulses {...shared} />
+        <Nodes {...shared} />
+        <OverlayProjector
+          {...shared}
+          overlay={overlay}
+          tokenCount={tokenCount}
+          root={rotating}
+        />
+      </group>
     </group>
   );
 }
@@ -440,7 +519,8 @@ export default function HeroScene(props: HeroSceneProps) {
         />
       </Canvas>
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        {props.layers.map((layer, i) => (
+        {props.variant === "desktop" &&
+          props.layers.map((layer, i) => (
           <div
             key={layer.label}
             ref={(element) => {
@@ -453,7 +533,7 @@ export default function HeroScene(props: HeroSceneProps) {
               <p className="text-[10px] text-text-muted">{layer.sub}</p>
             </div>
           </div>
-        ))}
+          ))}
         {props.tokens.map((token, i) => (
           <span
             key={token}

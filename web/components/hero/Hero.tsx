@@ -34,8 +34,10 @@ export function Hero({
       className="relative flex flex-col overflow-hidden sm:min-h-[calc(100svh-96px)]"
     >
       <HeroVisual
+        variant="desktop"
         layers={hero.graphLayers}
         tokens={hero.chaosTokens}
+        labels={t}
         fallback={
           <HeroFallback
             layers={hero.graphLayers}
@@ -66,8 +68,14 @@ export function Hero({
 
           {/* Below 640 px the scene lives in its own strip (RF-1.5). */}
           <div className="-mx-4 flex flex-col gap-2.5 sm:hidden">
-            <div className="flex h-[300px] items-center justify-center border-y border-[#15171b]">
-              <HeroFallback layers={hero.graphLayers} className="w-[88%]" />
+            <div className="relative h-[300px] border-y border-[#15171b]">
+              <HeroVisual
+                variant="mobile"
+                layers={hero.graphLayers}
+                tokens={hero.chaosTokens}
+                labels={t}
+                fallback={<HeroFallback layers={hero.graphLayers} className="w-[88%]" />}
+              />
             </div>
             <p className="px-4 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-text-muted">
               <span className="sr-only">{t.graphLabel}: </span>
