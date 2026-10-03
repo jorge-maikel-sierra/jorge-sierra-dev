@@ -190,5 +190,15 @@
     "bookCall": "Book a call",
     "leadCreated": "Done: Jorge got your details and will contact you."
   },
-  "skipToContent": "Skip to content"
+  "skipToContent": "Skip to content",
+  "cv": {
+    "summary": "Profile",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "education": "Education",
+    "stack": "Technologies",
+    "current": "Current",
+    "site": "Site and AI agent"
+  }
 }

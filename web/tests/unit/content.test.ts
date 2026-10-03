@@ -34,7 +34,15 @@ describe("content loading", () => {
   });
 
   it("accepts bracket placeholders where a URL is expected", () => {
-    expect(loadProfile().links.cv.startsWith("[")).toBe(true);
+    expect(loadProfile().links.calBooking.startsWith("[")).toBe(true);
+  });
+
+  it("the CV link is a file served by the site, and only a clean path is allowed", () => {
+    expect(loadProfile("es").links.cv).toBe("/cv/jorge-sierra-cv-es.pdf");
+    expect(loadProfile("en").links.cv).toBe("/cv/jorge-sierra-cv-en.pdf");
+    const broken = clone(profile);
+    broken.links.cv = "javascript:alert(1)";
+    expect(() => parseContent(profileSchema, broken, "es/profile.json")).toThrow(/links\.cv/);
   });
 });
 

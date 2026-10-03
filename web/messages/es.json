@@ -190,5 +190,15 @@
     "bookCall": "Agendar una llamada",
     "leadCreated": "Listo: Jorge recibió tus datos y te contactará."
   },
-  "skipToContent": "Saltar al contenido"
+  "skipToContent": "Saltar al contenido",
+  "cv": {
+    "summary": "Perfil",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "education": "Formación",
+    "stack": "Tecnologías",
+    "current": "Actual",
+    "site": "Sitio y agente con IA"
+  }
 }

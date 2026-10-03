@@ -11,7 +11,7 @@ test.describe("experience", () => {
     page,
   }) => {
     await page.goto("/es");
-    await expect(page.locator("[data-role]")).toHaveCount(4);
+    await expect(page.locator("[data-role]")).toHaveCount(3);
     const current = roleCard(page, "SOAINT");
     await expect(current.getByText("Actual")).toBeVisible();
     await expect(current.locator("[data-placeholder]").first()).toBeVisible();
@@ -29,22 +29,35 @@ test.describe("experience", () => {
     ).toHaveAttribute("aria-pressed", "true");
     const title = (org: string) => roleCard(page, org).getByRole("heading");
     await expect(title("SOAINT")).toHaveCSS("color", MUTED);
-    await expect(title("clínicas")).toHaveCSS("color", TEXT);
+    await expect(title("IX Colombia")).toHaveCSS("color", TEXT);
     await expect(
-      roleCard(page, "clínicas").locator('[data-chip="frontend"]').first(),
+      roleCard(page, "IX Colombia").locator('[data-chip="frontend"]').first(),
     ).toHaveCSS("color", "rgb(110, 240, 176)");
 
     await filters.getByRole("button", { name: "Todo" }).click();
     await expect(title("SOAINT")).toHaveCSS("color", TEXT);
   });
 
-  test("shows the side cards and a pending CV link as a placeholder", async ({
+  test("shows the side cards and a CV generated for each language", async ({
     page,
+    request,
   }) => {
     await page.goto("/es");
     await expect(page.getByText("Formación y en curso")).toBeVisible();
     await expect(page.getByText("Cómo trabajo")).toBeVisible();
-    await expect(page.getByText("[Enlace al CV en PDF]")).toBeVisible();
+    for (const [locale, label] of [
+      ["es", "Descargar CV"],
+      ["en", "Download CV"],
+    ] as const) {
+      await page.goto(`/${locale}`);
+      const cv = page.locator("#trayectoria").getByRole("link", { name: label });
+      const href = `/cv/jorge-sierra-cv-${locale}.pdf`;
+      await expect(cv).toHaveAttribute("href", href);
+      const response = await request.get(href);
+      expect(response.status()).toBe(200);
+      expect(response.headers()["content-type"]).toContain("application/pdf");
+    }
+    await page.goto("/es");
     await expect(
       page.locator("#trayectoria").getByRole("link", { name: /LinkedIn/ }),
     ).toHaveAttribute("href", "https://www.linkedin.com/in/jorgemaikelsierra/");

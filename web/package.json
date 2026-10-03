@@ -12,7 +12,8 @@
     "e2e": "playwright test",
     "kb:ingest": "tsx --env-file-if-exists=.env.local scripts/ingest.ts",
     "ask": "tsx --env-file-if-exists=.env.local scripts/ask.ts",
-    "evals": "tsx --env-file-if-exists=.env.local evals/run.ts"
+    "evals": "tsx --env-file-if-exists=.env.local evals/run.ts",
+    "cv": "tsx scripts/cv.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.71",

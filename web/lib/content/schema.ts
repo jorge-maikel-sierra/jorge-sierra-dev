@@ -6,7 +6,11 @@ export const placeholder = z.string().regex(/^\[.+\]$/, "Marcador inválido");
 export const isPlaceholder = (value: string) => value.startsWith("[");
 
 const text = z.string().min(1);
-const urlOrPlaceholder = z.union([z.url(), placeholder]);
+// Content URLs end up in href attributes: only http(s), never javascript: or data:.
+const webUrl = z.url({ protocol: /^https?$/ });
+const urlOrPlaceholder = z.union([webUrl, placeholder]);
+// Files served by the site itself, such as the generated CV (/cv/…pdf).
+const sitePath = z.string().regex(/^\/[\w./-]+$/);
 const emailOrPlaceholder = z.union([z.email(), placeholder]);
 
 // Fields starting with "_" are internal notes and are never rendered.
@@ -40,11 +44,11 @@ export const profileSchema = z.strictObject({
   education: z.array(z.strictObject({ title: text, org: text })),
   principles: z.array(z.strictObject({ title: text, text })),
   links: z.strictObject({
-    github: z.url(),
-    linkedin: z.url(),
+    github: webUrl,
+    linkedin: webUrl,
     email: emailOrPlaceholder,
     whatsapp: z.union([z.string().regex(/^\d{10,15}$/), placeholder]),
-    cv: urlOrPlaceholder,
+    cv: z.union([webUrl, sitePath, placeholder]),
     calBooking: urlOrPlaceholder,
   }),
   responseTime: text,
@@ -106,7 +110,7 @@ export const casesSchema = z.strictObject({
         decisions: z.array(z.strictObject({ title: text, text })).min(1),
         results: z.array(text).min(1),
         stack: z.array(text).min(1),
-        links: z.array(z.strictObject({ label: text, href: z.url() })),
+        links: z.array(z.strictObject({ label: text, href: webUrl })),
         note: z.string(),
         ...internalNotes,
       }),

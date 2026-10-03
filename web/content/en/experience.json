@@ -1,9 +1,21 @@
 {
   "areas": [
-    { "id": "ia", "label": "AI and automation" },
-    { "id": "backend", "label": "Backend" },
-    { "id": "frontend", "label": "Frontend" },
-    { "id": "cloud", "label": "Cloud and DevOps" }
+    {
+      "id": "ia",
+      "label": "AI and automation"
+    },
+    {
+      "id": "backend",
+      "label": "Backend"
+    },
+    {
+      "id": "frontend",
+      "label": "Frontend"
+    },
+    {
+      "id": "cloud",
+      "label": "Cloud and DevOps"
+    }
   ],
   "roles": [
     {
@@ -12,19 +24,48 @@
       "years": "2025 — Present",
       "role": "AI & Automation Engineer",
       "org": "SOAINT",
-      "areas": ["ia", "backend"],
+      "areas": [
+        "ia",
+        "backend"
+      ],
       "bullets": [
         "I lead a team of 2 to 3 developers.",
         "[ACHIEVEMENT with a metric: which process you automated and what impact it had]"
       ],
       "stack": [
-        { "label": "n8n", "area": "ia" },
-        { "label": "LangChain", "area": "ia" },
-        { "label": "LangSmith", "area": "ia" },
-        { "label": "RAG", "area": "ia" },
-        { "label": "Pinecone", "area": "ia" }
-      ],
-      "_verify": "Confirmar que este stack corresponde a SOAINT."
+        {
+          "label": "n8n",
+          "area": "ia"
+        },
+        {
+          "label": "LangChain",
+          "area": "ia"
+        },
+        {
+          "label": "LangGraph",
+          "area": "ia"
+        },
+        {
+          "label": "LangSmith",
+          "area": "ia"
+        },
+        {
+          "label": "RAG",
+          "area": "ia"
+        },
+        {
+          "label": "Pinecone",
+          "area": "ia"
+        },
+        {
+          "label": "Python",
+          "area": "backend"
+        },
+        {
+          "label": "FastAPI",
+          "area": "backend"
+        }
+      ]
     },
     {
       "id": "ix-colombia",
@@ -32,33 +73,54 @@
       "years": "2023 — 2025",
       "role": "Full Stack Developer",
       "org": "IX Colombia",
-      "areas": ["backend", "cloud"],
+      "areas": [
+        "frontend",
+        "backend",
+        "cloud"
+      ],
       "bullets": [
         "I built administrative modules for patient management on a healthcare platform.",
-        "I achieved 100% traceability in patient flows and cut operational errors by 20% with validations and improvements to the interface logic."
-      ],
-      "stack": [
-        { "label": "GraphQL", "area": "backend" },
-        { "label": "Redis", "area": "backend" },
-        { "label": "GitLab CI", "area": "cloud" },
-        { "label": "Terraform", "area": "cloud" }
-      ],
-      "_verify": "Confirmar cargo, años y stack. El orden respecto al rol de clínicas es una suposición."
-    },
-    {
-      "id": "clinicas",
-      "current": false,
-      "years": "[YEARS]",
-      "role": "Full Stack Developer",
-      "org": "[COMPANY] · Clinic management software",
-      "areas": ["frontend", "backend"],
-      "bullets": [
+        "I achieved 100% traceability in patient flows and cut operational errors by 20% with validations and improvements to the interface logic.",
         "I started on the frontend with Vue and Quasar and then moved to the backend.",
         "Product used by clients in Colombia, Peru and Argentina."
       ],
       "stack": [
-        { "label": "Vue", "area": "frontend" },
-        { "label": "Quasar", "area": "frontend" }
+        {
+          "label": "React",
+          "area": "frontend"
+        },
+        {
+          "label": "Vue",
+          "area": "frontend"
+        },
+        {
+          "label": "Quasar",
+          "area": "frontend"
+        },
+        {
+          "label": "TypeScript",
+          "area": "frontend"
+        },
+        {
+          "label": "FastAPI",
+          "area": "backend"
+        },
+        {
+          "label": "GraphQL",
+          "area": "backend"
+        },
+        {
+          "label": "Redis",
+          "area": "backend"
+        },
+        {
+          "label": "GitLab CI",
+          "area": "cloud"
+        },
+        {
+          "label": "Terraform",
+          "area": "cloud"
+        }
       ]
     },
     {
@@ -67,17 +129,43 @@
       "years": "2019 — 2023",
       "role": "Full Stack Developer",
       "org": "SENA",
-      "areas": ["backend", "cloud"],
+      "areas": [
+        "backend",
+        "cloud"
+      ],
       "bullets": [
         "Backend with Python, Django and Django REST Framework, applying patterns such as Singleton and Factory.",
         "GCP services: Compute Engine, Cloud Functions, Cloud Run, GKE, Pub/Sub, BigQuery and App Engine."
       ],
       "stack": [
-        { "label": "Python", "area": "backend" },
-        { "label": "Django", "area": "backend" },
-        { "label": "DRF", "area": "backend" },
-        { "label": "GCP", "area": "cloud" },
-        { "label": "BigQuery", "area": "cloud" }
+        {
+          "label": "Python",
+          "area": "backend"
+        },
+        {
+          "label": "Django",
+          "area": "backend"
+        },
+        {
+          "label": "DRF",
+          "area": "backend"
+        },
+        {
+          "label": "NestJS",
+          "area": "backend"
+        },
+        {
+          "label": "PostgreSQL",
+          "area": "backend"
+        },
+        {
+          "label": "GCP",
+          "area": "cloud"
+        },
+        {
+          "label": "BigQuery",
+          "area": "cloud"
+        }
       ]
     }
   ]

@@ -58,6 +58,7 @@
     "ia": [
       "n8n",
       "LangChain",
+      "LangGraph",
       "LangSmith",
       "RAG",
       "Pinecone",
@@ -128,7 +129,7 @@
     "linkedin": "https://www.linkedin.com/in/jorgemaikelsierra/",
     "email": "jorgemaikelsierraamaya@gmail.com",
     "whatsapp": "573187592616",
-    "cv": "[Link to the CV in PDF]",
+    "cv": "/cv/jorge-sierra-cv-en.pdf",
     "calBooking": "[Cal.com booking link]"
   },
   "responseTime": "I reply within 24 h"
