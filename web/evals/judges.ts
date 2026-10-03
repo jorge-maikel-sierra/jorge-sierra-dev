@@ -64,10 +64,28 @@ export type AgentRun = {
   toolCalls: string[];
   validCitations: number;
   invalidCitations: number;
+  /** Citation-like markers in another format ("[5]", "[2][4]"): they link nowhere. */
+  malformedCitations: number;
 };
 
 const CITATION = /\[fuente:\d+\]/g;
+const BARE_CITATION = /\[\d+\]/g;
 export const countCitations = (text: string) => text.match(CITATION)?.length ?? 0;
+export const countMalformedCitations = (text: string) => text.match(BARE_CITATION)?.length ?? 0;
+
+/**
+ * Citas válidas (§12): share of citations that resolve to a real source.
+ * Markers in the wrong format resolve to nothing, and an answer that had
+ * sources but cites none of them is not a cited answer.
+ */
+export function citationScore(
+  run: Pick<AgentRun, "validCitations" | "invalidCitations" | "malformedCitations">,
+  { mustCite }: { mustCite: boolean },
+) {
+  const total = run.validCitations + run.invalidCitations + run.malformedCitations;
+  if (mustCite && run.validCitations === 0) return 0;
+  return total ? run.validCitations / total : 1;
+}
 
 export const mean = (values: number[]) =>
   values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 1;
@@ -82,10 +100,20 @@ export function recallAt8(expected: string[], retrievedKeys: string[]) {
 const normalize = (text: string) =>
   text.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
-/** Case- and accent-insensitive substring checks on the visible answer. */
+const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * Case- and accent-insensitive phrase checks on the visible answer. Whole
+ * words only: "olas" must not match inside "escuelas".
+ */
 export function phraseHits(text: string, phrases: string[]) {
   const haystack = normalize(text);
-  return phrases.filter((phrase) => haystack.includes(normalize(phrase)));
+  return phrases.filter((phrase) => {
+    const needle = normalize(phrase);
+    const start = /^\w/.test(needle) ? "\\b" : "";
+    const end = /\w$/.test(needle) ? "\\b" : "";
+    return new RegExp(`${start}${escape(needle)}${end}`).test(haystack);
+  });
 }
 
 /** Everything the visitor reads: prose plus the structured report. */

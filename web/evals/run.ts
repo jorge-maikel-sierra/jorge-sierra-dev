@@ -10,7 +10,9 @@ import { AGENT_ENV, env, LANGFUSE_ENV, pickEnv } from "@/lib/env";
 import { flushLangfuse, registerLangfuse } from "@/lib/observability/langfuse";
 import { createServiceClient } from "@/lib/supabase/server";
 import {
+  citationScore,
   countCitations,
+  countMalformedCitations,
   EvalCaseSchema,
   judgeFaithfulness,
   judgeGaps,
@@ -145,6 +147,7 @@ async function main() {
       toolCalls,
       validCitations: countCitations(text) + reportCitations,
       invalidCitations: trace.invalidCitations,
+      malformedCitations: countMalformedCitations(text),
     };
   }
 
@@ -155,8 +158,10 @@ async function main() {
       try {
         const run = await runCase(testCase);
         span.update({ input: testCase.input, output: visibleAnswer(run) });
-        const totalCitations = run.validCitations + run.invalidCitations;
-        const citations = totalCitations ? run.validCitations / totalCitations : 1;
+        // Answers about Jorge must cite; refusals have nothing to cite.
+        const citations = citationScore(run, {
+          mustCite: testCase.type === "general" || testCase.type === "vacancy",
+        });
 
         if (testCase.type === "general" || testCase.type === "vacancy") {
           const faithfulness = await judgeFaithfulness(judge, run);
