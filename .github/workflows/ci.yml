@@ -1,6 +1,9 @@
 name: ci
 
-on: push
+# Nuxt site. The Next.js rewrite in web/ has its own workflow (web-ci.yml).
+on:
+  push:
+    branches: [main]
 
 jobs:
   ci:

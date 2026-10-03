@@ -14,7 +14,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: arrancar sin una variable obligatoria del servidor falla con un mensaje claro.
 - [x] **0.4 Contenido tipado**: `lib/content/schema.ts` y `load.ts` para `content/es/*.json` (copiar `content/` a `web/content/`).
   - Acepta si: un test de Vitest carga los tres JSON y falla si se rompe el esquema.
-- [ ] **0.5 CI**: workflow de GitHub Actions con lint, typecheck, test, build y gitleaks. Proyecto en Vercel con previews por PR.
+- [x] **0.5 CI**: workflow de GitHub Actions con lint, typecheck, test, build y gitleaks. Proyecto en Vercel con previews por PR.
   - Acepta si: un PR de prueba muestra todos los checks en verde y un enlace de preview.
 
 ## Fase 1 — Secciones estáticas (sin 3D ni IA)
