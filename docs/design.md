@@ -179,7 +179,7 @@ El sitio es oscuro por diseño; no hay tema claro en v1.
 | `EMBEDDING_API_KEY` | servidor | llave del proveedor de embeddings |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | servidor | rate limit y tope de costo |
 | `AGENT_DAILY_BUDGET_USD` | servidor | tope diario de costo del agente |
-| `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` / `LANGFUSE_HOST` | servidor | trazas |
+| `LANGFUSE_PUBLIC_KEY` / `LANGFUSE_SECRET_KEY` / `LANGFUSE_BASE_URL` | servidor | trazas |
 | `N8N_CONTACT_WEBHOOK_URL` / `N8N_WEBHOOK_SECRET` | servidor | pipeline de contacto |
 | `TURNSTILE_SECRET_KEY` / `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | ambos | antispam |
 | `GITHUB_TOKEN` | servidor (ingesta) | leer README de repos |

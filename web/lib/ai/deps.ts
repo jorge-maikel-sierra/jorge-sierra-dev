@@ -1,3 +1,4 @@
+import { startActiveObservation } from "@langfuse/tracing";
 import { Redis } from "@upstash/redis";
 import { loadCases } from "@/lib/content/load";
 import { createLeadStore } from "@/lib/contact/store";
@@ -58,7 +59,12 @@ export function createAgentRuntime(config: AgentConfig) {
       chatModel: config.AI_MODEL,
     }),
     retrieval: {
-      embedQuery: async (query) => (await embed([query])).embeddings[0],
+      embedQuery: (query) =>
+        startActiveObservation(
+          "embed_query",
+          async () => (await embed([query])).embeddings[0],
+          { asType: "embedding" },
+        ),
       search: async ({ embedding, query, matchCount, lang }) => {
         const { data, error } = await db.rpc("match_kb_chunks", {
           query_embedding: JSON.stringify(embedding),

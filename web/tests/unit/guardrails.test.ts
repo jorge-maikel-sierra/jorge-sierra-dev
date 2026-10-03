@@ -15,6 +15,13 @@ describe("redactPII", () => {
       redactPII("Soy Ana (ana.perez+rh@empresa.co), llámame al +57 318 759 2616. Vacante 2025."),
     ).toBe("Soy Ana ([email]), llámame al [teléfono]. Vacante 2025.");
   });
+
+  it("keeps year ranges, dates and decimals that only look like phones", () => {
+    const text = "IX Colombia 2023 - 2025, desde 2026-10-03, similitud 0.0123456. Tel 318.759.2616";
+    expect(redactPII(text)).toBe(
+      "IX Colombia 2023 - 2025, desde 2026-10-03, similitud 0.0123456. Tel [teléfono]",
+    );
+  });
 });
 
 describe("checkInput", () => {

@@ -9,9 +9,11 @@ import {
   type LanguageModelUsage,
   type ModelMessage,
   type UIMessage,
+  type UIMessageStreamWriter,
 } from "ai";
 import type { Case } from "@/lib/content/schema";
 import { estimateCost, type Usage } from "./cost";
+import { propagateAttributes, startActiveObservation } from "@langfuse/tracing";
 import { citationTransform, type ChatTurn } from "./guardrails";
 import {
   AGENT_MODES,
@@ -90,9 +92,12 @@ export function runAgent(params: {
   /** Mode detected on the first message and sent back by the client (§2). */
   mode?: AgentMode;
   lang?: string;
+  /** Random id created by the browser per conversation (§11), never personal data. */
+  sessionId?: string;
   deps: AgentDeps;
 }) {
   const { turns, deps } = params;
+  const lang = params.lang ?? "es";
   const now = deps.now ?? (() => performance.now());
   const lastVisitor = turns.filter((turn) => turn.role === "user").at(-1)?.text ?? "";
   const firstVisitor = turns.find((turn) => turn.role === "user")?.text ?? lastVisitor;
@@ -103,50 +108,86 @@ export function runAgent(params: {
       console.error("[agent]", error instanceof Error ? `${error.name}: ${error.message}` : error);
       return AGENT_UNAVAILABLE;
     },
-    execute: async ({ writer }) => {
-      const progress = (step: ProgressStep) =>
-        writer.write({ type: "data-progress", data: { step }, transient: true });
-      progress("read");
-      const steps: TraceData["steps"] = [];
-      const usages: Usage[] = [];
-      let invalidCitations = 0;
+    // §11: one Langfuse trace per request. Without a registered tracer
+    // provider (tests, missing keys) every span below is a no-op.
+    execute: ({ writer }) =>
+      propagateAttributes(
+        { traceName: "agent", sessionId: params.sessionId, tags: [`lang:${lang}`] },
+        () =>
+          startActiveObservation(
+            "agent",
+            async (root) => {
+              root.update({ input: lastVisitor });
+              const answer = await execute(writer);
+              root.update({ output: answer });
+            },
+            { asType: "agent" },
+          ),
+      ),
+  });
 
-      // 2. Mode, kept for the whole conversation once known.
-      let mode = params.mode && AGENT_MODES.includes(params.mode) ? params.mode : undefined;
-      if (!mode) {
-        const start = now();
-        const classified = await classifyMode(firstVisitor, deps.models.fast);
-        mode = classified.mode;
-        usages.push(toUsage(deps.models.fastModelId, classified.usage));
-        steps.push({ name: "classify", ms: Math.round(now() - start) });
-      }
+  async function execute(writer: UIMessageStreamWriter<AgentUIMessage>) {
+    const progress = (step: ProgressStep) =>
+      writer.write({ type: "data-progress", data: { step }, transient: true });
+    progress("read");
+    const steps: TraceData["steps"] = [];
+    const usages: Usage[] = [];
+    let invalidCitations = 0;
+    let leadCreated = false;
+    let hasGaps = false;
 
-      // 3. Retrieval. Out of scope: no sources and no tools, nothing to leak.
-      progress("search");
-      let sources: Source[] = [];
-      let report: MatchReport | null = null;
-      if (mode !== "out_of_scope") {
-        const start = now();
-        if (mode === "vacancy" && turns.filter((t) => t.role === "user").length === 1) {
-          const extracted = await extractRequirements(lastVisitor, deps.models.fast);
-          usages.push(toUsage(deps.models.fastModelId, extracted.usage));
-          sources = await retrieveForRequirements(
-            extracted.requirements.length ? extracted.requirements : [lastVisitor],
-            deps.retrieval,
-            { lang: params.lang },
-          );
-        } else {
-          sources = await retrieve(lastVisitor, deps.retrieval, { lang: params.lang });
-        }
-        steps.push({ name: "retrieve", ms: Math.round(now() - start) });
-      }
-      progress("compare");
-      const registry = new SourceRegistry(sources);
-      const system = buildSystemPrompt({ mode, sources });
-      const messages = toModelMessages(turns);
+    // 2. Mode, kept for the whole conversation once known.
+    let mode = params.mode && AGENT_MODES.includes(params.mode) ? params.mode : undefined;
+    if (!mode) {
+      const start = now();
+      const classified = await startActiveObservation("classify", async (span) => {
+        const result = await classifyMode(firstVisitor, deps.models.fast);
+        span.update({ output: result.mode });
+        return result;
+      });
+      mode = classified.mode;
+      usages.push(toUsage(deps.models.fastModelId, classified.usage));
+      steps.push({ name: "classify", ms: Math.round(now() - start) });
+    }
+    const firstTurn = turns.filter((t) => t.role === "user").length === 1;
 
+    // 3. Retrieval. Out of scope: no sources and no tools, nothing to leak.
+    progress("search");
+    let sources: Source[] = [];
+    if (mode !== "out_of_scope") {
+      const start = now();
+      sources = await startActiveObservation(
+        "retrieve",
+        async (span) => {
+          let found: Source[];
+          if (mode === "vacancy" && firstTurn) {
+            const extracted = await extractRequirements(lastVisitor, deps.models.fast);
+            usages.push(toUsage(deps.models.fastModelId, extracted.usage));
+            found = await retrieveForRequirements(
+              extracted.requirements.length ? extracted.requirements : [lastVisitor],
+              deps.retrieval,
+              { lang },
+            );
+          } else {
+            found = await retrieve(lastVisitor, deps.retrieval, { lang });
+          }
+          span.update({
+            output: found.map((source) => ({ id: source.id, title: source.title, score: source.score })),
+          });
+          return found;
+        },
+        { asType: "retriever" },
+      );
+      steps.push({ name: "retrieve", ms: Math.round(now() - start) });
+    }
+    progress("compare");
+    const registry = new SourceRegistry(sources);
+    const system = buildSystemPrompt({ mode, sources });
+    const messages = toModelMessages(turns);
+
+    const answer = await startActiveObservation("generate", async () => {
       // 4a. Vacancy: structured fit report (§7), with every source id checked.
-      if (mode === "vacancy" && turns.filter((t) => t.role === "user").length === 1) {
+      if (mode === "vacancy" && firstTurn) {
         const start = now();
         const generated = await generateText({
           model: deps.models.chat,
@@ -154,6 +195,7 @@ export function runAgent(params: {
           messages,
           output: Output.object({ schema: MatchReportSchema }),
           abortSignal: AbortSignal.timeout(LLM_TIMEOUT_MS),
+          telemetry: { functionId: "match_report" },
         });
         usages.push(toUsage(deps.models.chatModelId, generated.usage));
         const valid = registry.ids();
@@ -165,7 +207,8 @@ export function runAgent(params: {
           })
           // Evidence without a real source is not evidence.
           .filter((match) => match.sourceIds.length > 0);
-        report = { ...generated.output, matches };
+        const report: MatchReport = { ...generated.output, matches };
+        hasGaps = report.gaps.length > 0;
         writer.write({ type: "data-report", data: report });
         steps.push({ name: "generate", ms: Math.round(now() - start) });
       }
@@ -183,8 +226,12 @@ export function runAgent(params: {
               calBookingUrl: deps.calBookingUrl,
               registry,
               // The registry renumbers tool results after the initial sources.
-              search: (query) => retrieve(query, deps.retrieval, { lang: params.lang }),
-              createLead: deps.createLead,
+              search: (query) => retrieve(query, deps.retrieval, { lang }),
+              createLead: async (input) => {
+                const leadId = await deps.createLead(input);
+                leadCreated = true;
+                return leadId;
+              },
             });
 
       const result = streamText({
@@ -201,6 +248,7 @@ export function runAgent(params: {
             invalidCitations += 1;
           },
         ),
+        telemetry: { functionId: "answer" },
       });
 
       writer.merge(toUIMessageStream({ stream: result.stream }));
@@ -209,32 +257,50 @@ export function runAgent(params: {
       const generateStep = steps.find((step) => step.name === "generate");
       if (generateStep) generateStep.ms += generateMs;
       else steps.push({ name: "generate", ms: generateMs });
-      steps.push({ name: "verify", ms: 0 });
+      return result.text;
+    });
 
-      // 6. "Bajo el capó" (§10).
-      const costUsd = estimateCost(usages);
-      await deps.onCost?.(costUsd);
-      writer.write({
-        type: "data-trace",
-        data: {
-          mode,
-          steps,
-          retrieved: registry.all().map((source) => ({
-            id: source.id,
-            title: source.title,
-            url: source.url,
-            sourceType: source.sourceType,
-            score: Number(source.score.toFixed(4)),
-          })),
-          tokens: {
-            input: usages.reduce((sum, usage) => sum + usage.inputTokens, 0),
-            output: usages.reduce((sum, usage) => sum + usage.outputTokens, 0),
-          },
-          costUsd: Number(costUsd.toFixed(6)),
-          model: deps.models.chatModelId,
-          invalidCitations,
+    // 5. Citations were filtered while streaming; this span records the result
+    // and carries the tags only known at the end (mode, gaps, lead).
+    const tags = [
+      `lang:${lang}`,
+      `mode:${mode}`,
+      ...(hasGaps ? ["gaps"] : []),
+      ...(leadCreated ? ["lead"] : []),
+    ];
+    propagateAttributes({ tags }, () =>
+      startActiveObservation(
+        "verify_citations",
+        (span) => span.update({ output: { invalidCitations, valid: registry.ids().size } }),
+        { asType: "guardrail" },
+      ),
+    );
+    steps.push({ name: "verify", ms: 0 });
+
+    // 6. "Bajo el capó" (§10).
+    const costUsd = estimateCost(usages);
+    await deps.onCost?.(costUsd);
+    writer.write({
+      type: "data-trace",
+      data: {
+        mode,
+        steps,
+        retrieved: registry.all().map((source) => ({
+          id: source.id,
+          title: source.title,
+          url: source.url,
+          sourceType: source.sourceType,
+          score: Number(source.score.toFixed(4)),
+        })),
+        tokens: {
+          input: usages.reduce((sum, usage) => sum + usage.inputTokens, 0),
+          output: usages.reduce((sum, usage) => sum + usage.outputTokens, 0),
         },
-      });
-    },
-  });
+        costUsd: Number(costUsd.toFixed(6)),
+        model: deps.models.chatModelId,
+        invalidCitations,
+      },
+    });
+    return answer;
+  }
 }

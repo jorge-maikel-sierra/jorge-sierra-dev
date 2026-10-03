@@ -7,12 +7,16 @@ export const MAX_TURNS = 12;
 const EMAIL = /[\w.+-]+@[\w-]+(\.[\w-]+)+/g;
 // 7+ digits, optionally with +, spaces, dots, dashes or parentheses.
 const PHONE = /\+?\d[\d\s().-]{5,}\d/g;
+// Look like phones but are not: year ranges (2023 - 2025), ISO dates, decimals.
+const NOT_PHONE = [/^\d{4}\s*[-–]\s*\d{4}$/, /^\d{4}-\d{2}-\d{2}$/, /^\d+\.\d+$/];
 
 /** Masks e-mails and phone numbers before anything reaches the traces. */
 export function redactPII(text: string): string {
-  return text
-    .replace(EMAIL, "[email]")
-    .replace(PHONE, (match) => (match.replace(/\D/g, "").length >= 7 ? "[teléfono]" : match));
+  return text.replace(EMAIL, "[email]").replace(PHONE, (match) =>
+    match.replace(/\D/g, "").length >= 7 && !NOT_PHONE.some((pattern) => pattern.test(match))
+      ? "[teléfono]"
+      : match,
+  );
 }
 
 export type ChatTurn = { role: "user" | "assistant"; text: string };

@@ -1,10 +1,12 @@
 import { createUIMessageStreamResponse } from "ai";
+import { after } from "next/server";
 import { z } from "zod";
 import { runAgent } from "@/lib/ai/agent";
 import { createAgentRuntime } from "@/lib/ai/deps";
 import { checkInput, type ChatTurn } from "@/lib/ai/guardrails";
 import { AGENT_MODES } from "@/lib/ai/mode";
 import { AGENT_ENV, env, pickEnv } from "@/lib/env";
+import { flushLangfuse } from "@/lib/observability/langfuse";
 import { createAgentLimiter } from "@/lib/ratelimit";
 
 export const maxDuration = 60;
@@ -12,6 +14,8 @@ export const maxDuration = 60;
 const MAX_BODY_BYTES = 128 * 1024;
 
 const Body = z.object({
+  // useChat's random chat id, reused as the Langfuse session (§11).
+  id: z.string().max(64).optional(),
   messages: z
     .array(
       z.object({
@@ -73,11 +77,16 @@ export async function POST(request: Request) {
   const problem = checkInput(turns);
   if (problem) return json({ error: problem }, 400);
 
+  // Spans are exported right away; the flush covers the last ones before
+  // the function instance is frozen.
+  after(flushLangfuse);
+
   return createUIMessageStreamResponse({
     stream: runAgent({
       turns,
       mode: parsed.data.mode,
       lang: parsed.data.locale === "en" ? "en" : "es",
+      sessionId: parsed.data.id,
       deps,
     }),
   });

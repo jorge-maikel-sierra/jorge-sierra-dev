@@ -36,7 +36,7 @@ export const envSchema = z.object({
 
   LANGFUSE_PUBLIC_KEY: text,
   LANGFUSE_SECRET_KEY: text,
-  LANGFUSE_HOST: url,
+  LANGFUSE_BASE_URL: url,
 
   N8N_CONTACT_WEBHOOK_URL: url,
   N8N_WEBHOOK_SECRET: text,
@@ -114,6 +114,13 @@ export const AGENT_ENV = [
   "UPSTASH_REDIS_REST_URL",
   "UPSTASH_REDIS_REST_TOKEN",
   "AGENT_DAILY_BUDGET_USD",
+] as const satisfies readonly EnvKey[];
+
+/** Optional tracing (task 5.1): without these the agent runs untraced. */
+export const LANGFUSE_ENV = [
+  "LANGFUSE_PUBLIC_KEY",
+  "LANGFUSE_SECRET_KEY",
+  "LANGFUSE_BASE_URL",
 ] as const satisfies readonly EnvKey[];
 
 /**

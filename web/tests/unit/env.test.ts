@@ -19,8 +19,8 @@ describe("parseEnv", () => {
   });
 
   it("rejects malformed values", () => {
-    expect(() => parseEnv({ LANGFUSE_HOST: "not-a-url" }, [])).toThrow(
-      /LANGFUSE_HOST/,
+    expect(() => parseEnv({ LANGFUSE_BASE_URL: "not-a-url" }, [])).toThrow(
+      /LANGFUSE_BASE_URL/,
     );
     expect(() => parseEnv({ EMBEDDING_DIMENSIONS: "-3" }, [])).toThrow(
       /EMBEDDING_DIMENSIONS/,
