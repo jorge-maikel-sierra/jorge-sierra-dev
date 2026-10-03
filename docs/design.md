@@ -59,7 +59,7 @@ lib/
   ratelimit.ts  env.ts  hmac.ts
 messages/  es.json  en.json
 scripts/   ingest.ts
-supabase/  migrations/0001_init.sql
+supabase/  migrations/0001_contact.sql  0002_knowledge_base.sql
 evals/     dataset.jsonl  run.ts  judges.ts
 n8n/       contact-pipeline.json      # export del workflow
 tests/     unit/  e2e/

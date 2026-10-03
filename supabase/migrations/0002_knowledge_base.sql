@@ -1,9 +1,8 @@
--- 0001_init.sql — jorge-sierra.dev v2
--- Base de conocimiento del agente (pgvector + texto completo) y pipeline de contacto (leads + eventos en tiempo real).
+-- 0002_knowledge_base.sql — jorge-sierra.dev v2
+-- Base de conocimiento del agente (pgvector + texto completo), tarea 4.1.
 -- IMPORTANTE: la dimensión de vector(1536) debe coincidir con EMBEDDING_DIMENSIONS. Cámbiala aquí antes de aplicar si usas otro modelo.
 
 create extension if not exists vector;
-create extension if not exists pgcrypto;
 
 -- ─────────────────────────────────────────────
 -- Base de conocimiento
@@ -91,45 +90,3 @@ alter table public.kb_chunks    enable row level security;
 
 revoke execute on function public.match_kb_chunks(vector, text, int, text) from public, anon, authenticated;
 grant  execute on function public.match_kb_chunks(vector, text, int, text) to service_role;
-
--- ─────────────────────────────────────────────
--- Contacto
--- ─────────────────────────────────────────────
-
-create table public.leads (
-  id          uuid primary key default gen_random_uuid(),
-  source      text not null default 'form' check (source in ('form','agent')),
-  kind        text not null check (kind in ('vacante','proyecto','otro')),
-  name        text not null,
-  email       text not null,
-  company     text,
-  message     text not null,
-  intent      text,
-  priority    text check (priority in ('alta','normal','baja')),
-  created_at  timestamptz not null default now()
-);
-
-alter table public.leads enable row level security;
--- Sin políticas: solo el service role (API y n8n) lee y escribe leads.
-
-create table public.lead_events (
-  id          bigint generated always as identity primary key,
-  lead_id     uuid not null references public.leads(id) on delete cascade,
-  step        text not null check (step in ('received','classified','stored','notified','confirmed','failed')),
-  meta        jsonb not null default '{}'::jsonb,  -- sin datos personales: p. ej. {"intent":"vacante","priority":"alta"} o {"failedStep":"notified"}
-  created_at  timestamptz not null default now()
-);
-
-create index lead_events_lead_id_idx on public.lead_events (lead_id, created_at);
-
-alter table public.lead_events enable row level security;
-
--- Los eventos no contienen datos personales y el lead_id es un UUID v4 no adivinable:
--- el rol anónimo puede leerlos para que el navegador siga su propio envío por Realtime.
-create policy "anon puede leer eventos de pipeline"
-  on public.lead_events for select
-  to anon
-  using (true);
-
--- Realtime para que el navegador reciba los pasos en vivo.
-alter publication supabase_realtime add table public.lead_events;

@@ -50,7 +50,8 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 ## Fase 3 — Contacto con pipeline real
 
-- [ ] **3.1 Migración** `supabase/migrations/0001_init.sql` aplicada (tablas `leads` y `lead_events`, políticas RLS, Realtime activado en `lead_events`).
+- [x] **3.1 Migración** `supabase/migrations/0001_contact.sql` aplicada (tablas `leads` y `lead_events`, políticas RLS, Realtime activado en `lead_events`).
+  - `0001_init.sql` se dividió en `0001_contact.sql` (aplicada en el proyecto Supabase `jorge-sierra-dev`) y `0002_knowledge_base.sql` (tarea 4.1), para no fijar `vector(1536)` antes de elegir el modelo de embeddings. RLS verificado con la llave pública: escribir en ambas tablas → 401; leer `leads` → vacío; leer `lead_events` → permitido.
 - [ ] **3.2 `POST /api/contact`**: zod, honeypot, Turnstile, rate limit (5 / 10 min por IP), inserción en `leads` y evento `received`, llamada firmada con HMAC a n8n.
   - Acepta si: tests de unidad para firma, validación y limitador; e2e con n8n simulado.
 - [ ] **3.3 Workflow de n8n** (`n8n/contact-pipeline.json`): verificar firma → clasificar con LLM → actualizar lead → Telegram → Resend; un evento en `lead_events` por paso y `failed` en caso de error.
@@ -59,7 +60,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 ## Fase 4 — Agente
 
-- [ ] **4.1 Migración de la base de conocimiento** (`kb_documents`, `kb_chunks`, índice HNSW, `match_kb_chunks`). Revisar que `vector(N)` coincida con `EMBEDDING_DIMENSIONS`.
+- [ ] **4.1 Migración de la base de conocimiento** (`supabase/migrations/0002_knowledge_base.sql`: `kb_documents`, `kb_chunks`, índice HNSW, `match_kb_chunks`). Revisar que `vector(N)` coincida con `EMBEDDING_DIMENSIONS`.
 - [ ] **4.2 Ingesta** (`scripts/ingest.ts`, `pnpm kb:ingest`): fragmentación, eliminación de frases con marcadores `[ ]`, hash por contenido, README de GitHub, resumen final.
   - Acepta si: correrla dos veces seguidas no re-embebe nada la segunda vez.
 - [ ] **4.3 Recuperación** (`lib/ai/retrieval.ts`) con tests de RRF y umbral.
