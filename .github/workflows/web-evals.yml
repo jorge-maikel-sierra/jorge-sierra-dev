@@ -8,8 +8,10 @@ on:
       - "web/lib/ai/**"
       - "web/content/**"
       - "web/evals/**"
+  # Evals spend real tokens: a branch with an open PR is covered by the
+  # pull_request event, so pushes only run them on main.
   push:
-    branches: [main, next-rewrite]
+    branches: [main]
     paths:
       - "web/lib/ai/**"
       - "web/content/**"
