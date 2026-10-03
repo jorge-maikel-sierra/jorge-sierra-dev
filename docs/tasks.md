@@ -8,7 +8,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 - [x] **0.1 Crear la app Next.js** en la rama `next-rewrite`, en la carpeta `web/` (el código Nuxt queda intacto en la raíz hasta la Fase 6). TypeScript strict, App Router, Tailwind, pnpm, ESLint.
   - Acepta si: `pnpm dev` levanta una página vacía y `pnpm lint && pnpm typecheck` pasan.
-- [ ] **0.2 Tokens y tipografía**: variables CSS de `docs/design.md §3` en `globals.css`, mapeadas en Tailwind. Bricolage Grotesque y JetBrains Mono con `next/font/google`.
+- [x] **0.2 Tokens y tipografía**: variables CSS de `docs/design.md §3` en `globals.css`, mapeadas en Tailwind. Bricolage Grotesque y JetBrains Mono con `next/font/google`.
   - Acepta si: una página de prueba muestra los tokens y ambas fuentes sin salto de diseño.
 - [ ] **0.3 Variables de entorno**: `lib/env.ts` valida con zod las variables de `docs/design.md §9`; `.env.example` con todas, sin valores.
   - Acepta si: arrancar sin una variable obligatoria del servidor falla con un mensaje claro.

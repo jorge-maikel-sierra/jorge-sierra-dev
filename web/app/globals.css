@@ -1,1 +1,58 @@
 @import "tailwindcss";
+
+/* Design tokens — docs/design.md §3. The site is dark by design; there is no light theme in v1. */
+:root {
+  --bg: #07080a;
+  --surface: #0b0c0f;
+  --surface-2: #0f1114;
+  --rail: #1f2226;
+  --border: #2a2d33;
+  --border-strong: #33373e;
+  --text: #ecedef;
+  --text-2: #b4b9c1;
+  --text-3: #9ba1aa;
+  --text-muted: #8a9099;
+  --text-faint: #7a808a;
+  --accent: #6ef0b0;
+  --chaos: #ff9f5a;
+  --warn: #ffb27a;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-rail: var(--rail);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-accent: var(--accent);
+  --color-chaos: var(--chaos);
+  --color-warn: var(--warn);
+
+  --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --text-h1: clamp(48px, 7.2vw, 104px);
+  --text-h1--line-height: 0.94;
+  --text-h1--letter-spacing: -0.035em;
+  --text-h2: clamp(40px, 5.2vw, 72px);
+  --text-h3: clamp(24px, 2.4vw, 48px);
+
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-panel: 20px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+}
