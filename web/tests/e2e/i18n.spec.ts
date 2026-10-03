@@ -48,3 +48,11 @@ test("the sitemap lists both locales with alternates", async ({ request }) => {
   expect(xml).toContain("https://jorge-sierra.dev/en");
   expect(xml).toContain('hreflang="x-default"');
 });
+
+test("hreflang only lives in the HTML, never in a Link header with the request host", async ({
+  request,
+}) => {
+  // Otherwise Lighthouse sees the canonical point to "another hreflang location".
+  const response = await request.get("/es");
+  expect(response.headers().link ?? "").not.toContain("hreflang");
+});

@@ -47,3 +47,4 @@ next-env.d.ts
 
 # agent evals output (pnpm evals)
 /evals/report.json
+/.lighthouseci/

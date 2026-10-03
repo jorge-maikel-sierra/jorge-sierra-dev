@@ -7,4 +7,8 @@ export const routing = defineRouting({
   locales,
   defaultLocale,
   localePrefix: "always",
+  // hreflang lives in the HTML metadata with production URLs. The middleware's
+  // Link header would use the request host (localhost, previews) and make the
+  // canonical point to "another hreflang location" (Lighthouse SEO).
+  alternateLinks: false,
 });
