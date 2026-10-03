@@ -72,6 +72,15 @@ describe("citations", () => {
     );
   });
 
+  it("normalizes bare [N] citations so the UI can link them", async () => {
+    expect(filterCitations("Usa NestJS [5] y Supabase [2][4].", new Set([2, 4, 5]))).toBe(
+      "Usa NestJS [fuente:5] y Supabase [fuente:2][fuente:4].",
+    );
+    expect(await stream(["Cloud Run y BigQuery [", "3]. Rust [9]."], [3])).toBe(
+      "Cloud Run y BigQuery [fuente:3]. Rust .",
+    );
+  });
+
   it("does not hold back ordinary brackets", async () => {
     expect(await stream(["Lista [a, b] y [", "x]"], [1])).toBe("Lista [a, b] y [x]");
   });

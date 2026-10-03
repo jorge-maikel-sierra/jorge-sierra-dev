@@ -30,22 +30,27 @@ export function checkInput(turns: ChatTurn[]): "empty" | "too_long" | "too_many_
   return null;
 }
 
-const CITATION = /\[fuente:(\d+)\]/g;
+// "[fuente:N]" is the format; the model sometimes writes a bare "[N]" (seen in
+// the evals), which the UI cannot link. Both are read as citations.
+const CITATION = /\[(?:fuente:)?(\d+)\]/g;
 
-/** Removes citations to sources the model never received. */
+/**
+ * Normalizes citations to "[fuente:N]" and removes the ones that point to a
+ * source the model never received.
+ */
 export function filterCitations(text: string, valid: Set<number>, onInvalid?: (id: number) => void) {
-  return text.replace(CITATION, (match, id: string) => {
-    if (valid.has(Number(id))) return match;
+  return text.replace(CITATION, (_match, id: string) => {
+    if (valid.has(Number(id))) return `[fuente:${Number(id)}]`;
     onInvalid?.(Number(id));
     return "";
   });
 }
 
-/** True when `tail` could still grow into "[fuente:N]". */
-const couldBeCitation = (tail: string) => /^\[(f(u(e(n(t(e(:\d*)?)?)?)?)?)?)?$/.test(tail);
+/** True when `tail` could still grow into "[fuente:N]" or "[N]". */
+const couldBeCitation = (tail: string) => /^\[(\d*|f(u(e(n(t(e(:\d*)?)?)?)?)?)?)$/.test(tail);
 
 /**
- * Stream transform for streamText: drops invalid [fuente:N] while the text is
+ * Stream transform for streamText: normalizes and checks citations while the text is
  * still streaming. A citation may be split across deltas, so a possible
  * prefix at the end of a delta waits for the next one.
  */
