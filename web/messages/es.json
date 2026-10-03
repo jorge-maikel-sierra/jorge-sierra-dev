@@ -19,5 +19,29 @@
   },
   "placeholder": {
     "pending": "Dato pendiente:"
+  },
+  "cases": {
+    "eyebrow": "02 · Casos de estudio",
+    "titleLine1": "Problemas reales,",
+    "titleLine2": "arquitectura visible.",
+    "intro": "Cinco sistemas, del más terminado al que viene en camino. En cada uno: el problema, el flujo de datos y las decisiones que tomé, no solo el stack.",
+    "introMobile": "Cinco sistemas, del más terminado al que viene en camino. Desliza para elegir uno.",
+    "backToTop": "← Volver al inicio",
+    "backToTopMobile": "← Inicio",
+    "selectorLabel": "Elige un caso de estudio",
+    "caseLabel": "Caso",
+    "flow": "Flujo de datos",
+    "problem": "El problema",
+    "decisions": "Decisiones clave",
+    "results": "Resultado",
+    "stack": "Stack",
+    "previous": "← Anterior",
+    "next": "Siguiente →",
+    "previousLabel": "Caso anterior",
+    "nextLabel": "Caso siguiente",
+    "opensInNewTab": "(se abre en una pestaña nueva)",
+    "closingQuestion": "¿Tienes un proceso que hoy depende de hojas de cálculo y trabajo manual?",
+    "closingAgent": "Pregúntale a mi agente",
+    "closingGithub": "Ver GitHub"
   }
 }

@@ -1,3 +1,4 @@
+import { isPlaceholder } from "@/lib/content/schema";
 import es from "@/messages/es.json";
 
 // Data Jorge has not provided yet (CLAUDE.md rule 2). Never replace it with
@@ -17,5 +18,23 @@ export function Placeholder({
       <span className="sr-only">{pendingLabel} </span>
       {children}
     </span>
+  );
+}
+
+// For containers that already carry the placeholder style (dashed border,
+// muted text): only the screen-reader prefix is added.
+export function PendingText({
+  value,
+  pendingLabel = es.placeholder.pending,
+}: {
+  value: string;
+  pendingLabel?: string;
+}) {
+  if (!isPlaceholder(value)) return value;
+  return (
+    <>
+      <span className="sr-only">{pendingLabel} </span>
+      {value}
+    </>
   );
 }

@@ -71,3 +71,75 @@ html {
     scroll-behavior: auto;
   }
 }
+
+/* FlowDiagram connector with a data pulse (design-reference/Casos.dc.html). */
+.flow-conn {
+  position: relative;
+  width: 2px;
+  height: 24px;
+  margin-left: 23px;
+  background: var(--border);
+}
+
+.flow-conn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  animation: flow-y 1.4s linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (min-width: 820px) {
+  .flow-conn {
+    flex: 0 0 44px;
+    align-self: center;
+    width: auto;
+    height: 2px;
+    margin-left: 0;
+  }
+
+  .flow-conn::after {
+    top: -3px;
+    left: 0;
+    animation-name: flow-x;
+    animation-duration: 1.8s;
+  }
+}
+
+@keyframes flow-x {
+  from {
+    left: 0;
+  }
+  to {
+    left: calc(100% - 8px);
+  }
+}
+
+@keyframes flow-y {
+  from {
+    top: 0;
+  }
+  to {
+    top: calc(100% - 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-conn::after {
+    animation: none;
+    top: calc(50% - 4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 820px) {
+  .flow-conn::after {
+    top: -3px;
+    left: calc(50% - 4px);
+  }
+}

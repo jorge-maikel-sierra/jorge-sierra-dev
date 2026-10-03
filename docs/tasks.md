@@ -24,7 +24,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: coincide con `Main.dc.html` y `Mobile-Hero.dc.html` en copy, colores y jerarquía; LCP < 2 s en Lighthouse móvil.
   - Excepción aceptada por Jorge (2026-10-02): LCP simulado de 2,34 s (mediana local). La traza real pinta el h1 a ~50 ms del HTML; el exceso viene del runtime de Next en la simulación de Lighthouse. Se vuelve a medir contra el preview en 6.2.
 - [x] **1.3 Componente `Placeholder`** y regla global: cualquier string de contenido que empiece por `[` se renderiza con él.
-- [ ] **1.4 Casos de estudio**: `CaseSelector`, `CaseDetail`, `FlowDiagram` (horizontal/vertical con pulso CSS), `StatusBadge`, desde `cases.json`.
+- [x] **1.4 Casos de estudio**: `CaseSelector`, `CaseDetail`, `FlowDiagram` (horizontal/vertical con pulso CSS), `StatusBadge`, desde `cases.json`.
   - Acepta si: replica `Casos.dc.html` y `Mobile-Casos.dc.html`, incluido el carrusel horizontal en móvil y los bordes punteados del caso "soon"; navegación con teclado entre casos.
 - [ ] **1.5 Trayectoria**: `Timeline`, `AreaFilter`, `SideCards`, desde `experience.json` y `profile.json`.
   - Acepta si: replica `Trayectoria.dc.html` y su versión móvil; el filtro atenúa roles y resalta chips.
