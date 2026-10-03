@@ -82,7 +82,8 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 - [x] **5.1 Langfuse**: trazas con los spans y tags de `docs/agent-spec.md §11`.
   - Nota: SDK v5 (`@langfuse/otel` + `@langfuse/vercel-ai-sdk` para AI SDK v7) registrado en `instrumentation.ts`; sin las llaves todo es no-op. Spans `classify`, `retrieve`, `embed_query`, `generate`, `verify_citations` y uno por herramienta (los crea el AI SDK); tags `lang:*`, `mode:*`, `gaps`, `lead`; `sessionId` = el id aleatorio de `useChat`. La variable es `LANGFUSE_BASE_URL` (nombre canónico del SDK), no `LANGFUSE_HOST`. El `mask` de Langfuse solo cubre sus atributos `langfuse.*` y el prompt viaja en `gen_ai.*`: `RedactingSpanProcessor` redacta correos y teléfonos en todos los atributos (verificado contra la API v2 de Langfuse). `pnpm ask "…"` corre el agente real desde la terminal.
-- [ ] **5.2 Dataset de 30 casos** en `evals/dataset.jsonl` (formato de `dataset.example.jsonl`). Las vacantes deben ser reales y anonimizadas: pedírselas a Jorge.
+- [x] **5.2 Dataset de 30 casos** en `evals/dataset.jsonl` (formato de `dataset.example.jsonl`). Las vacantes deben ser reales y anonimizadas: pedírselas a Jorge.
+  - Nota: 31 casos en `web/evals/` (15 generales, 6 vacantes, 5 fuera de alcance, 5 inyecciones). Las 6 vacantes son las reales que dio Jorge, sin empresa, reclutador ni texto promocional; ninguna es de Frontend puro (la más cercana es `vac-003`, web y React), así que esa categoría de §12 queda sin vacante propia. `expected_sources` usa las llaves reales de la base (`source_type:slug`). Campos nuevos: `category` en vacantes y `forbidden_tools` en inyecciones (`inj-005` no debe llamar a `createLead`).
 - [ ] **5.3 Jueces y runner** (`evals/judges.ts`, `evals/run.ts`, `pnpm evals`) con los umbrales de §12.
 - [ ] **5.4 Job de evals en CI** cuando cambien `lib/ai/**`, `content/**` o `evals/**`.
   - Acepta si: romper a propósito el prompt (quitar la regla 1) hace fallar el job.
