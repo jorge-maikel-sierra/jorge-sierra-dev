@@ -1,3 +1,4 @@
+import { ContentText } from "@/components/ui/ContentText";
 import { loadProfile, type Locale } from "@/lib/content/load";
 import { getMessages } from "@/lib/messages";
 import { MobileMenu, type NavItem } from "./MobileMenu";
@@ -35,7 +36,7 @@ export function Header({ locale }: { locale: Locale }) {
             {initials(name)}
           </span>
           <span className="text-base font-bold sm:text-[17px] sm:tracking-[-0.01em]">
-            {name}
+            <ContentText value={name} />
           </span>
         </a>
 

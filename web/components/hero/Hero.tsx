@@ -1,4 +1,5 @@
 import { AgentBox } from "@/components/agent/AgentBox";
+import { ContentText } from "@/components/ui/ContentText";
 import type { Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 import { HeroFallback } from "./HeroFallback";
@@ -40,7 +41,7 @@ export function Hero({
         <div className="flex w-full max-w-[640px] flex-col gap-[22px] sm:gap-7">
           <p className="inline-flex items-center gap-2.5 self-start rounded-full border border-border bg-[rgba(7,8,10,0.7)] px-3 py-2 font-mono text-[11px] uppercase tracking-[0.06em] text-text-2 sm:px-3.5 sm:text-xs">
             <span aria-hidden="true" className="size-2 rounded-full bg-accent" />
-            {profile.availability}
+            <ContentText value={profile.availability} />
           </p>
 
           <h1
@@ -53,7 +54,7 @@ export function Hero({
           </h1>
 
           <p className="max-w-[560px] text-[17px] leading-[1.55] text-text-2 sm:text-[clamp(17px,1.4vw,20px)]">
-            {hero.subtitle}
+            <ContentText value={hero.subtitle} />
           </p>
 
           {/* Below 640 px the scene lives in its own strip (RF-1.5). */}
@@ -63,7 +64,9 @@ export function Hero({
             </div>
             <p className="px-4 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-text-muted">
               <span className="sr-only">{t.graphLabel}: </span>
-              {hero.graphLayers.map((layer) => layer.label).join(" → ")}
+              <ContentText
+                value={hero.graphLayers.map((layer) => layer.label).join(" → ")}
+              />
             </p>
           </div>
 
@@ -83,7 +86,7 @@ export function Hero({
               </span>
             </a>
             <p className="pt-3 font-mono text-xs leading-[1.7] tracking-[0.04em] text-text-muted sm:pt-0">
-              {hero.stackLine.join(" · ")}
+              <ContentText value={hero.stackLine.join(" · ")} />
             </p>
           </div>
         </div>

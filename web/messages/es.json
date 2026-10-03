@@ -16,5 +16,8 @@
     "ctaCases": "Ver casos de estudio",
     "ctaContact": "Agendar consulta",
     "graphLabel": "Arquitectura en cinco capas"
+  },
+  "placeholder": {
+    "pending": "Dato pendiente:"
   }
 }
