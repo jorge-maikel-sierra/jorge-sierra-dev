@@ -9,7 +9,15 @@ const DESKTOP_PARTICLES = 20_000;
 
 // Shows the static fallback until the WebGL scene is ready. Deferred loading,
 // GPU tiers and reduced motion arrive in tasks 2.5 and 2.6.
-export function HeroVisual({ fallback }: { fallback: ReactNode }) {
+export function HeroVisual({
+  fallback,
+  layers,
+  tokens,
+}: {
+  fallback: ReactNode;
+  layers: { label: string; sub: string }[];
+  tokens: string[];
+}) {
   const progress = useRef(1);
   const [desktop, setDesktop] = useState(false);
   const [ready, setReady] = useState(false);
@@ -32,10 +40,12 @@ export function HeroVisual({ fallback }: { fallback: ReactNode }) {
     <>
       {!ready && fallback}
       {desktop && (
-        <div className="pointer-events-none absolute inset-0">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
           <HeroScene
             progress={progress}
             particleCount={DESKTOP_PARTICLES}
+            layers={layers}
+            tokens={tokens}
             onReady={() => setReady(true)}
           />
         </div>

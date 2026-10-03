@@ -34,6 +34,8 @@ export function Hero({
       className="relative flex flex-col overflow-hidden sm:min-h-[calc(100svh-96px)]"
     >
       <HeroVisual
+        layers={hero.graphLayers}
+        tokens={hero.chaosTokens}
         fallback={
           <HeroFallback
             layers={hero.graphLayers}

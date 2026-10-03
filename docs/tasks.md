@@ -41,7 +41,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 - [x] **2.1 `buildGraph.ts`** con tests: 15 nodos en 5 capas, cada nodo con al menos una arista entrante o saliente, retrasos crecientes de izquierda a derecha.
 - [x] **2.2 Partículas en GPU**: `Points` con atributos y shaders de `docs/design.md §4`; `uProgress` controlado por un slider de desarrollo.
   - Acepta si: 20 000 partículas a 60 fps en un portátil con GPU integrada moderna.
-- [ ] **2.3 Aristas, pulsos, etiquetas de capa y tokens de caos**, con sus umbrales de aparición.
+- [x] **2.3 Aristas, pulsos, etiquetas de capa y tokens de caos**, con sus umbrales de aparición.
 - [ ] **2.4 Control por scroll** (ScrollTrigger con pin en escritorio), autoplay a 1,3 s, rotación con puntero/arrastre suavizada, botón "Volver al caos" en móvil.
 - [ ] **2.5 Degradación**: `detect-gpu` (tier 0 → fallback; tier 1 → 8 000 partículas sin bloom), `prefers-reduced-motion` → estado final estático, pausa fuera de pantalla.
 - [ ] **2.6 Carga diferida**: `next/dynamic` + montaje tras idle; generar la imagen de `HeroFallback` desde la escena.
