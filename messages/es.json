@@ -1,0 +1,204 @@
+{
+  "nav": {
+    "label": "Principal",
+    "menu": "Menú",
+    "cases": "Casos",
+    "agent": "Agente",
+    "experience": "Trayectoria",
+    "contact": "Contacto",
+    "language": "ES / EN",
+    "switchLanguage": "Read this site in English"
+  },
+  "hero": {
+    "agentLabel": "Pregúntale a mi agente",
+    "agentPlaceholder": "Pega una vacante o describe un proceso manual…",
+    "agentSubmit": "Analizar",
+    "ctaCases": "Ver casos de estudio",
+    "ctaContact": "Agendar consulta",
+    "graphLabel": "Arquitectura en cinco capas",
+    "stateChaos": "CAOS",
+    "stateOrdering": "ORDENANDO",
+    "stateArchitecture": "ARQUITECTURA",
+    "backToChaos": "VOLVER AL CAOS"
+  },
+  "placeholder": {
+    "pending": "Dato pendiente:"
+  },
+  "cases": {
+    "eyebrow": "02 · Casos de estudio",
+    "titleLine1": "Problemas reales,",
+    "titleLine2": "arquitectura visible.",
+    "intro": "Cinco sistemas, del más terminado al que viene en camino. En cada uno: el problema, el flujo de datos y las decisiones que tomé, no solo el stack.",
+    "introMobile": "Cinco sistemas, del más terminado al que viene en camino. Desliza para elegir uno.",
+    "backToTop": "← Volver al inicio",
+    "backToTopMobile": "← Inicio",
+    "selectorLabel": "Elige un caso de estudio",
+    "caseLabel": "Caso",
+    "flow": "Flujo de datos",
+    "problem": "El problema",
+    "decisions": "Decisiones clave",
+    "results": "Resultado",
+    "stack": "Stack",
+    "previous": "← Anterior",
+    "next": "Siguiente →",
+    "previousLabel": "Caso anterior",
+    "nextLabel": "Caso siguiente",
+    "opensInNewTab": "(se abre en una pestaña nueva)",
+    "closingQuestion": "¿Tienes un proceso que hoy depende de hojas de cálculo y trabajo manual?",
+    "closingAgent": "Pregúntale a mi agente",
+    "closingGithub": "Ver GitHub"
+  },
+  "experience": {
+    "eyebrow": "03 · Trayectoria",
+    "title": "Más de cinco años convirtiendo procesos en sistemas.",
+    "intro": "Backend, frontend, nube y ahora agentes de IA. Filtra por área para ver dónde usé cada cosa.",
+    "filterLabel": "Filtrar por área",
+    "all": "Todo",
+    "current": "Actual",
+    "highlighted": "Roles resaltados: {count} de {total}",
+    "education": "Formación y en curso",
+    "principles": "Cómo trabajo",
+    "downloadCv": "Descargar CV",
+    "linkedin": "LinkedIn",
+    "closingQuestion": "¿Encajo con lo que buscas? Hablemos.",
+    "closingMobile": "¿Encajo con lo que buscas? Hablemos",
+    "closingCta": "Ir a contacto"
+  },
+  "contact": {
+    "eyebrow": "04 · Contacto",
+    "title": "Cuéntame tu problema de negocio.",
+    "intro": "Escríbeme y mira lo que pasa con tu mensaje: es el mismo tipo de automatización que construyo para otros.",
+    "kindLabel": "¿Qué traes?",
+    "kinds": {
+      "vacante": "Una vacante",
+      "proyecto": "Un proyecto",
+      "otro": "Otra cosa"
+    },
+    "name": "Nombre",
+    "namePlaceholder": "Cómo te llamas",
+    "email": "Correo",
+    "emailPlaceholder": "tu@empresa.com",
+    "company": "Empresa",
+    "optional": "(opcional)",
+    "companyPlaceholder": "Dónde trabajas",
+    "message": "Mensaje",
+    "messagePlaceholder": "El proceso manual, el sistema lento o la vacante que tienes en mente",
+    "send": "Enviar mensaje",
+    "sending": "Enviando…",
+    "errors": {
+      "name": "Escribe tu nombre para saber a quién respondo.",
+      "email": "Revisa tu correo: así te llega la confirmación.",
+      "message": "Cuéntame un poco del problema o la vacante.",
+      "tooLong": "Es un poco largo: acórtalo, por favor."
+    },
+    "pipelineTitle": "Lo que pasa cuando envías",
+    "pipelineNote": "DEMO · EN PRODUCCIÓN CORRE EN n8n",
+    "waiting": "En espera",
+    "logIdle": "$ esperando un mensaje…",
+    "steps": [
+      "Webhook recibido",
+      "Clasificación con IA",
+      "Registro en el CRM",
+      "Aviso a Jorge",
+      "Respuesta automática"
+    ],
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "email": "Correo",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "or": "o",
+    "apiErrors": {
+      "rateLimited": "Enviaste varios mensajes seguidos. Espera unos minutos y vuelve a intentarlo.",
+      "captcha": "No pudimos verificar que eres una persona. Vuelve a intentarlo.",
+      "unavailable": "El formulario no está disponible ahora mismo. Escríbeme por correo o WhatsApp.",
+      "generic": "No se pudo enviar el mensaje. Vuelve a intentarlo o escríbeme por correo."
+    },
+    "honeypot": "Deja este campo vacío",
+    "stepDetails": {
+      "received": "POST /contacto · datos validados",
+      "classified": "Intención: {intent} · prioridad {priority}",
+      "stored": "Lead guardado en Supabase",
+      "notified": "Telegram: nuevo mensaje de {name}",
+      "confirmed": "Confirmación enviada a {email}"
+    },
+    "stepLogs": {
+      "received": "[webhook] POST /contacto → 200",
+      "classified": "[ia] intent={intent} priority={priority}",
+      "stored": "[db] leads.insert → ok",
+      "notified": "[telegram] sendMessage → ok",
+      "confirmed": "[mail] confirmación → {email}"
+    },
+    "done": "Listo. Te respondo personalmente pronto.",
+    "failed": "Algo falló, pero tu mensaje quedó guardado y lo leeré igual.",
+    "sendAnother": "Enviar otro mensaje",
+    "pipelineLive": "Paso completado: {step}"
+  },
+  "agent": {
+    "progress": {
+      "read": "Leyendo tu vacante o proceso",
+      "search": "Buscando en CV, casos y repos (RAG)",
+      "compare": "Comparando requisitos con experiencia",
+      "write": "Redactando respuesta con fuentes"
+    },
+    "followUpPlaceholder": "Haz otra pregunta sobre su perfil…",
+    "you": "Tú",
+    "agentName": "Agente",
+    "thinking": "El agente está trabajando…",
+    "answerReady": "Respuesta lista",
+    "errors": {
+      "rateLimited": "Hiciste varias preguntas seguidas. Vuelve a intentarlo en {minutes} min.",
+      "budget": "El agente descansa por hoy. Escríbele a Jorge directamente.",
+      "unavailable": "El agente no responde ahora mismo.",
+      "tooLong": "El mensaje es muy largo. Acórtalo a 8 000 caracteres.",
+      "tooManyTurns": "La conversación llegó a su límite. Escríbele a Jorge directamente."
+    },
+    "contactLink": "Ir a contacto",
+    "noScript": "Para hablar con el agente necesitas JavaScript. Escríbele a Jorge desde Contacto.",
+    "sources": "Fuentes",
+    "report": {
+      "title": "Encaje con la vacante",
+      "matches": "Dónde encaja",
+      "gaps": "Brechas honestas",
+      "questions": "Preguntas para la entrevista",
+      "evidence": "Evidencia"
+    },
+    "trace": {
+      "summary": "Bajo el capó",
+      "mode": "Modo",
+      "steps": "Pasos",
+      "retrieved": "Fragmentos recuperados",
+      "tokens": "Tokens",
+      "cost": "Costo estimado",
+      "model": "Modelo",
+      "invalidCitations": "Citas inválidas eliminadas",
+      "modes": {
+        "vacancy": "Vacante",
+        "problem": "Problema de negocio",
+        "general": "Pregunta general",
+        "out_of_scope": "Fuera de alcance"
+      },
+      "stepNames": {
+        "classify": "Clasificar",
+        "retrieve": "Recuperar",
+        "generate": "Generar",
+        "verify": "Verificar citas"
+      }
+    },
+    "caseCard": "Ver caso",
+    "bookCall": "Agendar una llamada",
+    "leadCreated": "Listo: Jorge recibió tus datos y te contactará."
+  },
+  "skipToContent": "Saltar al contenido",
+  "cv": {
+    "summary": "Perfil",
+    "experience": "Experiencia",
+    "projects": "Proyectos",
+    "skills": "Habilidades",
+    "education": "Formación",
+    "stack": "Tecnologías",
+    "current": "Actual",
+    "site": "Sitio y agente con IA"
+  }
+}

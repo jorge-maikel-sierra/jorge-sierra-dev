@@ -1,0 +1,204 @@
+{
+  "nav": {
+    "label": "Main",
+    "menu": "Menu",
+    "cases": "Cases",
+    "agent": "Agent",
+    "experience": "Experience",
+    "contact": "Contact",
+    "language": "ES / EN",
+    "switchLanguage": "Ver el sitio en español"
+  },
+  "hero": {
+    "agentLabel": "Ask my agent",
+    "agentPlaceholder": "Paste a job post or describe a manual process…",
+    "agentSubmit": "Analyze",
+    "ctaCases": "See case studies",
+    "ctaContact": "Book a call",
+    "graphLabel": "Five-layer architecture",
+    "stateChaos": "CHAOS",
+    "stateOrdering": "ORDERING",
+    "stateArchitecture": "ARCHITECTURE",
+    "backToChaos": "BACK TO CHAOS"
+  },
+  "placeholder": {
+    "pending": "Pending detail:"
+  },
+  "cases": {
+    "eyebrow": "02 · Case studies",
+    "titleLine1": "Real problems,",
+    "titleLine2": "visible architecture.",
+    "intro": "Five systems, from the most finished to the one on its way. For each: the problem, the data flow and the decisions I made, not just the stack.",
+    "introMobile": "Five systems, from the most finished to the one on its way. Swipe to pick one.",
+    "backToTop": "← Back to top",
+    "backToTopMobile": "← Top",
+    "selectorLabel": "Pick a case study",
+    "caseLabel": "Case",
+    "flow": "Data flow",
+    "problem": "The problem",
+    "decisions": "Key decisions",
+    "results": "Outcome",
+    "stack": "Stack",
+    "previous": "← Previous",
+    "next": "Next →",
+    "previousLabel": "Previous case",
+    "nextLabel": "Next case",
+    "opensInNewTab": "(opens in a new tab)",
+    "closingQuestion": "Do you have a process that still runs on spreadsheets and manual work?",
+    "closingAgent": "Ask my agent",
+    "closingGithub": "See GitHub"
+  },
+  "experience": {
+    "eyebrow": "03 · Experience",
+    "title": "Over five years turning processes into systems.",
+    "intro": "Backend, frontend, cloud and now AI agents. Filter by area to see where I used each one.",
+    "filterLabel": "Filter by area",
+    "all": "All",
+    "current": "Current",
+    "highlighted": "Highlighted roles: {count} of {total}",
+    "education": "Education and in progress",
+    "principles": "How I work",
+    "downloadCv": "Download CV",
+    "linkedin": "LinkedIn",
+    "closingQuestion": "Am I a fit for what you need? Let's talk.",
+    "closingMobile": "Am I a fit for what you need? Let's talk",
+    "closingCta": "Go to contact"
+  },
+  "contact": {
+    "eyebrow": "04 · Contact",
+    "title": "Tell me about your business problem.",
+    "intro": "Write to me and watch what happens to your message: it is the same kind of automation I build for others.",
+    "kindLabel": "What brings you here?",
+    "kinds": {
+      "vacante": "A job opening",
+      "proyecto": "A project",
+      "otro": "Something else"
+    },
+    "name": "Name",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "you@company.com",
+    "company": "Company",
+    "optional": "(optional)",
+    "companyPlaceholder": "Where you work",
+    "message": "Message",
+    "messagePlaceholder": "The manual process, the slow system or the role you have in mind",
+    "send": "Send message",
+    "sending": "Sending…",
+    "errors": {
+      "name": "Add your name so I know who I'm replying to.",
+      "email": "Check your email: that's where the confirmation goes.",
+      "message": "Tell me a bit about the problem or the role.",
+      "tooLong": "It's a bit long: please shorten it."
+    },
+    "pipelineTitle": "What happens when you send",
+    "pipelineNote": "DEMO · IN PRODUCTION IT RUNS ON n8n",
+    "waiting": "Waiting",
+    "logIdle": "$ waiting for a message…",
+    "steps": [
+      "Webhook received",
+      "AI classification",
+      "Saved to the CRM",
+      "Jorge notified",
+      "Automatic reply"
+    ],
+    "channels": {
+      "whatsapp": "WhatsApp",
+      "email": "Email",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "or": "or",
+    "apiErrors": {
+      "rateLimited": "You sent several messages in a row. Wait a few minutes and try again.",
+      "captcha": "We couldn't verify you are a person. Please try again.",
+      "unavailable": "The form is not available right now. Write to me by email or WhatsApp.",
+      "generic": "The message could not be sent. Try again or write to me by email."
+    },
+    "honeypot": "Leave this field empty",
+    "stepDetails": {
+      "received": "POST /contact · data validated",
+      "classified": "Intent: {intent} · priority {priority}",
+      "stored": "Lead saved in Supabase",
+      "notified": "Telegram: new message from {name}",
+      "confirmed": "Confirmation sent to {email}"
+    },
+    "stepLogs": {
+      "received": "[webhook] POST /contact → 200",
+      "classified": "[ai] intent={intent} priority={priority}",
+      "stored": "[db] leads.insert → ok",
+      "notified": "[telegram] sendMessage → ok",
+      "confirmed": "[mail] confirmation → {email}"
+    },
+    "done": "Done. I'll reply to you personally soon.",
+    "failed": "Something failed, but your message was saved and I'll read it anyway.",
+    "sendAnother": "Send another message",
+    "pipelineLive": "Step completed: {step}"
+  },
+  "agent": {
+    "progress": {
+      "read": "Reading your job post or process",
+      "search": "Searching the CV, cases and repos (RAG)",
+      "compare": "Comparing requirements with experience",
+      "write": "Writing an answer with sources"
+    },
+    "followUpPlaceholder": "Ask another question about his profile…",
+    "you": "You",
+    "agentName": "Agent",
+    "thinking": "The agent is working…",
+    "answerReady": "Answer ready",
+    "errors": {
+      "rateLimited": "You asked several questions in a row. Try again in {minutes} min.",
+      "budget": "The agent is resting for today. Write to Jorge directly.",
+      "unavailable": "The agent is not responding right now.",
+      "tooLong": "The message is too long. Keep it under 8,000 characters.",
+      "tooManyTurns": "The conversation reached its limit. Write to Jorge directly."
+    },
+    "contactLink": "Go to contact",
+    "noScript": "The agent needs JavaScript. Write to Jorge from Contact instead.",
+    "sources": "Sources",
+    "report": {
+      "title": "Fit with the role",
+      "matches": "Where he fits",
+      "gaps": "Honest gaps",
+      "questions": "Interview questions",
+      "evidence": "Evidence"
+    },
+    "trace": {
+      "summary": "Under the hood",
+      "mode": "Mode",
+      "steps": "Steps",
+      "retrieved": "Retrieved chunks",
+      "tokens": "Tokens",
+      "cost": "Estimated cost",
+      "model": "Model",
+      "invalidCitations": "Invalid citations removed",
+      "modes": {
+        "vacancy": "Job post",
+        "problem": "Business problem",
+        "general": "General question",
+        "out_of_scope": "Out of scope"
+      },
+      "stepNames": {
+        "classify": "Classify",
+        "retrieve": "Retrieve",
+        "generate": "Generate",
+        "verify": "Verify citations"
+      }
+    },
+    "caseCard": "See case",
+    "bookCall": "Book a call",
+    "leadCreated": "Done: Jorge got your details and will contact you."
+  },
+  "skipToContent": "Skip to content",
+  "cv": {
+    "summary": "Profile",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "education": "Education",
+    "stack": "Technologies",
+    "current": "Current",
+    "site": "Site and AI agent"
+  }
+}

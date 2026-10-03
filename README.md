@@ -1,60 +1,32 @@
-# Nuxt Starter Template
+# jorge-sierra.dev
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+Portafolio de Jorge Sierra, AI Engineer & Senior Full-Stack: [jorge-sierra.dev](https://jorge-sierra.dev).
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+El sitio demuestra lo que describe. Tiene un hero 3D ("del caos a la arquitectura"), un agente con RAG que responde sobre el perfil y analiza vacantes con citas a sus fuentes, casos de estudio con la arquitectura a la vista y un formulario de contacto cuyo pipeline se ve en tiempo real.
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+## Stack
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
+- **Web:** Next.js (App Router), React, TypeScript estricto, Tailwind CSS, three.js con @react-three/fiber, español e inglés con next-intl.
+- **Agente:** Vercel AI SDK con Claude, búsqueda híbrida (pgvector + texto) en Supabase, Langfuse para trazas y evals.
+- **Datos e infraestructura:** Supabase (Postgres, pgvector, Realtime), Upstash (rate limiting y presupuesto diario), Cloudflare Turnstile, Vercel.
+- **Calidad:** Vitest, Playwright con axe, evals del agente en CI y Lighthouse CI contra cada preview.
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
-
-## Quick Start
-
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
-
-## Setup
-
-Make sure to install the dependencies:
+## Comandos
 
 ```bash
-pnpm install
+pnpm dev          # servidor local
+pnpm lint         # ESLint
+pnpm typecheck    # tsc --noEmit
+pnpm test         # Vitest
+pnpm e2e          # Playwright (build de producción)
+pnpm kb:ingest    # indexa content/ y los README de GitHub en Supabase
+pnpm evals        # evals del agente (--subset=pr para los 10 casos de CI)
+pnpm ask "…"      # una consulta al agente real desde la terminal
+pnpm cv           # genera public/cv/*.pdf desde content/
 ```
 
-## Development Server
+Las variables de entorno están documentadas en `.env.example` y se validan al arrancar (`lib/env.ts`).
 
-Start the development server on `http://localhost:3000`:
+## Documentación
 
-```bash
-pnpm dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-pnpm build
-```
-
-Locally preview production build:
-
-```bash
-pnpm preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+La especificación está en `docs/`: requisitos, diseño, especificación del agente y el plan de tareas con las decisiones de cada una. El sitio anterior en Nuxt quedó archivado en la rama [`legacy-nuxt`](https://github.com/jorge-maikel-sierra/jorge-sierra-dev/tree/legacy-nuxt).

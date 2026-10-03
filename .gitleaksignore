@@ -1,0 +1,2 @@
+# False positive: fake Stripe key in a code-review example ("BAD: Exposed secret in code").
+6ae14fdff4b9f3a504c9177bc4338ac8017a7776:.github/instructions/code-review-generic.instructions.md:stripe-access-token:150

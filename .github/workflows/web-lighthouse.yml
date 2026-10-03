@@ -1,0 +1,49 @@
+name: web-lighthouse
+
+# RNF-4 (docs/requirements.md): Lighthouse against each Vercel preview of the
+# Next.js site. Vercel reports every deployment to GitHub; this runs when a
+# preview of the jorge-sierra-web project is ready.
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  lighthouse:
+    name: lighthouse (${{ matrix.form }})
+    if: >-
+      github.event.deployment_status.state == 'success' &&
+      startsWith(github.event.deployment.environment, 'Preview') &&
+      contains(github.event.deployment.environment, 'jorge-sierra-web')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        form: [mobile, desktop]
+    env:
+      PREVIEW_URL: ${{ github.event.deployment_status.target_url }}
+      # Vercel Deployment Protection → "Protection Bypass for Automation".
+      BYPASS: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Check secrets
+        run: |
+          if [ -z "$BYPASS" ]; then
+            echo "::error::Missing repository secret VERCEL_AUTOMATION_BYPASS_SECRET (previews are behind Vercel Authentication)"
+            exit 1
+          fi
+
+      - name: Lighthouse (${{ matrix.form }})
+        run: |
+          npx --yes @lhci/cli@0.15.1 autorun \
+            --config=lighthouse/${{ matrix.form }}.json \
+            --collect.url="$PREVIEW_URL/es" \
+            --collect.url="$PREVIEW_URL/en" \
+            --collect.settings.extraHeaders="{\"x-vercel-protection-bypass\":\"$BYPASS\",\"x-vercel-set-bypass-cookie\":\"true\"}"

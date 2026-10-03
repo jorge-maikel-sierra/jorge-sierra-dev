@@ -1,0 +1,87 @@
+name: web-evals
+
+# docs/agent-spec.md §12 and docs/design.md: the agent evals run only when the
+# agent, its knowledge or the dataset change. They call the real models.
+on:
+  pull_request:
+    paths:
+      - "lib/ai/**"
+      - "content/**"
+      - "evals/**"
+  # Evals spend real tokens: a branch with an open PR is covered by the
+  # pull_request event, so pushes only run them on main.
+  push:
+    branches: [main]
+    paths:
+      - "lib/ai/**"
+      - "content/**"
+      - "evals/**"
+  workflow_dispatch:
+    inputs:
+      full:
+        description: "Run the full dataset (31 cases) instead of the PR subset (10)"
+        type: boolean
+        default: true
+
+concurrency:
+  group: web-evals-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    name: agent evals
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AI_PROVIDER: anthropic
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      # Plain configuration, not secrets: referencing a secret like "1" would
+      # make GitHub mask every "1" in the logs.
+      EMBEDDING_PROVIDER: openai
+      EMBEDDING_MODEL: text-embedding-3-small
+      EMBEDDING_DIMENSIONS: "1536"
+      EMBEDDING_API_KEY: ${{ secrets.EMBEDDING_API_KEY }}
+      # Required by the agent runtime; evals never spend the visitor budget.
+      UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+      UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+      AGENT_DAILY_BUDGET_USD: "1"
+      # Optional: with these, each run is published as a Langfuse dataset run.
+      LANGFUSE_PUBLIC_KEY: ${{ secrets.LANGFUSE_PUBLIC_KEY }}
+      LANGFUSE_SECRET_KEY: ${{ secrets.LANGFUSE_SECRET_KEY }}
+      LANGFUSE_BASE_URL: ${{ secrets.LANGFUSE_BASE_URL }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: package.json
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Check secrets
+        run: |
+          for name in ANTHROPIC_API_KEY NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY EMBEDDING_API_KEY UPSTASH_REDIS_REST_URL; do
+            if [ -z "${!name}" ]; then echo "::error::Missing repository secret $name"; exit 1; fi
+          done
+
+      # Exits ≠ 0 when any §12 threshold fails. PRs and main run the 10-case
+      # subset; the full dataset runs on demand.
+      - run: pnpm evals ${{ (github.event_name == 'workflow_dispatch' && inputs.full) && '' || '--subset=pr' }}
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evals-report
+          path: evals/report.json
+          if-no-files-found: ignore

@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/* Design tokens — docs/design.md §3. The site is dark by design; there is no light theme in v1. */
+:root {
+  --bg: #07080a;
+  --surface: #0b0c0f;
+  --surface-2: #0f1114;
+  --rail: #1f2226;
+  --border: #2a2d33;
+  --border-strong: #33373e;
+  --text: #ecedef;
+  --text-2: #b4b9c1;
+  --text-3: #9ba1aa;
+  --text-muted: #8a9099;
+  --text-faint: #7a808a;
+  --accent: #6ef0b0;
+  --chaos: #ff9f5a;
+  --warn: #ffb27a;
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-rail: var(--rail);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-2: var(--text-2);
+  --color-text-3: var(--text-3);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-accent: var(--accent);
+  --color-chaos: var(--chaos);
+  --color-warn: var(--warn);
+
+  --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --text-h1: clamp(48px, 7.2vw, 104px);
+  --text-h1--line-height: 0.94;
+  --text-h1--letter-spacing: -0.035em;
+  --text-h2: clamp(40px, 5.2vw, 72px);
+  --text-h3: clamp(24px, 2.4vw, 48px);
+
+  --radius-control: 10px;
+  --radius-card: 14px;
+  --radius-panel: 20px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* FlowDiagram connector with a data pulse (design-reference/Casos.dc.html). */
+.flow-conn {
+  position: relative;
+  width: 2px;
+  height: 24px;
+  margin-left: 23px;
+  background: var(--border);
+}
+
+.flow-conn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  animation: flow-y 1.4s linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@media (min-width: 820px) {
+  .flow-conn {
+    flex: 0 0 44px;
+    align-self: center;
+    width: auto;
+    height: 2px;
+    margin-left: 0;
+  }
+
+  .flow-conn::after {
+    top: -3px;
+    left: 0;
+    animation-name: flow-x;
+    animation-duration: 1.8s;
+  }
+}
+
+@keyframes flow-x {
+  from {
+    left: 0;
+  }
+  to {
+    left: calc(100% - 8px);
+  }
+}
+
+@keyframes flow-y {
+  from {
+    top: 0;
+  }
+  to {
+    top: calc(100% - 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-conn::after {
+    animation: none;
+    top: calc(50% - 4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 820px) {
+  .flow-conn::after {
+    top: -3px;
+    left: calc(50% - 4px);
+  }
+}
+
+/* AreaFilter (design-reference/Trayectoria.dc.html). Roles outside the selected
+   area are dimmed with AA-compliant colors instead of the prototype's
+   opacity: 0.32, which left text at 1.6:1 (WCAG 1.4.3, task 1.8). */
+[data-role] *,
+[data-role] *::marker {
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-role] *,
+  [data-role] *::marker {
+    transition: none;
+  }
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) *,
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) *,
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) *,
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) * {
+  color: var(--text-muted);
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-role-dot],
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-role-dot],
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-role-dot],
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-role-dot] {
+  border-color: var(--border-strong);
+  background-color: var(--surface-2);
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-current-badge],
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-current-badge],
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-current-badge],
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-current-badge] {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-chip],
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-chip],
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-chip],
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-chip] {
+  border-color: var(--rail);
+}
+
+[data-filter="ia"] [data-chip="ia"],
+[data-filter="backend"] [data-chip="backend"],
+[data-filter="frontend"] [data-chip="frontend"],
+[data-filter="cloud"] [data-chip="cloud"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Active pipeline step (design-reference/Contacto.dc.html). */
+.pipeline-blink {
+  animation: pipeline-blink 0.9s ease-in-out infinite;
+}
+
+@keyframes pipeline-blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pipeline-blink {
+    animation: none;
+  }
+}
