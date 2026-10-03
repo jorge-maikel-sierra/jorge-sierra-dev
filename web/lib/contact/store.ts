@@ -4,11 +4,12 @@ import type { ContactInput } from "./schema";
 // Leads hold personal data; lead_events never do (docs/design.md §5).
 export function createLeadStore(db: SupabaseClient) {
   return {
-    async store(input: ContactInput) {
+    /** `source` is "agent" for leads created by the agent's createLead tool. */
+    async store(input: ContactInput, source: "form" | "agent" = "form") {
       const { data, error } = await db
         .from("leads")
         .insert({
-          source: "form",
+          source,
           kind: input.kind,
           name: input.name,
           email: input.email,

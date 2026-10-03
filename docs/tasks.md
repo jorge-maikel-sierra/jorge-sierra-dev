@@ -69,7 +69,8 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Verificado (2026-10-03): 1.ª corrida 15 documentos / 98 fragmentos (12 279 tokens); 2.ª corrida 0 embebidos, 15 sin cambios. Cero corchetes en los fragmentos de `content/`. Sin README: `ai-support-automation-platform` (404) y `netplan` (solo título, 0 fragmentos). En los README los corchetes son enlaces y se convierten a texto; la regla de marcadores aplica al contenido JSON.
 - [x] **4.3 Recuperación** (`lib/ai/retrieval.ts`) con tests de RRF y umbral.
   - `0004_retrieval_relevance.sql`, medido sobre la base real: el puntaje RRF no sirve como umbral (preguntas ajenas al perfil sacaban los mismos 0,0164/0,0161/0,0159 que las relevantes), así que la función devuelve también la similitud coseno, y el umbral es 0,35 (relevantes 0,377–0,591; ajenas 0,130–0,335). Además, `websearch_to_tsquery` exigía todas las palabras y la rama léxica casi nunca coincidía; ahora usa OR entre términos.
-- [ ] **4.4 Clasificación de modo, prompts y herramientas** (`lib/ai/*`) según `docs/agent-spec.md` §2, §6 y §8.
+- [x] **4.4 Clasificación de modo, prompts y herramientas** (`lib/ai/*`) según `docs/agent-spec.md` §2, §6 y §8.
+  - Modelos: `claude-sonnet-5-5` para generar (configurable con `AI_MODEL`) y `claude-haiku-4-5` para clasificar. AI SDK v7: `generateText` + `Output.choice/object` (`generateObject` está deprecado). `createLead` verifica el consentimiento en el último mensaje del visitante (su correo literal + un sí explícito), no en lo que diga el modelo.
 - [ ] **4.5 `POST /api/agent`**: guardas de entrada, streaming, data parts `data-trace` y `data-report`, verificación de citas, redacción de PII, tope de costo.
   - Acepta si: test de integración con modelo simulado cubre los cuatro modos.
 - [ ] **4.6 UI del agente**: `AgentBox` en el hero, mensajes con fuentes enlazadas, `MatchReport`, `TracePanel` plegable, estados de carga, error, rate limit y presupuesto agotado.
