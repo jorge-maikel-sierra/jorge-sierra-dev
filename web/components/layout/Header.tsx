@@ -26,7 +26,6 @@ export function Header({ locale }: { locale: Locale }) {
       <div className="flex flex-wrap items-center justify-between gap-4 p-4 sm:px-[clamp(16px,5vw,72px)] sm:py-6">
         <a
           href={`/${locale}`}
-          aria-label={nav.home}
           className="flex min-h-11 items-center gap-2.5 text-text hover:text-white sm:gap-3"
         >
           <span

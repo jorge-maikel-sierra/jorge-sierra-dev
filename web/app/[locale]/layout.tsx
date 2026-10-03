@@ -16,6 +16,8 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["400", "500"],
   display: "swap",
+  // Only used for labels; keeping it off the preload path frees bandwidth for the LCP.
+  preload: false,
   variable: "--font-jetbrains-mono",
 });
 

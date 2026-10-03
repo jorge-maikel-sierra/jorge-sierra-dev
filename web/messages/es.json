@@ -1,7 +1,6 @@
 {
   "nav": {
     "label": "Principal",
-    "home": "Jorge Sierra, inicio",
     "menu": "Menú",
     "cases": "Casos",
     "agent": "Agente",
@@ -9,5 +8,13 @@
     "contact": "Contacto",
     "language": "ES / EN",
     "languageSoon": "La versión en inglés llega pronto"
+  },
+  "hero": {
+    "agentLabel": "Pregúntale a mi agente",
+    "agentPlaceholder": "Pega una vacante o describe un proceso manual…",
+    "agentSubmit": "Analizar",
+    "ctaCases": "Ver casos de estudio",
+    "ctaContact": "Agendar consulta",
+    "graphLabel": "Arquitectura en cinco capas"
   }
 }
