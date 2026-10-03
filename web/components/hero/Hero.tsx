@@ -77,7 +77,9 @@ export function Hero({
                 fallback={<HeroFallback layers={hero.graphLayers} className="w-[88%]" />}
               />
             </div>
-            <p className="px-4 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-text-muted">
+            {/* Two lines reserved: JetBrains Mono is not preloaded, and a different
+                wrap on font swap would shift the agent box below (CLS, task 2.6). */}
+            <p className="min-h-[3.4em] px-4 font-mono text-[11px] leading-[1.7] tracking-[0.04em] text-text-muted">
               <span className="sr-only">{t.graphLabel}: </span>
               <ContentText
                 value={hero.graphLayers.map((layer) => layer.label).join(" → ")}

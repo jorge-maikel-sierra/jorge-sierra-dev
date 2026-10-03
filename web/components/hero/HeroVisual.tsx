@@ -23,9 +23,30 @@ type Labels = {
   backToChaos: string;
 };
 
-// Shows the static fallback until the WebGL scene is ready. Desktop: canvas
-// behind the hero copy, pinned scroll. Mobile: its own strip with the status
-// line and "Volver al caos". Deferred mounting after the LCP: task 2.6.
+/** Resolves once the page has loaded and the main thread is idle (after LCP). */
+function whenIdleAfterLoad(callback: () => void) {
+  let idleId: number | undefined;
+  let timeoutId: number | undefined;
+  const schedule = () => {
+    if (typeof window.requestIdleCallback === "function") {
+      idleId = window.requestIdleCallback(callback, { timeout: 2000 });
+    } else {
+      timeoutId = window.setTimeout(callback, 200);
+    }
+  };
+  if (document.readyState === "complete") schedule();
+  else window.addEventListener("load", schedule, { once: true });
+  return () => {
+    window.removeEventListener("load", schedule);
+    if (idleId !== undefined) window.cancelIdleCallback(idleId);
+    if (timeoutId !== undefined) window.clearTimeout(timeoutId);
+  };
+}
+
+// Shows the static fallback until the WebGL scene is ready. Nothing 3D (GPU
+// probe, three.js, GSAP) is requested before the page is loaded and idle.
+// Desktop: canvas behind the hero copy, pinned scroll. Mobile: its own strip
+// with the status line and "Volver al caos".
 export function HeroVisual({
   variant,
   fallback,
@@ -45,6 +66,7 @@ export function HeroVisual({
   const [reducedMotion, setReducedMotion] = useState(true);
   const [tier, setTier] = useState<number | null>(null);
   const [visible, setVisible] = useState(true);
+  const [idle, setIdle] = useState(false);
   const [ready, setReady] = useState(false);
   const active = matches && !reducedMotion && tier !== null && tier > 0;
   const [scrub, setScrub] = useState(0);
@@ -66,9 +88,11 @@ export function HeroVisual({
     };
   }, [variant]);
 
+  useEffect(() => whenIdleAfterLoad(() => setIdle(true)), []);
+
   // Only probe the GPU when this variant can actually show the scene.
   useEffect(() => {
-    if (!matches || reducedMotion || tier !== null) return;
+    if (!idle || !matches || reducedMotion || tier !== null) return;
     let cancelled = false;
     void detectGpuTier().then((value) => {
       if (!cancelled) setTier(value);
@@ -76,7 +100,7 @@ export function HeroVisual({
     return () => {
       cancelled = true;
     };
-  }, [matches, reducedMotion, tier]);
+  }, [idle, matches, reducedMotion, tier]);
 
   // Pause rendering while the scene is off screen.
   useEffect(() => {

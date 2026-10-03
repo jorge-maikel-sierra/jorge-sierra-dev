@@ -1,4 +1,6 @@
-import { z } from "zod";
+// zod/mini: this schema ships to the browser with ContactForm, and the
+// tree-shakable API keeps it out of the initial JS budget (RNF-2, task 2.6).
+import * as z from "zod/mini";
 
 // Shared by ContactForm (client) and POST /api/contact (task 3.2).
 export const contactKinds = ["vacante", "proyecto", "otro"] as const;
@@ -14,29 +16,24 @@ export type ContactErrors = {
 };
 
 export function contactSchema(errors: ContactErrors) {
+  const text = (max: number, required?: string) =>
+    z
+      .string()
+      .check(
+        z.trim(),
+        ...(required ? [z.minLength(1, required)] : []),
+        z.maxLength(max, errors.tooLong),
+      );
+
   return z.object({
     kind: z.enum(contactKinds),
-    name: z
-      .string()
-      .trim()
-      .min(1, errors.name)
-      .max(CONTACT_LIMITS.name, errors.tooLong),
-    email: z
-      .string()
-      .trim()
-      .max(CONTACT_LIMITS.email, errors.tooLong)
-      .pipe(z.email(errors.email)),
-    company: z
-      .string()
-      .trim()
-      .max(CONTACT_LIMITS.company, errors.tooLong)
-      .optional()
-      .transform((value) => value || undefined),
-    message: z
-      .string()
-      .trim()
-      .min(1, errors.message)
-      .max(CONTACT_LIMITS.message, errors.tooLong),
+    name: text(CONTACT_LIMITS.name, errors.name),
+    email: z.pipe(text(CONTACT_LIMITS.email), z.email(errors.email)),
+    company: z.pipe(
+      z.optional(text(CONTACT_LIMITS.company)),
+      z.transform((value) => value || undefined),
+    ),
+    message: text(CONTACT_LIMITS.message, errors.message),
   });
 }
 
