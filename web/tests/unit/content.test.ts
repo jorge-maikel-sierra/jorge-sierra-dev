@@ -34,7 +34,9 @@ describe("content loading", () => {
   });
 
   it("accepts bracket placeholders where a URL is expected", () => {
-    expect(loadProfile().links.calBooking.startsWith("[")).toBe(true);
+    const broken = clone(profile);
+    broken.links.calBooking = "[Enlace de Cal.com para agendar]";
+    expect(parseContent(profileSchema, broken, "es/profile.json").links.calBooking).toMatch(/^\[/);
   });
 
   it("the CV link is a file served by the site, and only a clean path is allowed", () => {

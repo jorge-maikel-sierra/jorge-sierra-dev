@@ -131,8 +131,7 @@
         }
       ],
       "results": [
-        "Delivered with 96% compliance and a 10/10 validation checklist.",
-        "[VIDEO: 30 s of the chat reading a real receipt]"
+        "Delivered with 96% compliance and a 10/10 validation checklist."
       ],
       "stack": [
         "n8n",
@@ -154,7 +153,7 @@
       "title": "NetPlan",
       "type": "SaaS + algorithms",
       "status": "partial",
-      "statusLabel": "Code ready · demo pending",
+      "statusLabel": "Code ready",
       "context": "",
       "kicker": "Network planning with minimum spanning trees",
       "problem": "NetPlan is a SaaS for planning network infrastructure: it computes the lowest-cost connection between points with MST algorithms on an interactive map. [Add: who it is for and what concrete problem it saves them]",
@@ -201,8 +200,7 @@
         }
       ],
       "results": [
-        "[DEMO: link or GIF of the map computing the network]",
-        "[Repo README: today it only has the title]"
+        "Production-ready containers with deployment set up on Vercel and Render."
       ],
       "stack": [
         "React",
@@ -218,7 +216,7 @@
           "href": "https://github.com/jorge-maikel-sierra/netplan"
         }
       ],
-      "note": "[Public demo]"
+      "note": ""
     },
     {
       "slug": "horebs",

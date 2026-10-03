@@ -30,7 +30,8 @@
       ],
       "bullets": [
         "I lead a team of 2 to 3 developers.",
-        "[ACHIEVEMENT with a metric: which process you automated and what impact it had]"
+        "I design and build AI automation flows in n8n, with language-model agents that replace repetitive manual processes.",
+        "I build and maintain AI pipelines with LangChain and LangGraph that connect language models to internal tools, APIs and data sources."
       ],
       "stack": [
         {

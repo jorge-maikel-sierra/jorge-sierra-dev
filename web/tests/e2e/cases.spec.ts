@@ -60,7 +60,7 @@ test.describe("case studies", () => {
     await selector(page).getByRole("button").nth(2).click();
     const panel = page.locator("#case-panel-netplan");
     await expect(
-      panel.getByText("[DEMO: enlace o GIF del mapa calculando la red]"),
+      panel.getByText("[Añade: para quién es y qué problema concreto le ahorra]"),
     ).toBeVisible();
     await expect(panel.locator("[data-placeholder]").first()).toBeVisible();
   });

@@ -14,7 +14,7 @@ test.describe("experience", () => {
     await expect(page.locator("[data-role]")).toHaveCount(3);
     const current = roleCard(page, "SOAINT");
     await expect(current.getByText("Actual")).toBeVisible();
-    await expect(current.locator("[data-placeholder]").first()).toBeVisible();
+    await expect(current.getByText("Lidero un equipo de 2 a 3 desarrolladores.")).toBeVisible();
   });
 
   test("the area filter dims roles with AA colors and highlights chips", async ({

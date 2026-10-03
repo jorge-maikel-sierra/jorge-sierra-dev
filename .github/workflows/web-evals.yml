@@ -17,6 +17,11 @@ on:
       - "web/content/**"
       - "web/evals/**"
   workflow_dispatch:
+    inputs:
+      full:
+        description: "Run the full dataset (31 cases) instead of the PR subset (10)"
+        type: boolean
+        default: true
 
 concurrency:
   group: web-evals-${{ github.ref }}
@@ -73,8 +78,9 @@ jobs:
             if [ -z "${!name}" ]; then echo "::error::Missing repository secret $name"; exit 1; fi
           done
 
-      # Exits ≠ 0 when any §12 threshold fails.
-      - run: pnpm evals
+      # Exits ≠ 0 when any §12 threshold fails. PRs and main run the 10-case
+      # subset; the full dataset runs on demand.
+      - run: pnpm evals ${{ (github.event_name == 'workflow_dispatch' && inputs.full) && '' || '--subset=pr' }}
 
       - if: always()
         uses: actions/upload-artifact@v4

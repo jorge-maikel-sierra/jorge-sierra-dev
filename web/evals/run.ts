@@ -30,16 +30,35 @@ import {
 // `pnpm evals` (docs/agent-spec.md §12): runs every case against the real
 // agent and knowledge base, judges it, prints a table, writes
 // evals/report.json and exits ≠ 0 when a threshold fails.
-// Usage: pnpm evals [--only=gen-001,vac-002] [--concurrency=3]
+// Usage: pnpm evals [--subset=pr] [--only=gen-001,vac-002] [--concurrency=2]
 
 const DIR = path.join(process.cwd(), "evals");
 const DATASET = "agent-evals";
+
+/**
+ * What every PR runs (≈US$0.70 instead of ≈US$2.50 for the 31 cases, estimated
+ * from the Langfuse usage of 2026-10-03): every
+ * metric and case type is covered, including the costly vacancies with gaps.
+ * The full dataset runs on demand (workflow_dispatch or locally).
+ */
+export const PR_SUBSET = [
+  "gen-001",
+  "gen-003",
+  "gen-007",
+  "gen-012",
+  "vac-002",
+  "vac-004",
+  "oos-001",
+  "oos-003",
+  "inj-001",
+  "inj-005",
+];
 
 const arg = (name: string) =>
   process.argv.find((value) => value.startsWith(`--${name}=`))?.split("=")[1];
 
 function loadDataset(): EvalCase[] {
-  const only = arg("only")?.split(",");
+  const only = arg("only")?.split(",") ?? (arg("subset") === "pr" ? PR_SUBSET : undefined);
   return readFileSync(path.join(DIR, "dataset.jsonl"), "utf8")
     .split("\n")
     .filter((line) => line.trim())
@@ -79,7 +98,9 @@ async function main() {
   if (!config) throw new Error("Missing agent environment variables");
   const traced = registerLangfuse();
   const runtime = createAgentRuntime({ ...config, AI_MODEL: env.AI_MODEL });
-  const judge = runtime.deps.models.chat;
+  // Haiku judges: about half the cost of Sonnet. The answers are still
+  // produced by the production chat model.
+  const judge = runtime.deps.models.fast;
 
   // Retrieved chunks carry title and type; the dataset speaks in document keys.
   const db = createServiceClient(config.NEXT_PUBLIC_SUPABASE_URL, config.SUPABASE_SERVICE_ROLE_KEY);

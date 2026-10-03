@@ -30,7 +30,8 @@
       ],
       "bullets": [
         "Lidero un equipo de 2 a 3 desarrolladores.",
-        "[LOGRO con métrica: qué proceso automatizaste y qué impacto tuvo]"
+        "Diseño e implemento flujos de automatización con IA en n8n, con agentes basados en modelos de lenguaje que reemplazan procesos manuales repetitivos.",
+        "Construyo y mantengo pipelines de IA con LangChain y LangGraph que conectan modelos de lenguaje con herramientas internas, APIs y fuentes de datos."
       ],
       "stack": [
         {

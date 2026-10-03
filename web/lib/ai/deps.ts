@@ -1,6 +1,7 @@
 import { startActiveObservation } from "@langfuse/tracing";
 import { Redis } from "@upstash/redis";
-import { loadCases } from "@/lib/content/load";
+import { loadCases, loadProfile } from "@/lib/content/load";
+import { isPlaceholder } from "@/lib/content/schema";
 import { createLeadStore } from "@/lib/contact/store";
 import type { AGENT_ENV, Env } from "@/lib/env";
 import { createEmbedder } from "@/lib/kb/embed";
@@ -25,6 +26,12 @@ type MatchRow = {
   score: number;
   similarity: number;
 };
+
+/** The booking link lives in content/ (profile.links.calBooking); CAL_BOOKING_URL overrides it. */
+function bookingLink() {
+  const link = loadProfile().links.calBooking;
+  return isPlaceholder(link) ? undefined : link;
+}
 
 /** Production wiring for runAgent: Anthropic, OpenAI embeddings, Supabase, Upstash. */
 export function createAgentRuntime(config: AgentConfig) {
@@ -88,7 +95,7 @@ export function createAgentRuntime(config: AgentConfig) {
       },
     },
     cases: loadCases("es"),
-    calBookingUrl: config.CAL_BOOKING_URL,
+    calBookingUrl: config.CAL_BOOKING_URL ?? bookingLink(),
     createLead: ({ kind, name, email, message }) =>
       leads.store({ kind, name, email, message, company: undefined }, "agent"),
     onCost: (costUsd) => budget.spend(costUsd),
