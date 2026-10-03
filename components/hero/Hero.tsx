@@ -52,7 +52,7 @@ export function Hero({
       />
 
       <div className="relative flex flex-1 items-center px-4 pb-10 pt-2 sm:px-[clamp(16px,5vw,72px)] sm:pb-[150px] sm:pt-6">
-        <div className="flex w-full max-w-[640px] flex-col gap-[22px] sm:gap-7">
+        <div data-hero-content className="flex w-full max-w-[640px] flex-col gap-[22px] sm:gap-7">
           <p className="inline-flex items-center gap-2.5 self-start rounded-full border border-border bg-[rgba(7,8,10,0.7)] px-3 py-2 font-mono text-[11px] uppercase tracking-[0.06em] text-text-2 sm:px-3.5 sm:text-xs">
             <span aria-hidden="true" className="size-2 rounded-full bg-accent" />
             <ContentText value={profile.availability} />

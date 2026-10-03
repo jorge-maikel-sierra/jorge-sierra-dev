@@ -39,7 +39,7 @@ function withCitations(text: string, sources: Retrieved, key: string): ReactNode
 }
 
 /** Bold markers only; everything else is plain, React-escaped text. */
-function inline(text: string, sources: Retrieved, key: string) {
+export function inline(text: string, sources: Retrieved, key: string) {
   return text.split(/(\*\*[^*]+\*\*)/).map((piece, i) =>
     piece.startsWith("**") && piece.endsWith("**") ? (
       <strong key={`${key}-b${i}`} className="font-semibold text-text">

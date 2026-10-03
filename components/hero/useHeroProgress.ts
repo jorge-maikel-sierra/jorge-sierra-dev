@@ -115,7 +115,20 @@ export function useHeroProgress({
         },
       });
 
+      // The pin measures the hero once. The agent box grows with each answer:
+      // without a re-measure the section keeps its first height and its
+      // overflow-hidden clips the fit report.
+      let frame = 0;
+      const content = section.querySelector<HTMLElement>("[data-hero-content]");
+      const resize = new ResizeObserver(() => {
+        cancelAnimationFrame(frame);
+        frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
+      if (content) resize.observe(content);
+
       cleanup = () => {
+        resize.disconnect();
+        cancelAnimationFrame(frame);
         trigger.kill();
         gsap.ticker.remove(tick);
         lenis.destroy();

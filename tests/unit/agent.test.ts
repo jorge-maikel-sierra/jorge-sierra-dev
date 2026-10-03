@@ -115,6 +115,25 @@ describe("mode classification", () => {
     expect(report.gaps).toHaveLength(REPORT_LIMITS.gaps);
     expect(report.interviewQuestions).toHaveLength(REPORT_LIMITS.interviewQuestions);
   });
+
+  it("normalizes and checks the citations written inside the report texts", () => {
+    const { report, invalidCitations } = finalizeReport(
+      {
+        roleTitle: "Node Sr",
+        summary: "Encaja en Node.js [fuente:5][2] y en Rust [9].",
+        matches: [{ requirement: "Node.js", evidence: "Paga Diario en Fly.io [fuente:5] [7]", sourceIds: [2] }],
+        gaps: [{ requirement: "SOAP", note: "Solo REST [2]." }],
+        interviewQuestions: ["¿Cómo probó la API [fuente:5]?"],
+      },
+      new Set([2, 5]),
+    );
+    expect(report.summary).toBe("Encaja en Node.js [fuente:5][fuente:2] y en Rust .");
+    // Evidence citations become source links; the text keeps no markers.
+    expect(report.matches[0]).toEqual({ requirement: "Node.js", evidence: "Paga Diario en Fly.io", sourceIds: [2, 5] });
+    expect(report.gaps[0].note).toBe("Solo REST [fuente:2].");
+    expect(report.interviewQuestions[0]).toBe("¿Cómo probó la API [fuente:5]?");
+    expect(invalidCitations).toBe(2);
+  });
 });
 
 describe("tools", () => {
