@@ -64,8 +64,9 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 - [x] **4.1 Migración de la base de conocimiento** (`supabase/migrations/0002_knowledge_base.sql`: `kb_documents`, `kb_chunks`, índice HNSW, `match_kb_chunks`). Revisar que `vector(N)` coincida con `EMBEDDING_DIMENSIONS`.
   - Embeddings: OpenAI `text-embedding-3-small` (1536), decisión de Jorge (2026-10-03). `0003_kb_hardening.sql` corrige dos avisos de seguridad de Supabase: pgvector pasa al esquema `extensions` y `match_kb_chunks` fija su `search_path`. Verificado: la función responde y el rol anónimo no puede ejecutarla.
-- [ ] **4.2 Ingesta** (`scripts/ingest.ts`, `pnpm kb:ingest`): fragmentación, eliminación de frases con marcadores `[ ]`, hash por contenido, README de GitHub, resumen final.
+- [x] **4.2 Ingesta** (`scripts/ingest.ts`, `pnpm kb:ingest`): fragmentación, eliminación de frases con marcadores `[ ]`, hash por contenido, README de GitHub, resumen final.
   - Acepta si: correrla dos veces seguidas no re-embebe nada la segunda vez.
+  - Verificado (2026-10-03): 1.ª corrida 15 documentos / 98 fragmentos (12 279 tokens); 2.ª corrida 0 embebidos, 15 sin cambios. Cero corchetes en los fragmentos de `content/`. Sin README: `ai-support-automation-platform` (404) y `netplan` (solo título, 0 fragmentos). En los README los corchetes son enlaces y se convierten a texto; la regla de marcadores aplica al contenido JSON.
 - [ ] **4.3 Recuperación** (`lib/ai/retrieval.ts`) con tests de RRF y umbral.
 - [ ] **4.4 Clasificación de modo, prompts y herramientas** (`lib/ai/*`) según `docs/agent-spec.md` §2, §6 y §8.
 - [ ] **4.5 `POST /api/agent`**: guardas de entrada, streaming, data parts `data-trace` y `data-report`, verificación de citas, redacción de PII, tope de costo.
