@@ -15,7 +15,9 @@ function browserClient() {
 
 /**
  * Follows one lead's events: Realtime for new rows plus one read for rows
- * written before the subscription was ready ("received" usually is).
+ * written before the subscription was ready. The read waits for SUBSCRIBED:
+ * reading earlier leaves a gap where fast events are missed by both.
+ * Duplicates are harmless (the pipeline reducer ignores repeated steps).
  */
 export async function followLead(
   leadId: string,
@@ -29,7 +31,15 @@ export async function followLead(
       { event: "INSERT", schema: "public", table: "lead_events", filter: `lead_id=eq.${leadId}` },
       (payload) => onEvent(payload.new as LeadEvent),
     )
-    .subscribe();
+;
+
+  await new Promise<void>((resolve) => {
+    channel.subscribe((status) => {
+      if (status === "SUBSCRIBED" || status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
+        resolve();
+      }
+    });
+  });
 
   const { data } = await db
     .from("lead_events")

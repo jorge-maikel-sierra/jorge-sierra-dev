@@ -27,6 +27,17 @@ describe("contact pipeline", () => {
     expect(state.done).toEqual(["received", "classified", "stored"]);
   });
 
+  it("holds early events until every earlier step arrived", () => {
+    const early = run("classified", "stored");
+    expect(early.done).toEqual([]);
+    expect(activeStep(early)).toBe("received");
+    expect(applyEvent(early, { step: "received" }).done).toEqual([
+      "received",
+      "classified",
+      "stored",
+    ]);
+  });
+
   it("captures intent and priority from the classified event", () => {
     const state = applyEvent(runningPipeline, {
       step: "classified",

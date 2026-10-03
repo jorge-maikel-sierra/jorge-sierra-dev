@@ -52,11 +52,13 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 - [x] **3.1 Migración** `supabase/migrations/0001_contact.sql` aplicada (tablas `leads` y `lead_events`, políticas RLS, Realtime activado en `lead_events`).
   - `0001_init.sql` se dividió en `0001_contact.sql` (aplicada en el proyecto Supabase `jorge-sierra-dev`) y `0002_knowledge_base.sql` (tarea 4.1), para no fijar `vector(1536)` antes de elegir el modelo de embeddings. RLS verificado con la llave pública: escribir en ambas tablas → 401; leer `leads` → vacío; leer `lead_events` → permitido.
-- [ ] **3.2 `POST /api/contact`**: zod, honeypot, Turnstile, rate limit (5 / 10 min por IP), inserción en `leads` y evento `received`, llamada firmada con HMAC a n8n.
+- [x] **3.2 `POST /api/contact`**: zod, honeypot, Turnstile, rate limit (5 / 10 min por IP), inserción en `leads` y evento `received`, llamada firmada con HMAC a n8n.
   - Acepta si: tests de unidad para firma, validación y limitador; e2e con n8n simulado.
+  - n8n es opcional hasta que exista una instancia (decisión de Jorge, 2026-10-03): sin `N8N_*` el lead se guarda con su evento `received` y no se llama a nada más.
 - [ ] **3.3 Workflow de n8n** (`n8n/contact-pipeline.json`): verificar firma → clasificar con LLM → actualizar lead → Telegram → Resend; un evento en `lead_events` por paso y `failed` en caso de error.
 - [ ] **3.4 `PipelineView` en tiempo real**: suscripción a Realtime por `lead_id`, timeout de 20 s y mensaje de fallo tranquilizador.
   - Acepta si: un envío real muestra los cinco pasos llegando en orden y llega el aviso a Telegram.
+  - Avance (2026-10-03): e2e contra Supabase Realtime y Upstash reales con un n8n simulado que verifica la firma; los cinco pasos llegan en orden (5/5 corridas). Pendiente el aviso real a Telegram, que depende de la tarea 3.3 (en pausa: no hay instancia de n8n).
 
 ## Fase 4 — Agente
 

@@ -21,6 +21,15 @@ export default defineConfig({
     : {
         command: `pnpm build && pnpm start --port ${port}`,
         timeout: 180_000,
+        // Cloudflare's documented always-pass Turnstile keys and a local fake
+        // n8n (tests/e2e/contact-pipeline.spec.ts). Real Supabase and Upstash
+        // come from .env.local when present.
+        env: {
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: "1x00000000000000000000AA",
+          TURNSTILE_SECRET_KEY: "1x0000000000000000000000000000000AA",
+          N8N_CONTACT_WEBHOOK_URL: "http://127.0.0.1:3401/webhook",
+          N8N_WEBHOOK_SECRET: "e2e-webhook-secret",
+        },
         port,
         reuseExistingServer: !process.env.CI,
       },
