@@ -12,7 +12,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: una página de prueba muestra los tokens y ambas fuentes sin salto de diseño.
 - [x] **0.3 Variables de entorno**: `lib/env.ts` valida con zod las variables de `docs/design.md §9`; `.env.example` con todas, sin valores.
   - Acepta si: arrancar sin una variable obligatoria del servidor falla con un mensaje claro.
-- [ ] **0.4 Contenido tipado**: `lib/content/schema.ts` y `load.ts` para `content/es/*.json` (copiar `content/` a `web/content/`).
+- [x] **0.4 Contenido tipado**: `lib/content/schema.ts` y `load.ts` para `content/es/*.json` (copiar `content/` a `web/content/`).
   - Acepta si: un test de Vitest carga los tres JSON y falla si se rompe el esquema.
 - [ ] **0.5 CI**: workflow de GitHub Actions con lint, typecheck, test, build y gitleaks. Proyecto en Vercel con previews por PR.
   - Acepta si: un PR de prueba muestra todos los checks en verde y un enlace de preview.

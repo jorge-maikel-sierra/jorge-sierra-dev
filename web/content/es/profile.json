@@ -1,0 +1,47 @@
+{
+  "name": "Jorge Sierra",
+  "fullName": "Jorge Maikel Sierra Amaya",
+  "headline": "AI Engineer & Senior Full-Stack",
+  "location": "Medellín, Colombia",
+  "workModes": ["Remoto", "Híbrido"],
+  "availability": "Disponible para nuevos retos",
+  "hero": {
+    "titleLine1": "Del caos",
+    "titleLine2": "a la arquitectura.",
+    "subtitle": "Soy Jorge Sierra, AI Engineer & Senior Full-Stack. Convierto procesos manuales y sistemas que no se hablan entre sí en agentes, automatizaciones y APIs que escalan.",
+    "stackLine": ["n8n", "LangChain", "RAG", "NestJS", "Next.js", "Supabase"],
+    "graphLayers": [
+      { "label": "INPUTS", "sub": "WhatsApp · Email" },
+      { "label": "ORQUESTACIÓN", "sub": "n8n · webhooks" },
+      { "label": "AGENTES IA", "sub": "LangChain · RAG" },
+      { "label": "APIs", "sub": "NestJS · Next.js" },
+      { "label": "DATOS", "sub": "Postgres · pgvector" }
+    ],
+    "chaosTokens": ["Copia_final_v3(2).xlsx", "RE: RE: URGENTE", "pedido sin estado", "TODO: hacerlo a mano", "export_manual.csv", "¿cuál es la versión buena?", "ctrl+c → ctrl+v", "reporte_lunes_DEF.pdf"]
+  },
+  "summary": "Ingeniero de software con más de 5 años construyendo sistemas backend, aplicaciones full stack y automatizaciones con IA. Actualmente Ingeniero de IA & Automatización en SOAINT, donde lidera un equipo de 2 a 3 desarrolladores. Su objetivo es especializarse en AI engineering, con foco en el desarrollo de agentes.",
+  "skills": {
+    "ia": ["n8n", "LangChain", "LangSmith", "RAG", "Pinecone", "OpenAI GPT-4o Vision"],
+    "backend": ["Node.js", "NestJS", "Express", "Python", "Django", "Django REST Framework", "FastAPI", "AdonisJS", "GraphQL", "Redis", "PostgreSQL", "Prisma"],
+    "frontend": ["Next.js", "React", "Vue", "Nuxt", "Quasar", "TypeScript", "Tailwind CSS"],
+    "cloud": ["GCP", "AWS (certificación en curso)", "Docker", "Fly.io", "Vercel", "Supabase", "Terraform", "GitLab CI", "Jenkins", "GitHub Actions"]
+  },
+  "education": [
+    { "title": "Tecnólogo", "org": "SENA" },
+    { "title": "AWS Cloud Architecture", "org": "Certificación en curso" },
+    { "title": "Inglés B2", "org": "Preparándome para C1" }
+  ],
+  "principles": [
+    { "title": "El problema antes que la tecnología", "text": "Entiendo el flujo operativo y los cuellos de botella antes de escribir una línea de código." },
+    { "title": "Spec-Driven Development", "text": "Requerimientos, diseño y tareas documentados antes de implementar." }
+  ],
+  "links": {
+    "github": "https://github.com/jorge-maikel-sierra",
+    "linkedin": "https://www.linkedin.com/in/jorgemaikelsierra/",
+    "email": "jorgemaikelsierraamaya@gmail.com",
+    "whatsapp": "[Tu número real en formato internacional, ej. 573001234567]",
+    "cv": "[Enlace al CV en PDF]",
+    "calBooking": "[Enlace de Cal.com para agendar]"
+  },
+  "responseTime": "Respondo en menos de 24 h"
+}
