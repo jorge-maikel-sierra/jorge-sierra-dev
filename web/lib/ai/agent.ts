@@ -37,6 +37,9 @@ export const MAX_TOOL_STEPS = 5;
 export const MAX_OUTPUT_TOKENS = 1200;
 export const LLM_TIMEOUT_MS = 20_000;
 
+/** §14: what the visitor sees when the model or a dependency fails. */
+export const AGENT_UNAVAILABLE = "El agente no responde ahora mismo. Escríbele a Jorge desde Contacto.";
+
 export type TraceData = {
   mode: AgentMode;
   steps: { name: "classify" | "retrieve" | "generate" | "verify"; ms: number }[];
@@ -91,6 +94,11 @@ export function runAgent(params: {
   const firstVisitor = turns.find((turn) => turn.role === "user")?.text ?? lastVisitor;
 
   return createUIMessageStream<AgentUIMessage>({
+    // Details stay in the server log; the visitor gets the §14 message.
+    onError: (error) => {
+      console.error("[agent]", error instanceof Error ? `${error.name}: ${error.message}` : error);
+      return AGENT_UNAVAILABLE;
+    },
     execute: async ({ writer }) => {
       const steps: TraceData["steps"] = [];
       const usages: Usage[] = [];
