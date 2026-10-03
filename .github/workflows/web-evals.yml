@@ -5,17 +5,17 @@ name: web-evals
 on:
   pull_request:
     paths:
-      - "web/lib/ai/**"
-      - "web/content/**"
-      - "web/evals/**"
+      - "lib/ai/**"
+      - "content/**"
+      - "evals/**"
   # Evals spend real tokens: a branch with an open PR is covered by the
   # pull_request event, so pushes only run them on main.
   push:
     branches: [main]
     paths:
-      - "web/lib/ai/**"
-      - "web/content/**"
-      - "web/evals/**"
+      - "lib/ai/**"
+      - "content/**"
+      - "evals/**"
   workflow_dispatch:
     inputs:
       full:
@@ -35,9 +35,6 @@ jobs:
     name: agent evals
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: web
     env:
       AI_PROVIDER: anthropic
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -62,13 +59,13 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          package_json_file: web/package.json
+          package_json_file: package.json
 
       - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
-          cache-dependency-path: web/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
 
       - run: pnpm install --frozen-lockfile
 
@@ -86,5 +83,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: evals-report
-          path: web/evals/report.json
+          path: evals/report.json
           if-no-files-found: ignore

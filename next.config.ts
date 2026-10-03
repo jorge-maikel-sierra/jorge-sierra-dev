@@ -4,8 +4,7 @@ import type { NextConfig } from "next";
 import "./lib/env";
 
 const nextConfig: NextConfig = {
-  // The Nuxt site keeps its own lockfile at the repo root until Phase 6; pin the
-  // root so Turbopack does not infer the parent folder.
+  // Pin the root so Turbopack never infers a parent folder with another lockfile.
   turbopack: {
     root: path.join(__dirname),
     // Hero shaders live in .glsl files and are imported as strings.

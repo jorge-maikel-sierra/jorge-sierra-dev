@@ -82,7 +82,7 @@ export function parseEnv(
       [
         "Variables de entorno inválidas:",
         ...problems,
-        "Revisa web/.env.example y define los valores en web/.env.local o en Vercel.",
+        "Revisa .env.example y define los valores en .env.local o en Vercel.",
       ].join("\n"),
     );
   }

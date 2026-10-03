@@ -41,7 +41,6 @@ jobs:
           fi
 
       - name: Lighthouse (${{ matrix.form }})
-        working-directory: web
         run: |
           npx --yes @lhci/cli@0.15.1 autorun \
             --config=lighthouse/${{ matrix.form }}.json \

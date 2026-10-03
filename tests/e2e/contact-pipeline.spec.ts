@@ -35,7 +35,7 @@ const SECRET = "e2e-webhook-secret";
 const NAME = "E2E Test";
 
 test.describe.configure({ mode: "serial" });
-test.skip(!ready, "needs Supabase and Upstash keys in web/.env.local");
+test.skip(!ready, "needs Supabase and Upstash keys in .env.local");
 // One fake n8n on a fixed port: run once, on desktop (the pipeline is the same).
 test.skip(({ isMobile }) => isMobile, "runs once, on desktop");
 
