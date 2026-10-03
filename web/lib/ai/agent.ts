@@ -43,16 +43,20 @@ export const AGENT_UNAVAILABLE = "El agente no responde ahora mismo. Escríbele 
 export type TraceData = {
   mode: AgentMode;
   steps: { name: "classify" | "retrieve" | "generate" | "verify"; ms: number }[];
-  retrieved: { id: number; title: string; sourceType: string; score: number }[];
+  retrieved: { id: number; title: string; url: string | null; sourceType: string; score: number }[];
   tokens: { input: number; output: number };
   costUsd: number;
   model: string;
   invalidCitations: number;
 };
 
+/** Real pipeline stages, shown live in the agent box (transient parts). */
+export const PROGRESS_STEPS = ["read", "search", "compare", "write"] as const;
+export type ProgressStep = (typeof PROGRESS_STEPS)[number];
+
 export type AgentUIMessage = UIMessage<
   never,
-  { trace: TraceData; report: MatchReport }
+  { trace: TraceData; report: MatchReport; progress: { step: ProgressStep } }
 >;
 
 export type AgentDeps = {
@@ -100,6 +104,9 @@ export function runAgent(params: {
       return AGENT_UNAVAILABLE;
     },
     execute: async ({ writer }) => {
+      const progress = (step: ProgressStep) =>
+        writer.write({ type: "data-progress", data: { step }, transient: true });
+      progress("read");
       const steps: TraceData["steps"] = [];
       const usages: Usage[] = [];
       let invalidCitations = 0;
@@ -115,6 +122,7 @@ export function runAgent(params: {
       }
 
       // 3. Retrieval. Out of scope: no sources and no tools, nothing to leak.
+      progress("search");
       let sources: Source[] = [];
       let report: MatchReport | null = null;
       if (mode !== "out_of_scope") {
@@ -132,6 +140,7 @@ export function runAgent(params: {
         }
         steps.push({ name: "retrieve", ms: Math.round(now() - start) });
       }
+      progress("compare");
       const registry = new SourceRegistry(sources);
       const system = buildSystemPrompt({ mode, sources });
       const messages = toModelMessages(turns);
@@ -162,6 +171,7 @@ export function runAgent(params: {
       }
 
       // 4b. Streamed answer with tools; invalid citations removed on the fly.
+      progress("write");
       const start = now();
       const tools =
         mode === "out_of_scope"
@@ -212,6 +222,7 @@ export function runAgent(params: {
           retrieved: registry.all().map((source) => ({
             id: source.id,
             title: source.title,
+            url: source.url,
             sourceType: source.sourceType,
             score: Number(source.score.toFixed(4)),
           })),

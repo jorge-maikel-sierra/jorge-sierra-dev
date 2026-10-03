@@ -13,11 +13,15 @@ function browserClient() {
   return client;
 }
 
+/** Realtime does not guarantee delivery: re-read while the pipeline runs. */
+export const RECONCILE_INTERVAL_MS = 3000;
+
 /**
- * Follows one lead's events: Realtime for new rows plus one read for rows
- * written before the subscription was ready. The read waits for SUBSCRIBED:
- * reading earlier leaves a gap where fast events are missed by both.
- * Duplicates are harmless (the pipeline reducer ignores repeated steps).
+ * Follows one lead's events: Realtime for new rows, one read for rows written
+ * before the subscription was ready (it waits for SUBSCRIBED: reading earlier
+ * leaves a gap where fast events are missed by both), and a periodic re-read
+ * so a dropped Realtime message cannot stall the pipeline. Duplicates are
+ * harmless: the pipeline reducer ignores repeated steps.
  */
 export async function followLead(
   leadId: string,
@@ -41,14 +45,19 @@ export async function followLead(
     });
   });
 
-  const { data } = await db
-    .from("lead_events")
-    .select("step, meta")
-    .eq("lead_id", leadId)
-    .order("created_at");
-  data?.forEach((event) => onEvent(event as LeadEvent));
+  const read = async () => {
+    const { data } = await db
+      .from("lead_events")
+      .select("step, meta")
+      .eq("lead_id", leadId)
+      .order("created_at");
+    data?.forEach((event) => onEvent(event as LeadEvent));
+  };
+  await read();
+  const timer = setInterval(() => void read(), RECONCILE_INTERVAL_MS);
 
   return () => {
+    clearInterval(timer);
     void db.removeChannel(channel);
   };
 }

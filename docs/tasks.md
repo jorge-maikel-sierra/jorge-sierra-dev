@@ -74,8 +74,9 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 - [x] **4.5 `POST /api/agent`**: guardas de entrada, streaming, data parts `data-trace` y `data-report`, verificación de citas, redacción de PII, tope de costo.
   - Acepta si: test de integración con modelo simulado cubre los cuatro modos.
   - Las citas inválidas se filtran dentro del stream (`experimental_transform`), incluso cuando llegan partidas entre fragmentos. En el reporte de vacante, un encaje sin fuentes válidas se descarta. El modo `out_of_scope` no consulta la base ni usa herramientas. Sin las variables del agente, la ruta responde 503.
-- [ ] **4.6 UI del agente**: `AgentBox` en el hero, mensajes con fuentes enlazadas, `MatchReport`, `TracePanel` plegable, estados de carga, error, rate limit y presupuesto agotado.
+- [x] **4.6 UI del agente**: `AgentBox` en el hero, mensajes con fuentes enlazadas, `MatchReport`, `TracePanel` plegable, estados de carga, error, rate limit y presupuesto agotado.
   - Acepta si: el e2e de "pegar vacante → ver reporte con fuentes" pasa; todo funciona con teclado y lector de pantalla.
+  - Los e2e usan el stream real de `runAgent` con modelos simulados (incluye axe sobre el reporte). Pendiente: probar con Claude real cuando la cuenta de Anthropic tenga saldo (hoy responde "credit balance is too low"). El progreso que se ve en la caja viene de eventos reales del servidor (`data-progress`), no de temporizadores. `useChat` se carga recién con la primera pregunta: JS inicial 165,5 KB (margen de 4,5 KB). Además, `followLead` relee los eventos cada 3 s, porque Realtime no garantiza la entrega y un evento perdido trababa el pipeline de contacto.
 
 ## Fase 5 — Evals y observabilidad
 

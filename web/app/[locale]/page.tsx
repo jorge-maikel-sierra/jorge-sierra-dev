@@ -20,7 +20,7 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
 
   return (
     <main id="contenido">
-      <Hero profile={profile} t={t.hero} />
+      <Hero profile={profile} t={t.hero} agent={t.agent} />
       <CasesSection
         cases={loadCases(locale)}
         github={profile.links.github}

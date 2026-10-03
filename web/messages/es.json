@@ -134,5 +134,60 @@
     "failed": "Algo falló, pero tu mensaje quedó guardado y lo leeré igual.",
     "sendAnother": "Enviar otro mensaje",
     "pipelineLive": "Paso completado: {step}"
+  },
+  "agent": {
+    "progress": {
+      "read": "Leyendo tu vacante o proceso",
+      "search": "Buscando en CV, casos y repos (RAG)",
+      "compare": "Comparando requisitos con experiencia",
+      "write": "Redactando respuesta con fuentes"
+    },
+    "followUpPlaceholder": "Haz otra pregunta sobre su perfil…",
+    "you": "Tú",
+    "agentName": "Agente",
+    "thinking": "El agente está trabajando…",
+    "answerReady": "Respuesta lista",
+    "errors": {
+      "rateLimited": "Hiciste varias preguntas seguidas. Vuelve a intentarlo en {minutes} min.",
+      "budget": "El agente descansa por hoy. Escríbele a Jorge directamente.",
+      "unavailable": "El agente no responde ahora mismo.",
+      "tooLong": "El mensaje es muy largo. Acórtalo a 8 000 caracteres.",
+      "tooManyTurns": "La conversación llegó a su límite. Escríbele a Jorge directamente."
+    },
+    "contactLink": "Ir a contacto",
+    "noScript": "Para hablar con el agente necesitas JavaScript. Escríbele a Jorge desde Contacto.",
+    "sources": "Fuentes",
+    "report": {
+      "title": "Encaje con la vacante",
+      "matches": "Dónde encaja",
+      "gaps": "Brechas honestas",
+      "questions": "Preguntas para la entrevista",
+      "evidence": "Evidencia"
+    },
+    "trace": {
+      "summary": "Bajo el capó",
+      "mode": "Modo",
+      "steps": "Pasos",
+      "retrieved": "Fragmentos recuperados",
+      "tokens": "Tokens",
+      "cost": "Costo estimado",
+      "model": "Modelo",
+      "invalidCitations": "Citas inválidas eliminadas",
+      "modes": {
+        "vacancy": "Vacante",
+        "problem": "Problema de negocio",
+        "general": "Pregunta general",
+        "out_of_scope": "Fuera de alcance"
+      },
+      "stepNames": {
+        "classify": "Clasificar",
+        "retrieve": "Recuperar",
+        "generate": "Generar",
+        "verify": "Verificar citas"
+      }
+    },
+    "caseCard": "Ver caso",
+    "bookCall": "Agendar una llamada",
+    "leadCreated": "Listo: Jorge recibió tus datos y te contactará."
   }
 }

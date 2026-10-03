@@ -24,12 +24,18 @@ test.describe("hero", () => {
     ).toHaveAttribute("href", "#contacto");
   });
 
-  test("is readable without JavaScript", async ({ browser }) => {
+  test("is readable without JavaScript and offers contact instead of the agent", async ({
+    browser,
+  }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
     await page.goto("/es");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByLabel("Pregúntale a mi agente")).toBeVisible();
+    // §14: without JS the agent field is replaced by a link to contact.
+    await expect(page.getByLabel("Pregúntale a mi agente")).toBeHidden();
+    await expect(
+      page.locator("#agente").getByRole("link", { name: /Escríbele a Jorge desde Contacto/ }),
+    ).toHaveAttribute("href", "#contacto");
     await context.close();
   });
 });
