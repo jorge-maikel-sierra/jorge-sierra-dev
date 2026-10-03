@@ -10,7 +10,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
   - Acepta si: `pnpm dev` levanta una página vacía y `pnpm lint && pnpm typecheck` pasan.
 - [x] **0.2 Tokens y tipografía**: variables CSS de `docs/design.md §3` en `globals.css`, mapeadas en Tailwind. Bricolage Grotesque y JetBrains Mono con `next/font/google`.
   - Acepta si: una página de prueba muestra los tokens y ambas fuentes sin salto de diseño.
-- [ ] **0.3 Variables de entorno**: `lib/env.ts` valida con zod las variables de `docs/design.md §9`; `.env.example` con todas, sin valores.
+- [x] **0.3 Variables de entorno**: `lib/env.ts` valida con zod las variables de `docs/design.md §9`; `.env.example` con todas, sin valores.
   - Acepta si: arrancar sin una variable obligatoria del servidor falla con un mensaje claro.
 - [ ] **0.4 Contenido tipado**: `lib/content/schema.ts` y `load.ts` para `content/es/*.json` (copiar `content/` a `web/content/`).
   - Acepta si: un test de Vitest carga los tres JSON y falla si se rompe el esquema.
