@@ -1,6 +1,5 @@
 import {
   createUIMessageStream,
-  generateText,
   isStepCount,
   Output,
   streamText,
