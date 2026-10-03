@@ -6,7 +6,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 
 ## Fase 0 — Base del proyecto
 
-- [ ] **0.1 Crear la app Next.js** en la rama `next-rewrite`, en la carpeta `web/` (el código Nuxt queda intacto en la raíz hasta la Fase 6). TypeScript strict, App Router, Tailwind, pnpm, ESLint.
+- [x] **0.1 Crear la app Next.js** en la rama `next-rewrite`, en la carpeta `web/` (el código Nuxt queda intacto en la raíz hasta la Fase 6). TypeScript strict, App Router, Tailwind, pnpm, ESLint.
   - Acepta si: `pnpm dev` levanta una página vacía y `pnpm lint && pnpm typecheck` pasan.
 - [ ] **0.2 Tokens y tipografía**: variables CSS de `docs/design.md §3` en `globals.css`, mapeadas en Tailwind. Bricolage Grotesque y JetBrains Mono con `next/font/google`.
   - Acepta si: una página de prueba muestra los tokens y ambas fuentes sin salto de diseño.
