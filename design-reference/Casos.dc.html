@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Casos de estudio — Jorge Sierra</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07080A}
+a{color:#ECEDEF}a:hover{color:#FFFFFF}
+.flow{display:flex;align-items:stretch}
+.node{flex:1 1 0;min-width:0;box-sizing:border-box;display:flex;flex-direction:column;gap:8px;padding:16px;border-radius:12px;background:#0F1114}
+.conn{position:relative;flex:0 0 44px;align-self:center;height:2px;background:#2A2D33}
+.conn::after{content:"";position:absolute;top:-3px;left:0;width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc);animation:flowx 1.8s linear infinite;animation-delay:var(--d,0s)}
+@keyframes flowx{from{left:0}to{left:calc(100% - 8px)}}
+@keyframes flowy{from{top:0}to{top:calc(100% - 8px)}}
+@media (max-width:820px){.flow{flex-direction:column}.node{flex:none}.conn{flex:0 0 28px;width:2px;height:auto;align-self:flex-start;margin-left:24px}.conn::after{left:-3px;top:0;animation-name:flowy}}
+@media (prefers-reduced-motion:reduce){.conn::after{animation:none;left:calc(50% - 4px)}}
+</style>
+</helmet>
+<div id="casos" style="--acc: {{accent}}; min-height: 100vh; box-sizing: border-box; background: #07080A; color: #ECEDEF; font-family: 'Bricolage Grotesque', Georgia, serif; padding: 56px clamp(16px, 5vw, 72px) 96px">
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 760px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #9BA1AA">02 · CASOS DE ESTUDIO</span>
+<h2 style="margin: 0; font-size: clamp(40px, 5.2vw, 72px); line-height: 0.98; letter-spacing: -0.03em; font-weight: 800">Problemas reales,<br>arquitectura <span style="color: {{accent}}">visible.</span></h2>
+<p style="margin: 0; max-width: 620px; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.55; color: #B4B9C1">Cinco sistemas, del más terminado al que viene en camino. En cada uno: el problema, el flujo de datos y las decisiones que tomé, no solo el stack.</p>
+</div>
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.04em; text-decoration: none; color: #B4B9C1">← Volver al inicio</a>
+</div>
+
+<div role="group" aria-label="Elige un caso de estudio" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+<sc-for list="{{cases}}" as="c" hint-placeholder-count="5">
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.pressed}}" style="text-align: left; display: flex; flex-direction: column; gap: 10px; padding: 20px; min-height: 172px; box-sizing: border-box; border: 1px solid {{c.border}}; border-radius: 14px; background: {{c.bg}}; color: #ECEDEF; font-family: inherit; cursor: pointer">
+<span style="display: flex; justify-content: space-between; gap: 12px; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: {{c.numColor}}"><span>{{c.num}}</span><span>{{c.type}}</span></span>
+<span style="font-size: 21px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15">{{c.title}}</span>
+<span style="font-size: 14px; line-height: 1.4; color: #9BA1AA">{{c.kicker}}</span>
+<span style="margin-top: auto; display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: {{c.statusColor}}"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{c.statusColor}}"></span>{{c.status}}</span>
+</button>
+</sc-for>
+</div>
+
+<section aria-live="polite" style="display: flex; flex-direction: column; gap: 36px; padding: clamp(20px, 3vw, 40px); border: 1px solid #2A2D33; border-radius: 20px; background: #0B0C0F">
+
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 12px; max-width: 760px">
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: {{accent}}"><span>CASO {{cur.num}} · {{cur.type}}</span><span style="padding: 4px 10px; border: 1px solid {{cur.statusColor}}; border-radius: 999px; color: {{cur.statusColor}}">{{cur.status}}</span></span>
+<h3 style="margin: 0; font-size: clamp(30px, 3.4vw, 48px); line-height: 1.02; letter-spacing: -0.025em; font-weight: 800">{{cur.kicker}}</h3>
+<span style="font-size: 16px; color: #9BA1AA">{{cur.title}}{{cur.context}}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{cur.links}}" as="l" hint-placeholder-count="2">
+<a href="{{l.href}}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border: 1px solid #33373E; border-radius: 999px; text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 13px">{{l.label}} ↗</a>
+</sc-for>
+<sc-if value="{{cur.hasNote}}" hint-placeholder-val="{{ false }}">
+<span style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px dashed #33373E; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #8A9099">{{cur.note}}</span>
+</sc-if>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #9BA1AA">{{cur.flowLabel}}</span>
+<div class="flow">
+<sc-for list="{{cur.flow}}" as="n" hint-placeholder-count="5">
+<sc-if value="{{n.notFirst}}" hint-placeholder-val="{{ true }}">
+<div class="conn" style="--d: {{n.delay}}" aria-hidden="true"></div>
+</sc-if>
+<div class="node" style="border: 1px {{n.borderStyle}} {{n.border}}">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: #8A9099"><span>{{n.tag}}</span>
+<sc-if value="{{n.hasBadge}}" hint-placeholder-val="{{ false }}"><span style="padding: 2px 8px; border-radius: 999px; background: {{accent}}; color: #07080A; font-weight: 500">{{n.badge}}</span></sc-if>
+</span>
+<span style="font-size: 17px; font-weight: 700; line-height: 1.2">{{n.name}}</span>
+<span style="font-size: 13px; line-height: 1.4; color: #9BA1AA">{{n.sub}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h4 style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #9BA1AA">EL PROBLEMA</h4>
+<p style="margin: 0; font-size: 17px; line-height: 1.6; color: #D5D8DD">{{cur.problem}}</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h4 style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #9BA1AA">{{cur.decisionsLabel}}</h4>
+<ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 18px">
+<sc-for list="{{cur.decisions}}" as="d" hint-placeholder-count="3">
+<li style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 17px; font-weight: 700">{{d.t}}</span>
+<span style="font-size: 15px; line-height: 1.55; color: #9BA1AA">{{d.d}}</span>
+</li>
+</sc-for>
+</ol>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<h4 style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #9BA1AA">{{cur.resultsLabel}}</h4>
+<ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{cur.results}}" as="r" hint-placeholder-count="2">
+<li style="padding: 12px 14px; border: 1px {{r.borderStyle}} {{r.borderColor}}; border-radius: 10px; font-size: 15px; line-height: 1.55; color: {{r.color}}">{{r.text}}</li>
+</sc-for>
+</ul>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-top: 20px; border-top: 1px solid #1C1E22">
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{cur.stack}}" as="s" hint-placeholder-count="5">
+<span style="padding: 6px 12px; border: 1px solid #2A2D33; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #B4B9C1">{{s.label}}</span>
+</sc-for>
+</div>
+<div style="display: flex; gap: 10px">
+<button type="button" onClick="{{prev}}" style="min-height: 44px; padding: 0 16px; border: 1px solid #33373E; border-radius: 999px; background: transparent; color: #ECEDEF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; cursor: pointer">← ANTERIOR</button>
+<button type="button" onClick="{{next}}" style="min-height: 44px; padding: 0 16px; border: 1px solid #33373E; border-radius: 999px; background: transparent; color: #ECEDEF; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; cursor: pointer">SIGUIENTE →</button>
+</div>
+</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding-top: 32px; border-top: 1px solid #1C1E22">
+<p style="margin: 0; max-width: 720px; font-size: clamp(22px, 2.4vw, 32px); line-height: 1.2; font-weight: 700; letter-spacing: -0.02em">¿Tienes un proceso que hoy depende de hojas de cálculo y trabajo manual?</p>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px; background: {{accent}}; color: #07080A; font-size: 16px; font-weight: 700; text-decoration: none">Pregúntale a mi agente</a>
+<a href="https://github.com/jorge-maikel-sierra" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border: 1px solid #33373E; border-radius: 10px; font-size: 16px; font-weight: 600; text-decoration: none">Ver GitHub ↗</a>
+</div>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6EF0B0","options":["#6EF0B0","#7CC8FF","#C9A7FF","#FFD166"],"section":"Estilo"},"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { sel: 0 };
+    const GH = 'https://github.com/jorge-maikel-sierra/';
+    this.D = [
+      {
+        num: '01', title: 'Paga Diario', type: 'SaaS fintech', st: 'done', status: 'Terminado · demo en vivo', context: '',
+        kicker: 'Del cuaderno y el Excel a una plataforma de cobro en tiempo real',
+        problem: 'Las carteras de microcréditos de cobro diario suelen llevarse en cuadernos y hojas de Excel. Paga Diario automatiza el registro de pagos, el cálculo de mora y los reportes, y organiza las rutas de los cobradores.',
+        flow: [
+          { tag: 'CAMPO', name: 'Cobradores', sub: 'rutas de cobro con GPS' },
+          { tag: 'API', name: 'Node.js + Express', sub: 'JWT · sesiones' },
+          { tag: 'COLAS', name: 'BullMQ + Redis', sub: 'trabajos en segundo plano' },
+          { tag: 'DATOS', name: 'PostgreSQL 16', sub: 'Prisma ORM' },
+          { tag: 'SALIDA', name: 'Panel en vivo', sub: 'Socket.io · avisos por Telegram', badge: 'TIEMPO REAL' }
+        ],
+        decisions: [
+          { t: 'Mora según la regulación colombiana', d: 'El cálculo es automático y sigue la norma, en lugar de depender de cuentas manuales.' },
+          { t: 'Tiempo real sin bloquear la API', d: 'BullMQ sobre Redis y Socket.io para el panel en vivo. Redis es opcional: la operación básica funciona sin él.' },
+          { t: 'Probado y desplegado', d: 'Tests con Jest y Supertest, contenedores Docker y deploy en Fly.io.' }
+        ],
+        results: [
+          { text: 'Demo en vivo con credenciales públicas.' },
+          { text: 'Módulos completos: préstamos, pagos, cobradores, gastos, importación masiva, reportes y avisos por Telegram.' },
+          { text: '[Siguiente paso: asistente con IA que priorice la ruta del día y señale clientes en riesgo de mora]', ph: true }
+        ],
+        stack: ['Node.js', 'Express', 'PostgreSQL', 'Prisma', 'BullMQ', 'Socket.io', 'Fly.io'],
+        links: [
+          { label: 'Demo', href: 'https://paga-diario.fly.dev/' },
+          { label: 'Código', href: GH + 'paga-diario' }
+        ],
+        note: ''
+      },
+      {
+        num: '02', title: 'Chatbot de WhatsApp con visión', type: 'Automatización + IA', st: 'done', status: 'Terminado · challenge técnico', context: ' · Prueba técnica para SuperLikers',
+        kicker: 'Un agente que lee tickets de compra y asigna puntos solo',
+        problem: 'El reto: registrar participantes de una campaña y procesar sus tickets de compra sin intervención humana. El chatbot identifica a la persona por WhatsApp, lee la foto de la factura con IA y asigna los puntos en la plataforma.',
+        flow: [
+          { tag: 'CANAL', name: 'WhatsApp Business', sub: 'mensajes y fotos' },
+          { tag: 'ORQUESTACIÓN', name: 'n8n', sub: '14 estados conversacionales' },
+          { tag: 'VISIÓN', name: 'GPT-4o Vision', sub: 'lectura de la factura', badge: 'IA' },
+          { tag: 'NEGOCIO', name: 'API SuperLikers', sub: 'participantes y ventas' },
+          { tag: 'ESTADO', name: 'DataTable de n8n', sub: 'persistencia' }
+        ],
+        decisions: [
+          { t: 'Máquina de estados explícita', d: 'La conversación se modela como 14 estados, con 10 casos de error manejados.' },
+          { t: 'Visión para leer facturas', d: 'GPT-4o Vision extrae los datos del ticket que el usuario fotografía.' },
+          { t: 'Iterar con tests', d: '11 tests automáticos y 12 correcciones críticas en la versión 2.0.0.' }
+        ],
+        results: [
+          { text: 'Entregado con 96 % de cumplimiento y checklist de validación 10/10.' },
+          { text: '[VIDEO: 30 s del chat leyendo un ticket real]', ph: true }
+        ],
+        stack: ['n8n', 'WhatsApp Business', 'GPT-4o Vision', 'Docker'],
+        links: [{ label: 'Código', href: GH + 'superlikers-ai-automation-challenge' }],
+        note: ''
+      },
+      {
+        num: '03', title: 'NetPlan', type: 'SaaS + algoritmos', st: 'partial', status: 'Código listo · falta demo', context: '',
+        kicker: 'Planeación de redes con árboles de expansión mínima',
+        problem: 'NetPlan es un SaaS para planear infraestructura de red: calcula la conexión de menor costo entre puntos con algoritmos MST sobre un mapa interactivo. [Añade: para quién es y qué problema concreto le ahorra]',
+        flow: [
+          { tag: 'MAPA', name: 'React + Leaflet', sub: 'Vite · Tailwind' },
+          { tag: 'API', name: 'FastAPI', sub: 'única puerta a los datos' },
+          { tag: 'ALGORITMO', name: 'NetworkX', sub: 'árbol de expansión mínima', badge: 'NÚCLEO' },
+          { tag: 'DATOS', name: 'Supabase', sub: 'Postgres · Auth · RLS' },
+          { tag: 'EXPORT', name: 'OpenPyXL', sub: 'reportes en Excel' }
+        ],
+        decisions: [
+          { t: 'Toda consulta pasa por FastAPI', d: 'El frontend nunca habla directo con Supabase: un solo punto de control para validación y lógica de negocio.' },
+          { t: 'Spec-Driven Development', d: 'requirements.md → design.md → tasks.md → gap-analysis.md antes de escribir código.' },
+          { t: 'Contenedores listos para producción', d: 'Docker multi-stage, nginx con routing SPA y docker-compose con healthchecks; despliegue en Vercel y Render.' }
+        ],
+        results: [
+          { text: '[DEMO: enlace o GIF del mapa calculando la red]', ph: true },
+          { text: '[README del repo: hoy solo tiene el título]', ph: true }
+        ],
+        stack: ['React', 'Leaflet', 'FastAPI', 'NetworkX', 'Supabase', 'Docker'],
+        links: [{ label: 'Código', href: GH + 'netplan' }],
+        note: '[Demo pública]'
+      },
+      {
+        num: '04', title: 'Pizzería Horebs', type: 'Full-stack + datos', st: 'building', status: 'En construcción', context: ' · Negocio real',
+        kicker: 'De WooCommerce a un negocio que se dirige con datos',
+        problem: 'El negocio vive en WordPress + WooCommerce, en Hostinger. Pedidos, productos y clientes están ahí, pero nadie los usaba para decidir. El objetivo: un sitio nuevo con carrito y checkout que además sea la base de control de todo el negocio.',
+        flow: [
+          { tag: 'ORIGEN', name: 'WooCommerce', sub: 'MariaDB en Hostinger' },
+          { tag: 'EXTRACCIÓN', name: 'MCP server', sub: 'IA sobre la base en vivo', badge: 'IA' },
+          { tag: 'API', name: 'NestJS', sub: 'REST' },
+          { tag: 'DATOS', name: 'Supabase', sub: 'Postgres' },
+          { tag: 'CLIENTE', name: 'Next.js', sub: 'Tienda + panel en Vercel' }
+        ],
+        decisions: [
+          { t: 'Datos antes que diseño', d: 'Conecté un MCP server a la base MariaDB en producción para trabajar con pedidos y productos reales desde el primer día.' },
+          { t: 'Monorepo NestJS + Next.js + Supabase', d: 'API y web en un solo repositorio, frontend en Vercel y tiers gratuitos para validar antes de pagar infraestructura.' },
+          { t: 'Sitio nuevo primero, migración después', d: 'La migración de clientes y pedidos históricos se decide cuando el sitio nuevo esté funcionando.' }
+        ],
+        results: [
+          { text: 'Los datos contradijeron a la marca: el producto más vendido es la Pizza de Jamón y Queso, no el que se asumía.' },
+          { text: 'Listo: monorepo, conexión a Supabase y endpoint /health. En desarrollo: catálogo, carrito y checkout.' },
+          { text: '[MÉTRICA: pedidos online o tiempo de gestión después del lanzamiento]', ph: true }
+        ],
+        stack: ['NestJS', 'Next.js', 'Supabase', 'Vercel', 'MCP', 'MariaDB'],
+        links: [
+          { label: 'Demo', href: 'https://horebs-web.vercel.app' },
+          { label: 'Código', href: GH + 'horebs-app' }
+        ],
+        note: ''
+      },
+      {
+        num: '05', title: 'AI Support Automation Platform', type: 'AI engineering', st: 'soon', status: 'Próximamente', context: ' · Proyecto en diseño',
+        kicker: 'Un agente de soporte que clasifica, responde y actúa',
+        problem: 'Una plataforma que recibe tickets de soporte, los clasifica por tema y urgencia, responde con RAG sobre una base de conocimiento y ejecuta acciones con tool calling. Cuando el agente no está seguro, escala a un humano.',
+        flowLabel: 'FLUJO PLANEADO',
+        flow: [
+          { tag: 'ENTRADA', name: 'Tickets', sub: 'email · chat · formulario' },
+          { tag: 'TRIAGE', name: 'Agente clasificador', sub: 'tema y urgencia', badge: 'IA' },
+          { tag: 'CONOCIMIENTO', name: 'RAG', sub: 'búsqueda vectorial', badge: 'IA' },
+          { tag: 'ACCIONES', name: 'Tool calling', sub: 'consultar · escalar · cerrar' },
+          { tag: 'SALIDA', name: 'Notificaciones', sub: 'Email · SMS · Push' }
+        ],
+        decisionsLabel: 'DECISIONES DE DISEÑO',
+        decisions: [
+          { t: 'Reutilizar lo que ya funciona', d: 'La salida usa el patrón Strategy multicanal de notificaciones-challenge y los flujos corren sobre n8n-local.' },
+          { t: 'Evals desde el día uno', d: 'Trazas y evaluaciones con Langfuse para medir la precisión de la clasificación y la calidad de las respuestas.' },
+          { t: 'Humano en el bucle', d: 'Si la confianza del agente es baja, el ticket se escala en lugar de responder.' }
+        ],
+        resultsLabel: 'CÓMO SE VA A MEDIR',
+        results: [
+          { text: '[Objetivo: precisión de clasificación y % de tickets resueltos sin humano, medidos con evals]', ph: true }
+        ],
+        stack: ['LLM', 'RAG', 'Tool calling', 'Langfuse', 'n8n'],
+        links: [],
+        note: '[Repo en desarrollo]'
+      }
+    ];
+    this.picks = this.D.map((c, i) => () => this.setState({ sel: i }));
+    this.prev = () => this.setState({ sel: (this.state.sel + this.D.length - 1) % this.D.length });
+    this.next = () => this.setState({ sel: (this.state.sel + 1) % this.D.length });
+  }
+
+  statusColor(st, accent) {
+    if (st === 'done') return accent;
+    if (st === 'partial') return '#ECEDEF';
+    if (st === 'building') return '#FFB27A';
+    return '#8A9099';
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#6EF0B0';
+    const sel = this.state.sel || 0;
+    const cases = this.D.map((c, i) => ({
+      num: c.num, title: c.title, kicker: c.kicker, type: c.type.toUpperCase(),
+      status: c.status.toUpperCase(), statusColor: this.statusColor(c.st, accent),
+      pressed: i === sel ? 'true' : 'false',
+      border: i === sel ? accent : '#2A2D33',
+      bg: i === sel ? '#0F1114' : 'transparent',
+      numColor: i === sel ? accent : '#8A9099',
+      pick: this.picks[i]
+    }));
+    const c = this.D[sel];
+    const planned = c.st === 'soon';
+    const cur = {
+      num: c.num, title: c.title, kicker: c.kicker, type: c.type.toUpperCase(),
+      status: c.status.toUpperCase(), statusColor: this.statusColor(c.st, accent),
+      context: c.context || '',
+      problem: c.problem,
+      links: c.links, hasNote: !!c.note, note: c.note || '',
+      flowLabel: c.flowLabel || 'FLUJO DE DATOS',
+      decisionsLabel: c.decisionsLabel || 'DECISIONES CLAVE',
+      resultsLabel: c.resultsLabel || 'RESULTADO',
+      flow: c.flow.map((n, i) => ({
+        tag: n.tag, name: n.name, sub: n.sub || '',
+        badge: n.badge || '', hasBadge: !!n.badge,
+        border: n.badge ? accent : '#2A2D33',
+        borderStyle: planned ? 'dashed' : 'solid',
+        notFirst: i > 0, delay: (i * 0.3).toFixed(1) + 's'
+      })),
+      decisions: c.decisions,
+      results: c.results.map((r) => ({
+        text: r.text,
+        color: r.ph ? '#8A9099' : '#ECEDEF',
+        borderStyle: r.ph ? 'dashed' : 'solid',
+        borderColor: r.ph ? '#33373E' : accent
+      })),
+      stack: c.stack.map((s) => ({ label: s }))
+    };
+    return { accent: accent, cases: cases, cur: cur, prev: this.prev, next: this.next };
+  }
+}
+</script>
+</body>
+</html>

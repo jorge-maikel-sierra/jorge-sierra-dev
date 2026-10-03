@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Hero móvil — Del caos a la arquitectura</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07080A}
+a{color:#ECEDEF}a:hover{color:#FFFFFF}
+input::placeholder{color:#7A808A}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 844px; box-sizing: border-box; background: #07080A; color: #ECEDEF; font-family: 'Bricolage Grotesque', Georgia, serif; display: flex; flex-direction: column; overflow: hidden">
+
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 16px">
+<a href="#" style="display: flex; align-items: center; gap: 10px; min-height: 44px; text-decoration: none; color: #ECEDEF">
+<span style="width: 36px; height: 36px; box-sizing: border-box; border: 1px solid #33373E; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 500">JS</span>
+<span style="font-size: 16px; font-weight: 700">Jorge Sierra</span>
+</a>
+<button type="button" onClick="{{toggleMenu}}" aria-expanded="{{menuExpanded}}" aria-label="Menú" style="width: 44px; height: 44px; border: 1px solid #33373E; border-radius: 12px; background: transparent; color: #ECEDEF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12"></path><path d="M18 6L6 18"></path></svg></sc-if>
+<sc-if value="{{menuClosed}}" hint-placeholder-val="{{ true }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path></svg></sc-if>
+</button>
+</header>
+
+<sc-if value="{{menuOpen}}" hint-placeholder-val="{{ false }}">
+<nav aria-label="Principal" style="display: flex; flex-direction: column; margin: 0 16px 12px; padding: 6px; border: 1px solid #2A2D33; border-radius: 16px; background: #0B0C0F; font-family: 'JetBrains Mono', monospace; font-size: 14px; letter-spacing: 0.04em">
+<a href="Mobile-Casos.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; text-decoration: none; color: #ECEDEF">Casos<span aria-hidden="true">→</span></a>
+<a href="#agente" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; text-decoration: none; color: #ECEDEF">Agente<span aria-hidden="true">→</span></a>
+<a href="Mobile-Trayectoria.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; text-decoration: none; color: #ECEDEF">Trayectoria<span aria-hidden="true">→</span></a>
+<a href="Mobile-Contacto.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 12px; text-decoration: none; color: #ECEDEF">Contacto<span aria-hidden="true">→</span></a>
+<a href="#" style="display: flex; align-items: center; min-height: 48px; padding: 0 12px; text-decoration: none; color: #9BA1AA">ES / EN</a>
+</nav>
+</sc-if>
+
+<main style="display: flex; flex-direction: column; gap: 22px; padding: 8px 16px 40px">
+<div style="display: inline-flex; align-self: flex-start; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid #2A2D33; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #B4B9C1">
+<span style="width: 8px; height: 8px; border-radius: 50%; background: {{accent}}"></span>
+<span>DISPONIBLE PARA NUEVOS RETOS</span>
+</div>
+
+<h1 style="margin: 0; font-size: 50px; line-height: 0.94; letter-spacing: -0.035em; font-weight: 800">Del <span style="color: {{chaos}}">caos</span><br>a la <span style="color: {{accent}}">arquitectura.</span></h1>
+
+<p style="margin: 0; font-size: 17px; line-height: 1.55; color: #B4B9C1">Soy Jorge Sierra, AI Engineer &amp; Senior Full-Stack. Convierto procesos manuales y sistemas que no se hablan entre sí en agentes, automatizaciones y APIs que escalan.</p>
+
+<div style="display: flex; flex-direction: column; gap: 10px; margin: 0 -16px">
+<div onPointerMove="{{onMove}}" style="position: relative; height: 300px; border-top: 1px solid #15171B; border-bottom: 1px solid #15171B; touch-action: pan-y">
+<canvas ref="{{setCanvas}}" aria-hidden="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block"></canvas>
+<div style="position: absolute; left: 16px; right: 16px; bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: #9BA1AA">
+<span style="display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{stateColor}}"></span>{{orderLabel}} · {{scrub}}%</span>
+<button type="button" onClick="{{reset}}" style="min-height: 44px; padding: 0 14px; border: 1px solid #33373E; border-radius: 999px; background: rgba(7, 8, 10, 0.75); color: #ECEDEF; font-family: inherit; font-size: 11px; letter-spacing: 0.06em; cursor: pointer">VOLVER AL CAOS</button>
+</div>
+</div>
+<p style="margin: 0; padding: 0 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.7; letter-spacing: 0.04em; color: #8A9099">INPUTS → ORQUESTACIÓN → AGENTES IA → APIs → DATOS</p>
+</div>
+
+<div id="agente" style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border: 1px solid #2A2D33; border-radius: 16px; background: #0C0D10">
+<label for="ask-m" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #9BA1AA">PREGÚNTALE A MI AGENTE</label>
+<input id="ask-m" type="text" value="{{q}}" onChange="{{onQ}}" placeholder="Pega una vacante o describe un proceso…" style="width: 100%; height: 48px; box-sizing: border-box; padding: 0 14px; border: 1px solid #33373E; border-radius: 10px; background: #0B0C0F; color: #ECEDEF; font-family: inherit; font-size: 16px">
+<button type="button" onClick="{{ask}}" style="width: 100%; height: 48px; border: 0; border-radius: 10px; background: {{accent}}; color: #07080A; font-family: inherit; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer">Analizar<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg></button>
+<sc-if value="{{asking}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 8px; padding-top: 4px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.5">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+<div style="display: flex; gap: 10px; color: {{s.color}}"><span aria-hidden="true">{{s.mark}}</span><span>{{s.label}}</span></div>
+</sc-for>
+<sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 4px; padding: 12px; border: 1px dashed #33373E; border-radius: 10px; color: #9BA1AA; line-height: 1.55">[Respuesta del agente en vivo: encaje con la vacante, proyectos que lo prueban y brechas honestas]</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 4px">
+<a href="Mobile-Casos.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 4px; border-bottom: 1px solid #1C1E22; font-size: 17px; font-weight: 600; text-decoration: none">Ver casos de estudio<span aria-hidden="true">→</span></a>
+<a href="Mobile-Contacto.dc.html" style="display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 4px; border-bottom: 1px solid #1C1E22; font-size: 17px; font-weight: 600; text-decoration: none">Agendar consulta<span aria-hidden="true">→</span></a>
+<span style="padding-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.7; letter-spacing: 0.04em; color: #8A9099">n8n · LangChain · RAG · NestJS · Next.js · Supabase</span>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6EF0B0","options":["#6EF0B0","#7CC8FF","#C9A7FF","#FFD166"],"section":"Estilo"},"chaos":{"editor":"color","default":"#FF9F5A","section":"Estilo"},"particles":{"editor":"int","default":700,"min":200,"max":1600,"step":100,"section":"Animación"},"spin":{"editor":"range","default":1,"min":0,"max":2,"step":0.1,"section":"Animación"},"autoplay":{"editor":"boolean","default":true,"section":"Animación"},"$preview":{"width":390,"height":1220}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { q: '', asking: false, step: -1, scrub: 0, touched: false, menu: false };
+    this.cv = null; this.ctx = null; this.raf = 0; this.timers = []; this.alive = false;
+    this.g = 0; this.target = 0; this.mx = 0; this.my = 0; this.smx = 0; this.smy = 0;
+    this.boost = 0; this.time = 0; this.last = 0; this.frame = 0; this.builtFor = null;
+    this.w = 1; this.h = 1; this.dpr = 1; this.palKey = ''; this.pal = []; this.A = [110, 240, 176];
+    this.setCanvas = (el) => { this.cv = el; if (el && this.alive && !this.raf) this.start(); };
+    this.onMove = (e) => {
+      const r = e.currentTarget.getBoundingClientRect();
+      this.mx = ((e.clientX - r.left) / r.width) * 2 - 1;
+      this.my = ((e.clientY - r.top) / r.height) * 2 - 1;
+    };
+    this.toggleMenu = () => this.setState({ menu: !this.state.menu });
+    this.onQ = (e) => this.setState({ q: e.target.value });
+    this.reset = () => {
+      this.target = 0;
+      this.setState({ touched: false });
+      this.later(() => { this.target = 1; }, 1900);
+    };
+    this.ask = () => {
+      this.boost = 1.6;
+      this.setState({ asking: true, step: 0 });
+      [1, 2, 3, 4].forEach((s, i) => this.later(() => this.setState({ step: s }), 850 * (i + 1)));
+    };
+  }
+
+  later(fn, ms) { const id = setTimeout(fn, ms); this.timers.push(id); }
+  clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+  hexRgb(h) {
+    let s = String(h || '').replace('#', '');
+    if (s.length === 3) s = s.split('').map((c) => c + c).join('');
+    const n = parseInt(s.slice(0, 6), 16);
+    if (isNaN(n)) return [110, 240, 176];
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  palette(acc, cha) {
+    const key = acc + '|' + cha;
+    if (this.palKey === key) return this.pal;
+    const A = this.hexRgb(acc), C = this.hexRgb(cha);
+    this.pal = [];
+    for (let i = 0; i < 16; i++) {
+      const t = i / 15;
+      this.pal.push('rgb(' + Math.round(C[0] + (A[0] - C[0]) * t) + ',' + Math.round(C[1] + (A[1] - C[1]) * t) + ',' + Math.round(C[2] + (A[2] - C[2]) * t) + ')');
+    }
+    this.A = A; this.palKey = key;
+    return this.pal;
+  }
+
+  componentDidMount() { this.alive = true; if (this.cv && !this.raf) this.start(); }
+  componentWillUnmount() {
+    this.alive = false;
+    if (this.raf) cancelAnimationFrame(this.raf);
+    this.raf = 0;
+    this.timers.forEach((id) => clearTimeout(id));
+    if (this.ro) this.ro.disconnect();
+  }
+
+  start() {
+    this.ctx = this.cv.getContext('2d');
+    this.reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.resize();
+    if (window.ResizeObserver) { this.ro = new ResizeObserver(() => this.resize()); this.ro.observe(this.cv); }
+    if (this.reduce) { this.g = 1; this.target = 1; this.setState({ scrub: 100 }); }
+    else if (this.props.autoplay !== false) this.later(() => { this.target = 1; }, 1300);
+    const loop = (now) => { if (!this.alive) return; this.raf = requestAnimationFrame(loop); this.tick(now); };
+    this.raf = requestAnimationFrame(loop);
+  }
+
+  resize() {
+    const cv = this.cv; if (!cv) return;
+    const w = cv.clientWidth || 1, h = cv.clientHeight || 1;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    this.w = w; this.h = h; this.dpr = dpr;
+    cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  }
+
+  build(n) {
+    const layers = [{ n: 4 }, { n: 3 }, { n: 3 }, { n: 3 }, { n: 2 }];
+    const nodes = [];
+    layers.forEach((L, li) => {
+      L.idx = [];
+      for (let k = 0; k < L.n; k++) {
+        const y = (k - (L.n - 1) / 2) * 0.62;
+        const z = (k % 2 ? 1 : -1) * 0.32 * (li % 2 ? -1 : 1);
+        L.idx.push(nodes.length);
+        nodes.push({ x: -1.3 + li * 0.65, y: y, z: z });
+      }
+    });
+    const edges = []; const seen = {};
+    for (let li = 0; li < layers.length - 1; li++) {
+      const A = layers[li].idx, B = layers[li + 1].idx;
+      A.forEach((a, k) => {
+        [B[k % B.length], B[(k + 1) % B.length]].forEach((b) => {
+          const key = a + '-' + b;
+          if (!seen[key]) { seen[key] = 1; edges.push({ a: a, b: b, off: Math.random() }); }
+        });
+      });
+    }
+    const P = [];
+    for (let i = 0; i < n; i++) {
+      const onNode = Math.random() < 0.26;
+      const p = {
+        onNode: onNode, edge: -1, t: 0, ox: 0, oy: 0, oz: 0,
+        sp: 0.04 + Math.random() * 0.06,
+        j: (Math.random() - 0.5) * 0.03, j2: (Math.random() - 0.5) * 0.03,
+        cx: (Math.random() * 2 - 1) * 1.7, cy: (Math.random() * 2 - 1) * 1.15, cz: (Math.random() * 2 - 1),
+        ph: Math.random() * 6.283, f: 0.3 + Math.random() * 0.9, delay: 0
+      };
+      let x;
+      if (onNode) {
+        const nd = nodes[i % nodes.length];
+        const r = 0.06 * Math.cbrt(Math.random());
+        const th = Math.random() * 6.283, ph = Math.acos(2 * Math.random() - 1);
+        p.ox = nd.x + r * Math.sin(ph) * Math.cos(th);
+        p.oy = nd.y + r * Math.sin(ph) * Math.sin(th);
+        p.oz = nd.z + r * Math.cos(ph);
+        x = p.ox;
+      } else {
+        p.edge = i % edges.length; p.t = Math.random();
+        const e = edges[p.edge];
+        x = nodes[e.a].x + (nodes[e.b].x - nodes[e.a].x) * p.t;
+      }
+      p.delay = 0.42 * ((x + 1.3) / 2.6) + Math.random() * 0.16;
+      P.push(p);
+    }
+    const tokens = ['Copia_final_v3(2).xlsx', 'RE: RE: URGENTE', 'TODO: hacerlo a mano', 'export_manual.csv', 'reporte_lunes_DEF.pdf']
+      .map((s) => ({ s: s, cx: -1.5 + Math.random() * 1.6, cy: (Math.random() * 2 - 1) * 1.0, cz: (Math.random() * 2 - 1) * 0.6, ph: Math.random() * 6.283 }));
+    this.G = { layers: layers, nodes: nodes, edges: edges, P: P, tokens: tokens };
+    this.builtFor = n;
+  }
+
+  tick(now) {
+    const ctx = this.ctx; if (!ctx) return;
+    const n = Math.round(this.clamp(Number(this.props.particles ?? 700) || 700, 200, 1600));
+    if (this.builtFor !== n) this.build(n);
+    const dt = this.last ? Math.min(50, now - this.last) / 16.667 : 1;
+    this.last = now;
+    const ts = this.reduce ? 0 : 1;
+    this.time += dt * 0.016667 * ts;
+    this.g += (this.target - this.g) * Math.min(1, 0.035 * dt);
+    this.boost *= Math.pow(0.985, dt);
+    this.smx += (this.mx - this.smx) * Math.min(1, 0.05 * dt);
+    this.smy += (this.my - this.smy) * Math.min(1, 0.05 * dt);
+    this.frame++;
+    if (this.frame % 6 === 0) {
+      const v = Math.round(this.g * 100);
+      if (v !== this.state.scrub) this.setState({ scrub: v });
+    }
+
+    const accent = this.props.accent ?? '#6EF0B0';
+    const chaos = this.props.chaos ?? '#FF9F5A';
+    const pal = this.palette(accent, chaos);
+    const A = this.A;
+    const G = this.G, T = this.time, g = this.g;
+    const w = this.w, h = this.h, dpr = this.dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, w, h);
+
+    const cx = w * 0.5, cy = h * 0.44;
+    const sc = Math.min(w * 0.27, h * 0.34);
+    const spin = Number(this.props.spin ?? 1);
+    const yaw = Math.sin(T * 0.18 * spin) * 0.4 - 0.22 + this.smx * 0.35;
+    const pitch = 0.2 + this.smy * 0.15;
+    const cyw = Math.cos(yaw), syw = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const proj = (x, y, z, out) => {
+      const x1 = x * cyw - z * syw;
+      const z1 = x * syw + z * cyw;
+      const y1 = y * cp - z1 * sp;
+      const z2 = y * sp + z1 * cp;
+      const k = 3.6 / (3.6 + z2);
+      out.x = cx + x1 * sc * k; out.y = cy + y1 * sc * k; out.k = k;
+      return out;
+    };
+    const pn = G.nodes.map((nd) => proj(nd.x, nd.y, nd.z, {}));
+    const rgbA = A[0] + ',' + A[1] + ',' + A[2];
+
+    const eg = this.clamp((g - 0.55) / 0.4, 0, 1);
+    if (eg > 0) {
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(' + rgbA + ',' + (0.32 * eg) + ')';
+      ctx.beginPath();
+      G.edges.forEach((e) => { ctx.moveTo(pn[e.a].x, pn[e.a].y); ctx.lineTo(pn[e.b].x, pn[e.b].y); });
+      ctx.stroke();
+    }
+
+    const D = 0.58; const tmp = {};
+    const flow = 1 + this.boost * 2;
+    for (let i = 0; i < G.P.length; i++) {
+      const p = G.P[i];
+      const raw = this.clamp(g * (1 + D) - p.delay, 0, 1);
+      const e = raw < 0.5 ? 4 * raw * raw * raw : 1 - Math.pow(-2 * raw + 2, 3) / 2;
+      const a = T * p.f + p.ph;
+      const qx = p.cx + Math.sin(a) * 0.09, qy = p.cy + Math.cos(a * 1.3) * 0.09, qz = p.cz + Math.sin(a * 0.7 + p.ph) * 0.09;
+      let ox, oy, oz;
+      if (p.onNode) {
+        const b = T * 0.6 + p.ph;
+        ox = p.ox + Math.sin(b) * 0.008; oy = p.oy + Math.cos(b) * 0.008; oz = p.oz;
+      } else {
+        const E = G.edges[p.edge], na = G.nodes[E.a], nb = G.nodes[E.b];
+        const tt = (p.t + T * p.sp * flow) % 1;
+        ox = na.x + (nb.x - na.x) * tt + p.j; oy = na.y + (nb.y - na.y) * tt + p.j2; oz = na.z + (nb.z - na.z) * tt;
+      }
+      proj(qx + (ox - qx) * e, qy + (oy - qy) * e, qz + (oz - qz) * e, tmp);
+      ctx.fillStyle = pal[Math.round(e * 15)];
+      ctx.globalAlpha = 0.35 + 0.65 * this.clamp((tmp.k - 0.6) / 0.8, 0, 1);
+      const s = (p.onNode ? 1.8 : 1.3) * tmp.k;
+      ctx.fillRect(tmp.x - s / 2, tmp.y - s / 2, s, s);
+    }
+
+    const pg = this.clamp((g - 0.8) / 0.2, 0, 1);
+    if (pg > 0) {
+      ctx.globalAlpha = pg;
+      ctx.fillStyle = accent;
+      const speed = 0.28 + this.boost * 0.8;
+      G.edges.forEach((E) => {
+        const na = G.nodes[E.a], nb = G.nodes[E.b];
+        for (let m = 0; m < 2; m++) {
+          const tt = (E.off + m * 0.5 + T * speed) % 1;
+          proj(na.x + (nb.x - na.x) * tt, na.y + (nb.y - na.y) * tt, na.z + (nb.z - na.z) * tt, tmp);
+          ctx.beginPath(); ctx.arc(tmp.x, tmp.y, 2 * tmp.k, 0, 6.283); ctx.fill();
+        }
+      });
+    }
+
+    const ng = this.clamp((g - 0.65) / 0.3, 0, 1);
+    if (ng > 0) {
+      pn.forEach((q) => {
+        ctx.globalAlpha = ng * 0.9;
+        ctx.strokeStyle = accent; ctx.lineWidth = 1.1;
+        ctx.beginPath(); ctx.arc(q.x, q.y, 8 * q.k, 0, 6.283); ctx.stroke();
+        ctx.fillStyle = accent;
+        ctx.beginPath(); ctx.arc(q.x, q.y, 2.6 * q.k, 0, 6.283); ctx.fill();
+      });
+    }
+
+    const tg = 1 - this.clamp(g * 1.6, 0, 1);
+    if (tg > 0) {
+      ctx.textAlign = 'left';
+      ctx.font = '400 10px "JetBrains Mono", monospace';
+      ctx.fillStyle = chaos;
+      G.tokens.forEach((tk) => {
+        const a = T * 0.4 + tk.ph;
+        proj(tk.cx + Math.sin(a) * 0.05, tk.cy + Math.cos(a * 1.2) * 0.05, tk.cz, tmp);
+        ctx.globalAlpha = tg * 0.75 * this.clamp(tmp.k - 0.3, 0.3, 1);
+        ctx.fillText(tk.s, tmp.x, tmp.y);
+      });
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#6EF0B0';
+    const chaos = this.props.chaos ?? '#FF9F5A';
+    const st = this.state;
+    const labels = ['Leyendo tu vacante o proceso', 'Buscando en CV, casos y repos (RAG)', 'Comparando requisitos con experiencia', 'Redactando respuesta con fuentes'];
+    const steps = labels.map((label, i) => ({
+      label: label,
+      mark: i < st.step ? '●' : (i === st.step ? '◐' : '○'),
+      color: i < st.step ? accent : (i === st.step ? '#ECEDEF' : '#7A808A')
+    }));
+    const scrub = st.scrub;
+    const orderLabel = scrub < 30 ? 'CAOS' : (scrub < 90 ? 'ORDENANDO' : 'ARQUITECTURA');
+    const stateColor = scrub < 30 ? chaos : (scrub < 90 ? '#ECEDEF' : accent);
+    return {
+      accent: accent, chaos: chaos, q: st.q, onQ: this.onQ, ask: this.ask,
+      asking: st.asking, done: st.step >= 4, steps: steps,
+      scrub: scrub, reset: this.reset, onMove: this.onMove,
+      setCanvas: this.setCanvas, orderLabel: orderLabel, stateColor: stateColor,
+      menuOpen: !!st.menu, menuClosed: !st.menu, menuExpanded: st.menu ? 'true' : 'false',
+      toggleMenu: this.toggleMenu
+    };
+  }
+}
+</script>
+</body>
+</html>

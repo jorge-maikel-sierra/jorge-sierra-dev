@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Trayectoria — Jorge Sierra</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07080A}
+a{color:#ECEDEF}a:hover{color:#FFFFFF}
+</style>
+</helmet>
+<div id="trayectoria" style="min-height: 100vh; box-sizing: border-box; background: #07080A; color: #ECEDEF; font-family: 'Bricolage Grotesque', Georgia, serif; padding: 56px clamp(16px, 5vw, 72px) 96px">
+<div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px">
+<div style="display: flex; flex-direction: column; gap: 16px; max-width: 760px">
+<span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #9BA1AA">03 · TRAYECTORIA</span>
+<h2 style="margin: 0; font-size: clamp(40px, 5.2vw, 72px); line-height: 0.98; letter-spacing: -0.03em; font-weight: 800">Más de cinco años convirtiendo procesos en <span style="color: {{accent}}">sistemas.</span></h2>
+<p style="margin: 0; max-width: 620px; font-size: clamp(17px, 1.4vw, 19px); line-height: 1.55; color: #B4B9C1">Backend, frontend, nube y ahora agentes de IA. Filtra por área para ver dónde usé cada cosa.</p>
+</div>
+<a href="Main.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.04em; text-decoration: none; color: #B4B9C1">← Volver al inicio</a>
+</div>
+
+<div role="group" aria-label="Filtrar por área" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{filters}}" as="f" hint-placeholder-count="5">
+<button type="button" onClick="{{f.pick}}" aria-pressed="{{f.pressed}}" style="min-height: 44px; padding: 0 18px; border: 1px solid {{f.border}}; border-radius: 999px; background: {{f.bg}}; color: {{f.color}}; font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.04em; cursor: pointer">{{f.label}}</button>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+
+<ol style="flex: 999 1 560px; min-width: 0; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+<sc-for list="{{jobs}}" as="j" hint-placeholder-count="4">
+<li style="display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 24px; opacity: {{j.opacity}}; transition: opacity 0.3s ease">
+<div style="position: relative; display: flex; justify-content: center">
+<div style="position: absolute; top: 0; bottom: 0; width: 2px; background: #1F2226"></div>
+<div style="position: relative; margin-top: 6px; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; background: {{j.dotBg}}; border: 2px solid {{j.dotBorder}}"></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding-bottom: 48px">
+<span style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.06em; color: {{j.yearsColor}}"><span>{{j.years}}</span>
+<sc-if value="{{j.current}}" hint-placeholder-val="{{ false }}"><span style="padding: 3px 9px; border-radius: 999px; background: {{accent}}; color: #07080A">ACTUAL</span></sc-if>
+</span>
+<h3 style="margin: 0; font-size: clamp(24px, 2.4vw, 32px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 800">{{j.role}}</h3>
+<span style="font-size: 17px; color: #B4B9C1">{{j.org}}</span>
+<ul style="margin: 0; padding: 0 0 0 18px; display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{j.bullets}}" as="b" hint-placeholder-count="2">
+<li style="font-size: 16px; line-height: 1.55; color: {{b.color}}">{{b.text}}</li>
+</sc-for>
+</ul>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px">
+<sc-for list="{{j.chips}}" as="k" hint-placeholder-count="4">
+<span style="padding: 5px 11px; border: 1px solid {{k.border}}; border-radius: 999px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: {{k.color}}">{{k.label}}</span>
+</sc-for>
+</div>
+</div>
+</li>
+</sc-for>
+</ol>
+
+<aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 1px solid #2A2D33; border-radius: 16px; background: #0B0C0F">
+<h4 style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #9BA1AA">FORMACIÓN Y EN CURSO</h4>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">Tecnólogo</span><span style="font-size: 15px; color: #9BA1AA">SENA</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">AWS Cloud Architecture</span><span style="font-size: 15px; color: #9BA1AA">Certificación en curso</span></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 17px; font-weight: 700">Inglés B2</span><span style="font-size: 15px; color: #9BA1AA">Preparándome para C1</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; border: 1px solid #2A2D33; border-radius: 16px; background: #0B0C0F">
+<h4 style="margin: 0; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: #9BA1AA">CÓMO TRABAJO</h4>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">El problema antes que la tecnología</span><span style="font-size: 15px; line-height: 1.5; color: #9BA1AA">Entiendo el flujo operativo y los cuellos de botella antes de escribir una línea de código.</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span style="font-size: 17px; font-weight: 700">Spec-Driven Development</span><span style="font-size: 15px; line-height: 1.5; color: #9BA1AA">Requerimientos, diseño y tareas documentados antes de implementar.</span></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<a href="#" style="flex: 1 1 140px; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 18px; border-radius: 10px; background: {{accent}}; color: #07080A; font-size: 16px; font-weight: 700; text-decoration: none">Descargar CV</a>
+<a href="https://www.linkedin.com/in/jorgemaikelsierra/" target="_blank" rel="noopener" style="flex: 1 1 140px; display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 18px; border: 1px solid #33373E; border-radius: 10px; font-size: 16px; font-weight: 600; text-decoration: none">LinkedIn ↗</a>
+</div>
+</aside>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; padding-top: 32px; border-top: 1px solid #1C1E22">
+<p style="margin: 0; max-width: 720px; font-size: clamp(22px, 2.4vw, 32px); line-height: 1.2; font-weight: 700; letter-spacing: -0.02em">¿Encajo con lo que buscas? Hablemos.</p>
+<a href="Contacto.dc.html" style="display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border-radius: 10px; background: {{accent}}; color: #07080A; font-size: 16px; font-weight: 700; text-decoration: none">Ir a contacto</a>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6EF0B0","options":["#6EF0B0","#7CC8FF","#C9A7FF","#FFD166"],"section":"Estilo"},"$preview":{"width":1440,"height":1640}}'>
+class Component extends DCLogic {
+  constructor(...args) {
+    super(...args);
+    this.state = { f: 'all' };
+    this.F = [['all', 'Todo'], ['ia', 'IA y automatización'], ['backend', 'Backend'], ['frontend', 'Frontend'], ['cloud', 'Cloud y DevOps']];
+    this.fpicks = this.F.map((x) => () => this.setState({ f: x[0] }));
+    this.J = [
+      {
+        years: '[AÑO] — HOY', current: true, role: 'Ingeniero de IA & Automatización', org: 'SOAINT', tags: ['ia', 'backend'],
+        bullets: [
+          { t: 'Lidero un equipo de 2 a 3 desarrolladores.' },
+          { t: '[LOGRO con métrica: qué proceso automatizaste y qué impacto tuvo]', ph: true }
+        ],
+        chips: [['n8n', 'ia'], ['LangChain', 'ia'], ['LangSmith', 'ia'], ['RAG', 'ia'], ['Pinecone', 'ia']]
+      },
+      {
+        years: '[AÑOS]', current: false, role: 'Desarrollador Full Stack', org: 'IX Colombia', tags: ['backend', 'cloud'],
+        bullets: [
+          { t: '[Qué construiste, para quién y con qué resultado]', ph: true }
+        ],
+        chips: [['GraphQL', 'backend'], ['Redis', 'backend'], ['GitLab CI', 'cloud'], ['Terraform', 'cloud']]
+      },
+      {
+        years: '[AÑOS]', current: false, role: 'Desarrollador Full Stack', org: '[EMPRESA] · Software de gestión de clínicas', tags: ['frontend', 'backend'],
+        bullets: [
+          { t: 'Empecé en el frontend con Vue y Quasar y luego pasé al backend.' },
+          { t: 'Producto usado por clientes en Colombia, Perú y Argentina.' }
+        ],
+        chips: [['Vue', 'frontend'], ['Quasar', 'frontend']]
+      },
+      {
+        years: '2019 — 2023', current: false, role: 'Desarrollador Full Stack', org: 'SENA', tags: ['backend', 'cloud'],
+        bullets: [
+          { t: 'Backend con Python, Django y Django REST Framework, aplicando patrones como Singleton y Factory.' },
+          { t: 'Servicios en GCP: Compute Engine, Cloud Functions, Cloud Run, GKE, Pub/Sub, BigQuery y App Engine.' }
+        ],
+        chips: [['Python', 'backend'], ['Django', 'backend'], ['DRF', 'backend'], ['GCP', 'cloud'], ['BigQuery', 'cloud']]
+      }
+    ];
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#6EF0B0';
+    const f = this.state.f || 'all';
+    const filters = this.F.map((x, i) => ({
+      label: x[1], pick: this.fpicks[i], pressed: x[0] === f ? 'true' : 'false',
+      border: x[0] === f ? accent : '#33373E',
+      bg: x[0] === f ? accent : 'transparent',
+      color: x[0] === f ? '#07080A' : '#ECEDEF'
+    }));
+    const jobs = this.J.map((j) => {
+      const on = f === 'all' || j.tags.indexOf(f) >= 0;
+      return {
+        years: j.years, current: j.current, role: j.role, org: j.org,
+        opacity: on ? 1 : 0.32,
+        yearsColor: j.current ? accent : '#9BA1AA',
+        dotBg: j.current ? accent : '#07080A',
+        dotBorder: on ? accent : '#33373E',
+        bullets: j.bullets.map((b) => ({ text: b.t, color: b.ph ? '#8A9099' : '#D5D8DD' })),
+        chips: j.chips.map((c) => {
+          const hit = f !== 'all' && c[1] === f;
+          return { label: c[0], border: hit ? accent : '#2A2D33', color: hit ? accent : '#B4B9C1' };
+        })
+      };
+    });
+    return { accent: accent, filters: filters, jobs: jobs };
+  }
+}
+</script>
+</body>
+</html>

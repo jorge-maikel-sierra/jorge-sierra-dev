@@ -1,0 +1,82 @@
+# Tareas — jorge-sierra.dev v2
+
+Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al terminar. No pases a la siguiente fase sin que los criterios de la fase actual se cumplan. Si algo de la especificación es ambiguo, pregunta antes de suponer.
+
+---
+
+## Fase 0 — Base del proyecto
+
+- [ ] **0.1 Crear la app Next.js** en la rama `next-rewrite`, en la carpeta `web/` (el código Nuxt queda intacto en la raíz hasta la Fase 6). TypeScript strict, App Router, Tailwind, pnpm, ESLint.
+  - Acepta si: `pnpm dev` levanta una página vacía y `pnpm lint && pnpm typecheck` pasan.
+- [ ] **0.2 Tokens y tipografía**: variables CSS de `docs/design.md §3` en `globals.css`, mapeadas en Tailwind. Bricolage Grotesque y JetBrains Mono con `next/font/google`.
+  - Acepta si: una página de prueba muestra los tokens y ambas fuentes sin salto de diseño.
+- [ ] **0.3 Variables de entorno**: `lib/env.ts` valida con zod las variables de `docs/design.md §9`; `.env.example` con todas, sin valores.
+  - Acepta si: arrancar sin una variable obligatoria del servidor falla con un mensaje claro.
+- [ ] **0.4 Contenido tipado**: `lib/content/schema.ts` y `load.ts` para `content/es/*.json` (copiar `content/` a `web/content/`).
+  - Acepta si: un test de Vitest carga los tres JSON y falla si se rompe el esquema.
+- [ ] **0.5 CI**: workflow de GitHub Actions con lint, typecheck, test, build y gitleaks. Proyecto en Vercel con previews por PR.
+  - Acepta si: un PR de prueba muestra todos los checks en verde y un enlace de preview.
+
+## Fase 1 — Secciones estáticas (sin 3D ni IA)
+
+- [ ] **1.1 Layout y navegación**: header con logo, enlaces a secciones y selector ES/EN (inactivo hasta Fase 6). Menú desplegable bajo 640 px como en `design-reference/Mobile-Hero.dc.html`.
+- [ ] **1.2 Hero estático**: titular, subtítulo, indicador de disponibilidad, caja del agente (sin funcionar aún), CTAs y línea de stack. `HeroFallback` con imagen temporal.
+  - Acepta si: coincide con `Main.dc.html` y `Mobile-Hero.dc.html` en copy, colores y jerarquía; LCP < 2 s en Lighthouse móvil.
+- [ ] **1.3 Componente `Placeholder`** y regla global: cualquier string de contenido que empiece por `[` se renderiza con él.
+- [ ] **1.4 Casos de estudio**: `CaseSelector`, `CaseDetail`, `FlowDiagram` (horizontal/vertical con pulso CSS), `StatusBadge`, desde `cases.json`.
+  - Acepta si: replica `Casos.dc.html` y `Mobile-Casos.dc.html`, incluido el carrusel horizontal en móvil y los bordes punteados del caso "soon"; navegación con teclado entre casos.
+- [ ] **1.5 Trayectoria**: `Timeline`, `AreaFilter`, `SideCards`, desde `experience.json` y `profile.json`.
+  - Acepta si: replica `Trayectoria.dc.html` y su versión móvil; el filtro atenúa roles y resalta chips.
+- [ ] **1.6 Contacto (solo UI)**: `ContactForm` con validación zod en cliente y mensajes de error; `PipelineView` en estado de espera; `Channels`.
+  - Acepta si: replica `Contacto.dc.html` y su versión móvil; un e2e prueba los tres mensajes de validación.
+- [ ] **1.7 SEO base**: `generateMetadata`, OG generado, JSON-LD `Person`, sitemap y robots.
+  - Acepta si: Lighthouse SEO = 100 y las etiquetas Open Graph y Twitter dicen lo mismo.
+- [ ] **1.8 Accesibilidad**: e2e con axe en las cuatro secciones, escritorio y móvil.
+  - Acepta si: cero violaciones serias o críticas.
+
+## Fase 2 — Hero 3D
+
+- [ ] **2.1 `buildGraph.ts`** con tests: 15 nodos en 5 capas, cada nodo con al menos una arista entrante o saliente, retrasos crecientes de izquierda a derecha.
+- [ ] **2.2 Partículas en GPU**: `Points` con atributos y shaders de `docs/design.md §4`; `uProgress` controlado por un slider de desarrollo.
+  - Acepta si: 20 000 partículas a 60 fps en un portátil con GPU integrada moderna.
+- [ ] **2.3 Aristas, pulsos, etiquetas de capa y tokens de caos**, con sus umbrales de aparición.
+- [ ] **2.4 Control por scroll** (ScrollTrigger con pin en escritorio), autoplay a 1,3 s, rotación con puntero/arrastre suavizada, botón "Volver al caos" en móvil.
+- [ ] **2.5 Degradación**: `detect-gpu` (tier 0 → fallback; tier 1 → 8 000 partículas sin bloom), `prefers-reduced-motion` → estado final estático, pausa fuera de pantalla.
+- [ ] **2.6 Carga diferida**: `next/dynamic` + montaje tras idle; generar la imagen de `HeroFallback` desde la escena.
+  - Acepta si: JS inicial < 170 KB gzip sin el chunk 3D; CLS = 0; Lighthouse móvil ≥ 90.
+
+## Fase 3 — Contacto con pipeline real
+
+- [ ] **3.1 Migración** `supabase/migrations/0001_init.sql` aplicada (tablas `leads` y `lead_events`, políticas RLS, Realtime activado en `lead_events`).
+- [ ] **3.2 `POST /api/contact`**: zod, honeypot, Turnstile, rate limit (5 / 10 min por IP), inserción en `leads` y evento `received`, llamada firmada con HMAC a n8n.
+  - Acepta si: tests de unidad para firma, validación y limitador; e2e con n8n simulado.
+- [ ] **3.3 Workflow de n8n** (`n8n/contact-pipeline.json`): verificar firma → clasificar con LLM → actualizar lead → Telegram → Resend; un evento en `lead_events` por paso y `failed` en caso de error.
+- [ ] **3.4 `PipelineView` en tiempo real**: suscripción a Realtime por `lead_id`, timeout de 20 s y mensaje de fallo tranquilizador.
+  - Acepta si: un envío real muestra los cinco pasos llegando en orden y llega el aviso a Telegram.
+
+## Fase 4 — Agente
+
+- [ ] **4.1 Migración de la base de conocimiento** (`kb_documents`, `kb_chunks`, índice HNSW, `match_kb_chunks`). Revisar que `vector(N)` coincida con `EMBEDDING_DIMENSIONS`.
+- [ ] **4.2 Ingesta** (`scripts/ingest.ts`, `pnpm kb:ingest`): fragmentación, eliminación de frases con marcadores `[ ]`, hash por contenido, README de GitHub, resumen final.
+  - Acepta si: correrla dos veces seguidas no re-embebe nada la segunda vez.
+- [ ] **4.3 Recuperación** (`lib/ai/retrieval.ts`) con tests de RRF y umbral.
+- [ ] **4.4 Clasificación de modo, prompts y herramientas** (`lib/ai/*`) según `docs/agent-spec.md` §2, §6 y §8.
+- [ ] **4.5 `POST /api/agent`**: guardas de entrada, streaming, data parts `data-trace` y `data-report`, verificación de citas, redacción de PII, tope de costo.
+  - Acepta si: test de integración con modelo simulado cubre los cuatro modos.
+- [ ] **4.6 UI del agente**: `AgentBox` en el hero, mensajes con fuentes enlazadas, `MatchReport`, `TracePanel` plegable, estados de carga, error, rate limit y presupuesto agotado.
+  - Acepta si: el e2e de "pegar vacante → ver reporte con fuentes" pasa; todo funciona con teclado y lector de pantalla.
+
+## Fase 5 — Evals y observabilidad
+
+- [ ] **5.1 Langfuse**: trazas con los spans y tags de `docs/agent-spec.md §11`.
+- [ ] **5.2 Dataset de 30 casos** en `evals/dataset.jsonl` (formato de `dataset.example.jsonl`). Las vacantes deben ser reales y anonimizadas: pedírselas a Jorge.
+- [ ] **5.3 Jueces y runner** (`evals/judges.ts`, `evals/run.ts`, `pnpm evals`) con los umbrales de §12.
+- [ ] **5.4 Job de evals en CI** cuando cambien `lib/ai/**`, `content/**` o `evals/**`.
+  - Acepta si: romper a propósito el prompt (quitar la regla 1) hace fallar el job.
+
+## Fase 6 — Pulido y lanzamiento
+
+- [ ] **6.1 Inglés**: `messages/en.json`, contenido traducido en `content/en/`, selector ES/EN activo, `hreflang`, re-ingesta con `lang = 'en'`.
+- [ ] **6.2 Lighthouse CI** con los umbrales de RNF-4 en cada PR.
+- [ ] **6.3 Revisión de marcadores**: listar todos los `[ ]` y campos `_verify` que quedan en `content/` y pedírselos a Jorge. No lanzar con marcadores en cargos, años de SOAINT, WhatsApp ni enlace al CV, ni con campos `_verify` sin resolver.
+- [ ] **6.4 Corte**: mover `web/` a la raíz, archivar el código Nuxt en la rama `legacy-nuxt`, apuntar jorge-sierra.dev al nuevo proyecto en Vercel, verificar redirecciones y que el formulario y el agente funcionen en producción.
