@@ -199,3 +199,20 @@ html {
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* Active pipeline step (design-reference/Contacto.dc.html). */
+.pipeline-blink {
+  animation: pipeline-blink 0.9s ease-in-out infinite;
+}
+
+@keyframes pipeline-blink {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pipeline-blink {
+    animation: none;
+  }
+}

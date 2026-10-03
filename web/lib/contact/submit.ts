@@ -1,9 +1,14 @@
-import { contactSchema, type ContactErrors, type ContactInput } from "./schema";
+import {
+  contactSchema,
+  HONEYPOT_FIELD,
+  type ContactErrors,
+  type ContactInput,
+} from "./schema";
 
 // Use case behind POST /api/contact (docs/design.md §5). Infrastructure is
 // injected, so every branch is covered by unit tests without network.
 
-export const HONEYPOT_FIELD = "website";
+export { HONEYPOT_FIELD };
 
 export type ContactDeps = {
   /** Sliding window per IP: 5 submissions every 10 minutes. */

@@ -4,28 +4,95 @@ import { useRef, useState, type FormEvent } from "react";
 import {
   CONTACT_LIMITS,
   contactKinds,
+  HONEYPOT_FIELD,
   contactSchema,
   type ContactKind,
 } from "@/lib/contact/schema";
 import type { Messages } from "@/lib/messages";
+import { Turnstile, type TurnstileHandle } from "./Turnstile";
 
 type Field = "name" | "email" | "company" | "message";
+type FormError = { field: Field | "form"; text: string };
 const FIELD_ORDER: Field[] = ["name", "email", "company", "message"];
 
 const input =
   "h-12 rounded-control border border-border-strong bg-bg px-3.5 text-base text-text placeholder:text-text-faint aria-[invalid=true]:border-warn";
 const label = "text-sm text-text-2";
 
-// Validation only: submission to /api/contact and the live pipeline arrive in
-// tasks 3.2 and 3.4.
-export function ContactForm({ t }: { t: Messages["contact"] }) {
+// Validates on the client with the server's schema, then posts to
+// /api/contact with the Turnstile token and the honeypot.
+export function ContactForm({
+  t,
+  locked,
+  onSent,
+}: {
+  t: Messages["contact"];
+  /** While a submission's pipeline is running. */
+  locked: boolean;
+  onSent: (leadId: string, sender: { name: string; email: string }) => void;
+}) {
   const [kind, setKind] = useState<ContactKind>("vacante");
-  const [error, setError] = useState<{ field: Field; text: string } | null>(null);
+  const [error, setError] = useState<FormError | null>(null);
+  const [sending, setSending] = useState(false);
   const form = useRef<HTMLFormElement>(null);
+  const turnstile = useRef<TurnstileHandle | null>(null);
   const schema = contactSchema(t.errors);
+
+  const showError = (next: FormError) => {
+    setError(next);
+    if (next.field !== "form") {
+      form.current?.querySelector<HTMLElement>(`[name="${next.field}"]`)?.focus();
+    }
+  };
+
+  const send = async (data: FormData, input: Record<string, unknown>) => {
+    setSending(true);
+    try {
+      const turnstileToken = (await turnstile.current?.getToken()) ?? "";
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...input,
+          turnstileToken,
+          [HONEYPOT_FIELD]: data.get(HONEYPOT_FIELD) ?? "",
+        }),
+      });
+      const body = (await response.json().catch(() => ({}))) as {
+        leadId?: string;
+        field?: string;
+        message?: string;
+      };
+
+      if (response.ok && body.leadId) {
+        onSent(body.leadId, { name: String(input.name), email: String(input.email) });
+        return;
+      }
+      if (response.status === 400 && body.field && body.message) {
+        const field = FIELD_ORDER.includes(body.field as Field) ? (body.field as Field) : "form";
+        showError({ field, text: body.message });
+        return;
+      }
+      const text =
+        response.status === 403
+          ? t.apiErrors.captcha
+          : response.status === 429
+            ? t.apiErrors.rateLimited
+            : response.status === 503
+              ? t.apiErrors.unavailable
+              : t.apiErrors.generic;
+      showError({ field: "form", text });
+    } catch {
+      showError({ field: "form", text: t.apiErrors.generic });
+    } finally {
+      turnstile.current?.reset();
+      setSending(false);
+    }
+  };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (sending || locked) return;
     const data = new FormData(event.currentTarget);
     const result = schema.safeParse({
       kind,
@@ -37,6 +104,7 @@ export function ContactForm({ t }: { t: Messages["contact"] }) {
 
     if (result.success) {
       setError(null);
+      void send(data, result.data);
       return;
     }
 
@@ -45,9 +113,7 @@ export function ContactForm({ t }: { t: Messages["contact"] }) {
     ).find(Boolean);
     if (!issue) return;
 
-    const field = issue.path[0] as Field;
-    setError({ field, text: issue.message });
-    form.current?.querySelector<HTMLElement>(`[name="${field}"]`)?.focus();
+    showError({ field: issue.path[0] as Field, text: issue.message });
   };
 
   const invalid = (field: Field) => error?.field === field || undefined;
@@ -60,7 +126,8 @@ export function ContactForm({ t }: { t: Messages["contact"] }) {
       noValidate
       onSubmit={onSubmit}
       aria-label={t.title}
-      className="flex min-w-0 flex-col gap-4 rounded-[18px] border border-border bg-surface px-4 py-[18px] sm:flex-[1_1_440px] sm:gap-[18px] sm:rounded-[20px] sm:p-[clamp(20px,2.6vw,32px)]"
+      aria-busy={sending}
+      className="relative flex min-w-0 flex-col gap-4 rounded-[18px] border border-border bg-surface px-4 py-[18px] sm:flex-[1_1_440px] sm:gap-[18px] sm:rounded-[20px] sm:p-[clamp(20px,2.6vw,32px)]"
     >
       <fieldset className="flex flex-col gap-2.5">
         <legend className="mb-2.5 font-mono text-xs uppercase tracking-[0.08em] text-text-3">
@@ -158,6 +225,16 @@ export function ContactForm({ t }: { t: Messages["contact"] }) {
         />
       </p>
 
+      {/* Honeypot: invisible to people and assistive tech; bots fill it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] size-px overflow-hidden">
+        <label>
+          {t.honeypot}
+          <input name={HONEYPOT_FIELD} type="text" tabIndex={-1} autoComplete="off" />
+        </label>
+      </div>
+
+      <Turnstile ref={turnstile} />
+
       {error && (
         <p id="contact-error" role="alert" className="text-[15px] text-warn">
           {error.text}
@@ -166,9 +243,10 @@ export function ContactForm({ t }: { t: Messages["contact"] }) {
 
       <button
         type="submit"
-        className="flex h-[52px] items-center justify-center gap-2 rounded-xl bg-accent text-[17px] font-bold text-bg"
+        disabled={sending || locked}
+        className="flex h-[52px] items-center justify-center gap-2 rounded-xl bg-accent text-[17px] font-bold text-bg disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {t.send}
+        {sending ? t.sending : t.send}
         <svg
           width="18"
           height="18"

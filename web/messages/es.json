@@ -108,6 +108,31 @@
       "linkedin": "LinkedIn",
       "github": "GitHub"
     },
-    "or": "o"
+    "or": "o",
+    "apiErrors": {
+      "rateLimited": "Enviaste varios mensajes seguidos. Espera unos minutos y vuelve a intentarlo.",
+      "captcha": "No pudimos verificar que eres una persona. Vuelve a intentarlo.",
+      "unavailable": "El formulario no está disponible ahora mismo. Escríbeme por correo o WhatsApp.",
+      "generic": "No se pudo enviar el mensaje. Vuelve a intentarlo o escríbeme por correo."
+    },
+    "honeypot": "Deja este campo vacío",
+    "stepDetails": {
+      "received": "POST /contacto · datos validados",
+      "classified": "Intención: {intent} · prioridad {priority}",
+      "stored": "Lead guardado en Supabase",
+      "notified": "Telegram: nuevo mensaje de {name}",
+      "confirmed": "Confirmación enviada a {email}"
+    },
+    "stepLogs": {
+      "received": "[webhook] POST /contacto → 200",
+      "classified": "[ia] intent={intent} priority={priority}",
+      "stored": "[db] leads.insert → ok",
+      "notified": "[telegram] sendMessage → ok",
+      "confirmed": "[mail] confirmación → {email}"
+    },
+    "done": "Listo. Te respondo personalmente pronto.",
+    "failed": "Algo falló, pero tu mensaje quedó guardado y lo leeré igual.",
+    "sendAnother": "Enviar otro mensaje",
+    "pipelineLive": "Paso completado: {step}"
   }
 }

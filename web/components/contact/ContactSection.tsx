@@ -3,8 +3,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 import { Channels } from "./Channels";
-import { ContactForm } from "./ContactForm";
-import { PipelineView } from "./PipelineView";
+import { ContactWorkspace } from "./ContactWorkspace";
 
 export function ContactSection({
   profile,
@@ -44,10 +43,7 @@ export function ContactSection({
           }
         />
 
-        <div className="flex flex-col gap-6 sm:flex-row sm:flex-wrap sm:items-stretch sm:gap-5">
-          <ContactForm t={t} />
-          <PipelineView t={t} />
-        </div>
+        <ContactWorkspace t={t} />
 
         <Channels profile={profile} t={t} opensInNewTab={opensInNewTab} />
 

@@ -6,6 +6,9 @@ import * as z from "zod/mini";
 export const contactKinds = ["vacante", "proyecto", "otro"] as const;
 export type ContactKind = (typeof contactKinds)[number];
 
+/** Hidden field only bots fill in (RF-5.3). */
+export const HONEYPOT_FIELD = "website";
+
 export const CONTACT_LIMITS = { name: 120, email: 254, company: 120, message: 4000 };
 
 export type ContactErrors = {
