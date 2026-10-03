@@ -143,3 +143,27 @@ html {
     left: calc(50% - 4px);
   }
 }
+
+/* AreaFilter: dim roles outside the selected area and highlight its chips
+   (design-reference/Trayectoria.dc.html). Areas come from experience.json. */
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]),
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]),
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]),
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) {
+  opacity: 0.32;
+}
+
+[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-role-dot],
+[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-role-dot],
+[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-role-dot],
+[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-role-dot] {
+  border-color: var(--border-strong);
+}
+
+[data-filter="ia"] [data-chip="ia"],
+[data-filter="backend"] [data-chip="backend"],
+[data-filter="frontend"] [data-chip="frontend"],
+[data-filter="cloud"] [data-chip="cloud"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}

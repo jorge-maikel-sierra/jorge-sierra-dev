@@ -43,5 +43,21 @@
     "closingQuestion": "¿Tienes un proceso que hoy depende de hojas de cálculo y trabajo manual?",
     "closingAgent": "Pregúntale a mi agente",
     "closingGithub": "Ver GitHub"
+  },
+  "experience": {
+    "eyebrow": "03 · Trayectoria",
+    "title": "Más de cinco años convirtiendo procesos en sistemas.",
+    "intro": "Backend, frontend, nube y ahora agentes de IA. Filtra por área para ver dónde usé cada cosa.",
+    "filterLabel": "Filtrar por área",
+    "all": "Todo",
+    "current": "Actual",
+    "highlighted": "Roles resaltados: {count} de {total}",
+    "education": "Formación y en curso",
+    "principles": "Cómo trabajo",
+    "downloadCv": "Descargar CV",
+    "linkedin": "LinkedIn",
+    "closingQuestion": "¿Encajo con lo que buscas? Hablemos.",
+    "closingMobile": "¿Encajo con lo que buscas? Hablemos",
+    "closingCta": "Ir a contacto"
   }
 }

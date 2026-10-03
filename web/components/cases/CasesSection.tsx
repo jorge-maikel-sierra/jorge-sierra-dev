@@ -38,8 +38,7 @@ export function CasesSection({
         <SectionHeader
           id="casos-title"
           eyebrow={t.eyebrow}
-          titleLine1={t.titleLine1}
-          titleLine2={t.titleLine2}
+          title={[t.titleLine1, t.titleLine2]}
           intro={
             <>
               <p className="sm:hidden">{t.introMobile}</p>

@@ -26,7 +26,7 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 - [x] **1.3 Componente `Placeholder`** y regla global: cualquier string de contenido que empiece por `[` se renderiza con él.
 - [x] **1.4 Casos de estudio**: `CaseSelector`, `CaseDetail`, `FlowDiagram` (horizontal/vertical con pulso CSS), `StatusBadge`, desde `cases.json`.
   - Acepta si: replica `Casos.dc.html` y `Mobile-Casos.dc.html`, incluido el carrusel horizontal en móvil y los bordes punteados del caso "soon"; navegación con teclado entre casos.
-- [ ] **1.5 Trayectoria**: `Timeline`, `AreaFilter`, `SideCards`, desde `experience.json` y `profile.json`.
+- [x] **1.5 Trayectoria**: `Timeline`, `AreaFilter`, `SideCards`, desde `experience.json` y `profile.json`.
   - Acepta si: replica `Trayectoria.dc.html` y su versión móvil; el filtro atenúa roles y resalta chips.
 - [ ] **1.6 Contacto (solo UI)**: `ContactForm` con validación zod en cliente y mensajes de error; `PipelineView` en estado de espera; `Channels`.
   - Acepta si: replica `Contacto.dc.html` y su versión móvil; un e2e prueba los tres mensajes de validación.

@@ -1,7 +1,13 @@
 import { notFound } from "next/navigation";
 import { CasesSection } from "@/components/cases/CasesSection";
+import { ExperienceSection } from "@/components/experience/ExperienceSection";
 import { Hero } from "@/components/hero/Hero";
-import { isLocale, loadCases, loadProfile } from "@/lib/content/load";
+import {
+  isLocale,
+  loadCases,
+  loadExperience,
+  loadProfile,
+} from "@/lib/content/load";
 import { getMessages } from "@/lib/messages";
 
 export default async function Home({ params }: PageProps<"/[locale]">) {
@@ -19,8 +25,14 @@ export default async function Home({ params }: PageProps<"/[locale]">) {
         github={profile.links.github}
         t={t.cases}
       />
-      {/* Built in tasks 1.5–1.6. */}
-      <section id="trayectoria" aria-label={t.nav.experience} />
+      <ExperienceSection
+        experience={loadExperience(locale)}
+        profile={profile}
+        t={t.experience}
+        opensInNewTab={t.cases.opensInNewTab}
+        backToTop={t.cases.backToTop}
+      />
+      {/* Built in task 1.6. */}
       <section id="contacto" aria-label={t.nav.contact} />
     </main>
   );
