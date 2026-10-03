@@ -44,8 +44,9 @@ Reglas: haz las tareas en orden. Cada tarea es un commit. Marca la casilla al te
 - [x] **2.3 Aristas, pulsos, etiquetas de capa y tokens de caos**, con sus umbrales de aparición.
 - [x] **2.4 Control por scroll** (ScrollTrigger con pin en escritorio), autoplay a 1,3 s, rotación con puntero/arrastre suavizada, botón "Volver al caos" en móvil.
 - [x] **2.5 Degradación**: `detect-gpu` (tier 0 → fallback; tier 1 → 8 000 partículas sin bloom), `prefers-reduced-motion` → estado final estático, pausa fuera de pantalla.
-- [ ] **2.6 Carga diferida**: `next/dynamic` + montaje tras idle; generar la imagen de `HeroFallback` desde la escena.
+- [x] **2.6 Carga diferida**: `next/dynamic` + montaje tras idle; generar la imagen de `HeroFallback` desde la escena.
   - Acepta si: JS inicial < 170 KB gzip sin el chunk 3D; CLS = 0; Lighthouse móvil ≥ 90.
+  - Medido (2026-10-02): JS inicial 153,5 KB gzip, CLS 0, Lighthouse móvil 92–93. Decisión de Jorge: `HeroFallback` sigue siendo el SVG en línea (~3 KB) en lugar de una captura AVIF/WebP, que pasaría a ser el elemento LCP y lo empeoraría.
 
 ## Fase 3 — Contacto con pipeline real
 
