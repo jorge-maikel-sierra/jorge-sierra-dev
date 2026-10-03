@@ -91,3 +91,28 @@ export function parseEnv(
 }
 
 export const env = parseEnv(process.env);
+
+/** Variables the contact pipeline needs (tasks 3.2–3.4). */
+export const CONTACT_ENV = [
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "SUPABASE_SERVICE_ROLE_KEY",
+  "TURNSTILE_SECRET_KEY",
+  "N8N_CONTACT_WEBHOOK_URL",
+  "N8N_WEBHOOK_SECRET",
+  "UPSTASH_REDIS_REST_URL",
+  "UPSTASH_REDIS_REST_TOKEN",
+] as const satisfies readonly EnvKey[];
+
+/** Returns the requested variables only when every one of them is set. */
+export function pickEnv<K extends EnvKey>(
+  keys: readonly K[],
+  source: Env = env,
+): { [P in K]: NonNullable<Env[P]> } | null {
+  const picked = {} as { [P in K]: NonNullable<Env[P]> };
+  for (const key of keys) {
+    const value = source[key];
+    if (value === undefined) return null;
+    picked[key] = value as NonNullable<Env[K]>;
+  }
+  return picked;
+}
