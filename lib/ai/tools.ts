@@ -117,7 +117,12 @@ export function createAgentTools(deps: AgentToolDeps) {
       inputSchema: z.object({ reason: z.string().max(200) }),
       execute: async () =>
         deps.calBookingUrl
-          ? { available: true, url: deps.calBookingUrl }
+          ? {
+              available: true,
+              url: deps.calBookingUrl,
+              // The UI renders this link as a button right after the answer.
+              note: "La interfaz ya muestra un botón con este enlace. No escribas la URL en tu respuesta.",
+            }
           : { available: false, contact: "/es#contacto" },
     }),
 
