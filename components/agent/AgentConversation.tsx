@@ -72,6 +72,21 @@ function AssistantMessage({ message, t }: { message: AgentUIMessage; t: T }) {
     | TraceData
     | undefined;
   const sources = trace?.retrieved ?? [];
+  // The booking link is shown as a button: drop any line that repeats it.
+  const bookingUrl = message.parts
+    .map((part) =>
+      part.type === "tool-offerCall" && part.state === "output-available"
+        ? (part.output as { url?: string }).url
+        : undefined,
+    )
+    .find(Boolean);
+  const withoutBookingUrl = (text: string) =>
+    bookingUrl
+      ? text
+          .split("\n")
+          .filter((line) => !line.includes(bookingUrl.replace(/^https?:\/\//, "")))
+          .join("\n")
+      : text;
   // The report and the prose stream in parallel: the report always goes first.
   const report = message.parts.find((part) => part.type === "data-report")?.data;
 
@@ -81,8 +96,8 @@ function AssistantMessage({ message, t }: { message: AgentUIMessage; t: T }) {
       {message.parts.map((part, i) => {
         switch (part.type) {
           case "text":
-            return part.text.trim() ? (
-              <AgentMessage key={i} text={part.text} sources={sources} />
+            return withoutBookingUrl(part.text).trim() ? (
+              <AgentMessage key={i} text={withoutBookingUrl(part.text)} sources={sources} />
             ) : null;
           default:
             if (part.type === "tool-getCase" && part.state === "output-available") {

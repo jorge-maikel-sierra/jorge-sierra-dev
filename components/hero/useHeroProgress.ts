@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, type RefObject } from "react";
+import { AGENT_STARTED_EVENT, agentStarted } from "@/lib/ui-events";
 
 /**
  * Mutable motion state shared with the scene. The scene eases `value` toward
@@ -126,7 +127,21 @@ export function useHeroProgress({
       });
       if (content) resize.observe(content);
 
+      // Once the visitor talks to the agent, the hero is a page again: no
+      // pinned stretch to scroll through, and the graph shows its final state.
+      const release = () => {
+        const state = motion.current;
+        state.touched = true;
+        state.ordered = true;
+        state.target = 1;
+        trigger.kill();
+        ScrollTrigger.refresh();
+      };
+      if (agentStarted()) release();
+      else window.addEventListener(AGENT_STARTED_EVENT, release, { once: true });
+
       cleanup = () => {
+        window.removeEventListener(AGENT_STARTED_EVENT, release);
         resize.disconnect();
         cancelAnimationFrame(frame);
         trigger.kill();

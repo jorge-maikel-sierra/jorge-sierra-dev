@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useCallback, useRef, useState, type FormEvent } from "react";
 import { MAX_MESSAGE_CHARS } from "@/lib/ai/guardrails";
+import { announceAgentStarted } from "@/lib/ui-events";
 import type { Locale } from "@/lib/content/load";
 import type { Messages } from "@/lib/messages";
 import type { ConversationHandle } from "./AgentConversation";
@@ -30,7 +31,10 @@ export function AgentBox({
     event.preventDefault();
     const text = input.trim();
     if (!text || busy) return;
-    if (first === null) setFirst(text);
+    if (first === null) {
+      setFirst(text);
+      announceAgentStarted();
+    }
     else conversation.current?.send(text);
     setInput("");
   };
