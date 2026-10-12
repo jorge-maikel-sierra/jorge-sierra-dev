@@ -34,7 +34,7 @@ export type HeroSceneProps = {
   paused?: boolean;
   layers: { label: string; sub: string }[];
   tokens: string[];
-  /** Mobile strip status ("CAOS · 12%"), updated in place without re-renders. */
+  /** Status ("CAOS · 12%") and, on desktop, the slider, updated in place without re-renders. */
   status?: {
     element: RefObject<HTMLElement | null>;
     labels: StatusLabels;
@@ -108,7 +108,7 @@ function advanceMotion(state: HeroMotion, delta: number) {
 
 type StatusLabels = { chaos: string; ordering: string; architecture: string };
 
-/** Writes "CAOS · 12%" and data-state on the strip status; returns the text. */
+/** Writes "CAOS · 12%", data-state and the slider position; returns the text. */
 function writeStatus(
   element: HTMLElement,
   value: number,
@@ -122,6 +122,9 @@ function writeStatus(
     element.dataset.state = state;
     const target = element.querySelector("[data-status-text]");
     if (target) target.textContent = text;
+    // The slider follows scroll and autoplay, except while the visitor drags it.
+    const range = element.querySelector<HTMLInputElement>("[data-status-range]");
+    if (range && document.activeElement !== range) range.value = String(percent);
   }
   return text;
 }

@@ -19,7 +19,9 @@
     "stateChaos": "CHAOS",
     "stateOrdering": "ORDERING",
     "stateArchitecture": "ARCHITECTURE",
-    "backToChaos": "BACK TO CHAOS"
+    "backToChaos": "BACK TO CHAOS",
+    "stateLabel": "STATE",
+    "scrubLabel": "SIMULATE SCROLL"
   },
   "placeholder": {
     "pending": "Pending detail:"

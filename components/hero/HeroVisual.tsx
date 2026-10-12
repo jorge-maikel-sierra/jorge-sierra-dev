@@ -21,6 +21,8 @@ type Labels = {
   stateOrdering: string;
   stateArchitecture: string;
   backToChaos: string;
+  stateLabel: string;
+  scrubLabel: string;
 };
 
 /** Resolves once the page has loaded and the main thread is idle (after LCP). */
@@ -61,7 +63,7 @@ export function HeroVisual({
   labels: Labels;
 }) {
   const root = useRef<HTMLDivElement>(null);
-  const status = useRef<HTMLSpanElement>(null);
+  const status = useRef<HTMLElement>(null);
   const [matches, setMatches] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(true);
   const [tier, setTier] = useState<number | null>(null);
@@ -69,7 +71,6 @@ export function HeroVisual({
   const [idle, setIdle] = useState(false);
   const [ready, setReady] = useState(false);
   const active = matches && !reducedMotion && tier !== null && tier > 0;
-  const [scrub, setScrub] = useState(0);
   const { motion, reset, scrubTo } = useHeroProgress({ variant, enabled: active, root });
 
   useEffect(() => {
@@ -122,18 +123,14 @@ export function HeroVisual({
       paused={!visible}
       layers={layers}
       tokens={tokens}
-      status={
-        variant === "mobile"
-          ? {
-              element: status,
-              labels: {
-                chaos: labels.stateChaos,
-                ordering: labels.stateOrdering,
-                architecture: labels.stateArchitecture,
-              },
-            }
-          : undefined
-      }
+      status={{
+        element: status,
+        labels: {
+          chaos: labels.stateChaos,
+          ordering: labels.stateOrdering,
+          architecture: labels.stateArchitecture,
+        },
+      }}
       onReady={() => setReady(true)}
     />
   );
@@ -151,7 +148,7 @@ export function HeroVisual({
         )}
         {active && ready && (
           <div className="absolute inset-x-4 bottom-2 flex items-center justify-between gap-3 font-mono text-[11px] tracking-[0.06em] text-text-3">
-            <span ref={status} aria-hidden="true" className="group flex items-center gap-2">
+            <span ref={status as React.RefObject<HTMLSpanElement>} aria-hidden="true" className="group flex items-center gap-2">
               <span className="size-2 rounded-full bg-chaos group-data-[state=architecture]:bg-accent group-data-[state=ordering]:bg-text" />
               <span data-status-text="">{labels.stateChaos} · 0%</span>
             </span>
@@ -176,23 +173,39 @@ export function HeroVisual({
           {scene}
         </div>
       )}
-      {process.env.NODE_ENV !== "production" && active && (
-        // Development-only scrubber for uProgress (task 2.2).
-        <label className="absolute bottom-6 right-[clamp(16px,5vw,72px)] z-10 flex items-center gap-3 font-mono text-xs tracking-[0.06em] text-text-3">
-          SIMULAR SCROLL · {scrub}%
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={scrub}
-            onChange={(event) => {
-              const value = Number(event.target.value);
-              setScrub(value);
-              scrubTo(value / 100);
-            }}
-            className="h-11 w-[200px] accent-accent"
-          />
-        </label>
+      {active && ready && (
+        // Main.dc.html: state, scroll simulator and "back to chaos" under the hero.
+        <div
+          ref={status as React.RefObject<HTMLDivElement>}
+          className="group absolute inset-x-[clamp(16px,5vw,72px)] bottom-6 z-10 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 font-mono text-xs tracking-[0.06em] text-text-3"
+        >
+          <span aria-hidden="true" className="flex items-center gap-2.5">
+            <span className="size-2 rounded-full bg-chaos group-data-[state=architecture]:bg-accent group-data-[state=ordering]:bg-text" />
+            <span>
+              {labels.stateLabel} · <span data-status-text="">{labels.stateChaos} · 0%</span>
+            </span>
+          </span>
+          <span className="flex flex-wrap items-center gap-x-3.5 gap-y-2">
+            <label htmlFor="hero-scrub">{labels.scrubLabel}</label>
+            <input
+              id="hero-scrub"
+              data-status-range=""
+              type="range"
+              min={0}
+              max={100}
+              defaultValue={0}
+              onInput={(event) => scrubTo(Number(event.currentTarget.value) / 100)}
+              className="h-11 w-[200px] accent-accent"
+            />
+            <button
+              type="button"
+              onClick={reset}
+              className="min-h-11 rounded-full border border-border-strong px-4 text-xs tracking-[0.06em] text-text hover:border-accent"
+            >
+              {labels.backToChaos}
+            </button>
+          </span>
+        </div>
       )}
     </div>
   );
