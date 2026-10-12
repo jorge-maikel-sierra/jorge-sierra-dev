@@ -4,15 +4,15 @@ import { expect, test, type Page } from "@playwright/test";
 // (columns when the screen is wide and tall enough, tabs otherwise). Without
 // motion it is a plain grid followed by the detail.
 
-const coverflow = (page: Page) => page.locator("[data-coverflow]");
-const cardButtons = (page: Page) => page.locator("[data-cf-item] button");
+const coverflow = (page: Page) => page.locator("#casos-coverflow");
+const cardButtons = (page: Page) => page.locator("#casos-coverflow [data-cf-item] button");
 const activeDot = (page: Page) =>
-  page.locator(".cf-dot").evaluateAll((dots) => dots.findIndex((dot) => dot.classList.contains("is-active")));
+  page.locator("#casos-coverflow .cf-dot").evaluateAll((dots) => dots.findIndex((dot) => dot.classList.contains("is-active")));
 
 /** Scrolls to a fraction (0–1) of the pinned travel and lets the frame render. */
 async function scrollTravel(page: Page, fraction: number) {
   await page.evaluate((f) => {
-    const section = document.querySelector<HTMLElement>("[data-coverflow]")!;
+    const section = document.querySelector<HTMLElement>("#casos-coverflow")!;
     const sticky = section.querySelector<HTMLElement>(".cf-sticky")!;
     const start = section.getBoundingClientRect().top + window.scrollY;
     // The site scrolls smoothly; measure at the target position.
@@ -43,7 +43,7 @@ test.describe("case studies", () => {
       await expect(cardButtons(page).nth(i)).toContainText(title);
     }
     const heights = await page
-      .locator("[data-cf-item]")
+      .locator("#casos-coverflow [data-cf-item]")
       .evaluateAll((items) => items.map((item) => (item as HTMLElement).offsetHeight));
     expect(new Set(heights).size).toBe(1);
     await expect(page.locator("#case-panel-paga-diario")).toBeVisible();
@@ -58,7 +58,7 @@ test.describe("case studies", () => {
     const sticky = coverflow(page).locator(".cf-sticky");
     expect(await sticky.evaluate((node) => Math.round(node.getBoundingClientRect().top))).toBe(0);
     // The centered card faces the viewer; its neighbours turn about 38°.
-    const angles = await page.locator("[data-cf-item]").evaluateAll((items) =>
+    const angles = await page.locator("#casos-coverflow [data-cf-item]").evaluateAll((items) =>
       items.map((item) => Number((item as HTMLElement).style.transform.match(/rotateY\((-?[\d.e-]+)deg\)/)?.[1])),
     );
     expect(angles[2]).toBeCloseTo(0, 0);
@@ -144,8 +144,8 @@ test.describe("case studies", () => {
     await expect(coverflow(page)).not.toHaveClass(/is-3d/);
     await expect(coverflow(page).locator(".cf-stage")).toHaveCSS("display", "grid");
     await expect(coverflow(page).locator(".cf-sticky")).toHaveCSS("position", "static");
-    await expect(page.locator(".cf-dot")).toHaveCount(0);
-    expect(await page.locator("[data-cf-item]").first().evaluate((item) => (item as HTMLElement).style.transform)).toBe("");
+    await expect(page.locator("#casos-coverflow .cf-dot")).toHaveCount(0);
+    expect(await page.locator("#casos-coverflow [data-cf-item]").first().evaluate((item) => (item as HTMLElement).style.transform)).toBe("");
     // A card still opens its case, and the detail is brought into view.
     await cardButtons(page).nth(2).click();
     await expect(page.locator("#case-panel-netplan")).toBeVisible();
@@ -161,7 +161,7 @@ test("mobile: one card at a time, no horizontal overflow, tabs in the detail", a
   await page.goto("/es");
   await scrollTravel(page, 0.25);
   const opacities = await page
-    .locator("[data-cf-item]")
+    .locator("#casos-coverflow [data-cf-item]")
     .evaluateAll((items) => items.map((item) => Number((item as HTMLElement).style.opacity)));
   expect(opacities.filter((value) => value > 0)).toHaveLength(1);
   expect(await activeDot(page)).toBe(1);
@@ -169,7 +169,7 @@ test("mobile: one card at a time, no horizontal overflow, tabs in the detail", a
     await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth),
   ).toBe(0);
 
-  const tabs = page.getByRole("tab");
+  const tabs = page.locator("#casos").getByRole("tab");
   await expect(tabs).toHaveCount(4);
   await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
   await tabs.nth(2).click();

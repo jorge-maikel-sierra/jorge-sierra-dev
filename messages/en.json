@@ -70,7 +70,13 @@
     "linkedin": "LinkedIn",
     "closingQuestion": "Am I a fit for what you need? Let's talk.",
     "closingMobile": "Am I a fit for what you need? Let's talk",
-    "closingCta": "Go to contact"
+    "closingCta": "Go to contact",
+    "tabs": {
+      "roles": "Experience",
+      "education": "Education",
+      "principles": "How I work"
+    },
+    "viewsLabel": "Experience views"
   },
   "contact": {
     "eyebrow": "04 · Contact",
