@@ -47,7 +47,12 @@
     "closingQuestion": "Do you have a process that still runs on spreadsheets and manual work?",
     "closingAgent": "Ask my agent",
     "closingGithub": "See GitHub",
-    "viewCase": "See the case"
+    "tabs": {
+      "flow": "Flow",
+      "problem": "Problem",
+      "decisions": "Decisions",
+      "results": "Outcome"
+    }
   },
   "experience": {
     "eyebrow": "03 · Experience",

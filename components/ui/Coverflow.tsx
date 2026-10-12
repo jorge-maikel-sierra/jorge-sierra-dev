@@ -80,6 +80,7 @@ export function Coverflow({
     let distance = 1;
     let cardW = 0;
     let active = -1;
+    let current = 0;
 
     const layout = () => {
       header = headerHeight();
@@ -98,6 +99,7 @@ export function Coverflow({
       const top = section.getBoundingClientRect().top;
       const progress = Math.min(1, Math.max(0, (header - top) / distance));
       const position = progress * (n - 1);
+      current = position;
       const spread = Math.min(window.innerWidth * 0.36, cardW);
       const phone = window.innerWidth < 640;
 
@@ -109,7 +111,7 @@ export function Coverflow({
         // Phones: side cards fade fully so their text never shows through the front glass.
         item.style.opacity = String(phone ? Math.max(0, 1 - d * 1.4) : Math.max(0.25, 1 - d * 0.45));
         item.style.zIndex = String(100 - Math.round(d * 10));
-        item.style.pointerEvents = d > 0.5 ? "none" : "";
+        item.style.pointerEvents = d > 1.6 || Number(item.style.opacity) < 0.05 ? "none" : "";
         // WCAG 1.4.3 exempts inactive components: side cards are faded on
         // purpose and become active (full contrast) once centered.
         item.toggleAttribute("data-cf-inactive", d > 0.5);
@@ -144,14 +146,28 @@ export function Coverflow({
     });
     observer.observe(section);
 
-    // Tabbing into a card brings it to the center.
-    const onFocus = (event: FocusEvent) => {
-      const index = items.findIndex((item) => item.contains(event.target as Node));
-      if (index < 0) return;
+    const goTo = (index: number, behavior: ScrollBehavior) => {
       const rect = section.getBoundingClientRect();
       window.scrollTo({
         top: window.scrollY + rect.top - header + (index / (n - 1)) * distance,
+        behavior,
       });
+    };
+
+    // Tabbing into a card brings it to the center.
+    const onFocus = (event: FocusEvent) => {
+      const index = items.findIndex((item) => item.contains(event.target as Node));
+      if (index >= 0) goTo(index, "auto");
+    };
+
+    // Clicking a side card centers it instead of activating it: one click to
+    // bring a case forward, no scrolling needed.
+    const onClick = (event: MouseEvent) => {
+      const index = items.findIndex((item) => item.contains(event.target as Node));
+      if (index < 0 || index === Math.round(current)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      goTo(index, "smooth");
     };
 
     const images = [...cards.querySelectorAll("img")];
@@ -160,6 +176,7 @@ export function Coverflow({
     window.addEventListener("resize", relayout);
     images.forEach((image) => image.addEventListener("load", relayout));
     cards.addEventListener("focusin", onFocus);
+    cards.addEventListener("click", onClick, true);
 
     return () => {
       observer.disconnect();
@@ -167,6 +184,7 @@ export function Coverflow({
       window.removeEventListener("resize", relayout);
       images.forEach((image) => image.removeEventListener("load", relayout));
       cards.removeEventListener("focusin", onFocus);
+      cards.removeEventListener("click", onClick, true);
       section.classList.remove("is-3d");
       section.style.height = "";
       cards.style.height = "";
@@ -199,7 +217,7 @@ export function Coverflow({
             {children}
           </div>
           <div ref={dots} className="cf-dots" aria-hidden="true" />
-          {after}
+          {after && <div className="cf-after">{after}</div>}
         </div>
       </div>
     </div>

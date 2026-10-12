@@ -52,7 +52,7 @@ test.describe("accessibility", () => {
     await page.goto("/es");
 
     // Keyboard: focusing a card link centers that card, Enter opens its detail.
-    await page.getByRole("link", { name: /Ver el caso.*Caso 05/ }).focus();
+    await page.getByRole("button", { name: /AI Support Automation Platform/ }).focus();
     await page.keyboard.press("Enter");
     await expect(page.locator("#case-panel-ai-support-platform")).toBeVisible();
     await page

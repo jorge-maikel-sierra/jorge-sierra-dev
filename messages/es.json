@@ -47,7 +47,12 @@
     "closingQuestion": "¿Tienes un proceso que hoy depende de hojas de cálculo y trabajo manual?",
     "closingAgent": "Pregúntale a mi agente",
     "closingGithub": "Ver GitHub",
-    "viewCase": "Ver el caso"
+    "tabs": {
+      "flow": "Flujo",
+      "problem": "Problema",
+      "decisions": "Decisiones",
+      "results": "Resultado"
+    }
   },
   "experience": {
     "eyebrow": "03 · Trayectoria",

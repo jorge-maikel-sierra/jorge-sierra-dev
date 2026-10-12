@@ -23,7 +23,7 @@ export function FlowDiagram({
             />
           )}
           <li
-            className={`flex min-w-0 flex-col gap-1.5 rounded-xl border bg-surface-2 px-4 py-3.5 min-[820px]:flex-[1_1_0] min-[820px]:gap-2 min-[820px]:p-4 ${
+            className={`flex min-w-0 flex-row-reverse items-center justify-between gap-3 rounded-xl border bg-surface-2 px-3 py-1.5 min-[820px]:flex-[1_1_0] min-[820px]:flex-col min-[820px]:items-stretch min-[820px]:justify-start min-[820px]:gap-1 min-[820px]:p-2.5 ${
               planned ? "border-dashed" : "border-solid"
             } ${node.badge ? "border-accent" : "border-border"}`}
           >
@@ -35,11 +35,11 @@ export function FlowDiagram({
                 </span>
               )}
             </span>
-            <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 min-[820px]:flex-col min-[820px]:items-start min-[820px]:gap-2">
-              <span className="text-base font-bold leading-[1.2] min-[820px]:text-[17px]">
+            <span className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 min-[820px]:flex-col min-[820px]:items-start min-[820px]:gap-1">
+              <span className="text-sm font-bold leading-[1.2] min-[820px]:text-[15px]">
                 <ContentText value={node.name} />
               </span>
-              <span className="text-[13px] leading-[1.4] text-text-3">
+              <span className="text-xs leading-[1.35] text-text-3">
                 <ContentText value={node.sub} />
               </span>
             </span>

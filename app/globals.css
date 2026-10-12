@@ -76,7 +76,7 @@ html {
 .flow-conn {
   position: relative;
   width: 2px;
-  height: 24px;
+  height: 8px;
   margin-left: 23px;
   background: var(--border);
 }
@@ -97,7 +97,7 @@ html {
 
 @media (min-width: 820px) {
   .flow-conn {
-    flex: 0 0 44px;
+    flex: 0 0 28px;
     align-self: center;
     width: auto;
     height: 2px;
@@ -217,6 +217,12 @@ html {
   }
 }
 
+/* Case detail: three columns only when the screen is wide AND tall enough for
+   everything to show at once; otherwise tabs (nothing is ever cut off). */
+@custom-variant roomy (@media (min-width: 900px) and (min-height: 780px));
+/* Exactly the negation of roomy (a comma list would lose its second query). */
+@custom-variant cozy (@media not all and (min-width: 900px) and (min-height: 780px));
+
 /* Coverflow (components/ui/Coverflow.tsx). Without JS or with reduced motion
    this is a plain grid; the script adds .is-3d for the pinned 3D mode. */
 .cf {
@@ -264,9 +270,20 @@ html {
   height: calc(100svh - var(--header-h));
   display: flex;
   flex-direction: column;
-  justify-content: center;
   overflow: hidden;
-  padding-block: 1.5rem;
+  padding-block: 0.75rem;
+}
+/* Pinned screen: heading, cards and the detail share one viewport. */
+.cf.is-3d .cf-container {
+  flex: 1;
+  min-height: 0;
+  gap: 0.5rem;
+}
+.cf.is-3d .cf-after {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 .cf.is-3d .cf-stage {
   display: block;
@@ -349,5 +366,15 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .cf-blob {
     animation: none;
+  }
+}
+
+/* Case section intro: only where the pinned screen has height to spare. */
+.cf-intro {
+  display: none;
+}
+@media (min-width: 1280px) and (min-height: 920px) {
+  .cf-intro {
+    display: block;
   }
 }
