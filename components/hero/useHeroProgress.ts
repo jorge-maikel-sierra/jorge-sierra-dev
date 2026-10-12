@@ -52,9 +52,11 @@ export function useHeroProgress({
     timers.current.push(window.setTimeout(fn, ms));
   }, []);
 
-  // Autoplay: if nobody scrolls within 1.3 s, order the graph anyway.
+  // Mobile autoplay: if nobody touches the strip within 1.3 s, order the graph.
+  // Desktop has no autoplay: the chaos waits and the scroll orders it (Jorge,
+  // 2026-10-12: with autoplay the chaos lasted 1.3 s and scroll did nothing).
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || variant === "desktop") return;
     const state = motion.current;
     later(() => {
       if (state.touched) return;
@@ -63,7 +65,7 @@ export function useHeroProgress({
     }, AUTOPLAY_DELAY);
     const pending = timers.current;
     return () => pending.forEach((id) => window.clearTimeout(id));
-  }, [enabled, later]);
+  }, [enabled, variant, later]);
 
   // Pointer (desktop) or drag (mobile) rotation, normalized to [-1, 1].
   useEffect(() => {
@@ -111,8 +113,9 @@ export function useHeroProgress({
         pin: true,
         onUpdate: (self) => {
           const state = motion.current;
-          if (self.progress > 0) state.touched = true;
-          state.target = state.ordered ? 1 : self.progress;
+          state.touched = true;
+          state.ordered = false;
+          state.target = self.progress;
         },
       });
 
@@ -162,12 +165,13 @@ export function useHeroProgress({
     state.target = 0;
     state.touched = false;
     state.ordered = false;
+    if (variant === "desktop") return;
     later(() => {
       if (state.touched) return;
       state.target = 1;
       state.ordered = true;
     }, RESET_AUTOPLAY_DELAY);
-  }, [later]);
+  }, [later, variant]);
 
   /** Development scrubber: take control and stop autoplay. */
   const scrubTo = useCallback((value: number) => {

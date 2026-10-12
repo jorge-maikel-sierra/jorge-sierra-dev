@@ -117,7 +117,7 @@ El sitio es oscuro por diseño; no hay tema claro en v1.
 - Posprocesado: bloom suave solo en GPU tier ≥ 2.
 
 ### Control del progreso
-- Escritorio: la sección hero se fija con ScrollTrigger (`pin: true`) durante 100 vh de scroll; `uProgress` va de 0 a 1 con ese recorrido. Si el usuario no hace scroll en 1,3 s, una animación de autoplay lleva el progreso a 1.
+- Escritorio: la sección hero se fija con ScrollTrigger (`pin: true`) durante 100 vh de scroll; `uProgress` va de 0 a 1 con ese recorrido, en las dos direcciones. Sin autoplay: el caos espera a que el visitante scrollee (decisión de Jorge, 2026-10-12; con autoplay el caos duraba 1,3 s y el scroll no animaba nada). Bajo el hero, la barra de `Main.dc.html`: estado ("CAOS · 0 %"), deslizador "SIMULAR SCROLL" que sigue al scroll, y "VOLVER AL CAOS". Al usar el agente, el pin se suelta y el grafo queda ordenado.
 - Móvil: autoplay a 1 tras 1,3 s; botón "Volver al caos". Sin pin.
 - Rotación: yaw = `sin(t * 0.18) * 0.45 - 0.28 + pointer.x * 0.4`; pitch = `0.2 + pointer.y * 0.18`, suavizados.
 
