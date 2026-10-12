@@ -152,6 +152,7 @@ El sitio es oscuro por diseño; no hay tema claro en v1.
 - Cualquier string que empiece por `[` se renderiza con `Placeholder`.
 - `FlowDiagram`: horizontal en ≥ 820 px, vertical debajo; pulso animado por CSS entre nodos con retraso escalonado de 0,3 s; `prefers-reduced-motion` lo detiene.
 - Los casos con `status: "soon"` usan bordes punteados en los nodos y los rótulos `labels` del JSON.
+- Casos como coverflow 3D anclado (pedido por Jorge, 2026-10-12; reemplaza las tarjetas de `Casos.dc.html` y el carrusel móvil): `components/ui/Coverflow.tsx`, CSS + un hook sin librerías. La sección se ancla a pantalla completa con `position: sticky` y el scroll vertical mueve las cinco tarjetas (cada paso cuesta 60 % del viewport); al pasar la última se suelta. La tarjeta centrada mira de frente; las laterales retroceden (`translateZ(−180px × d)`), giran 38° y se atenúan (en móvil se apagan del todo). La parte superior de cada tarjeta es el flujo real del caso (no hay imágenes). Debajo queda el panel de detalle (problema, flujo animado, decisiones, resultados), que sigue a la tarjeta centrada; "Ver el caso →" lo abre. Sin JS o con `prefers-reduced-motion`: grilla normal (1, 2 o 3 columnas), sin anclaje ni blobs. Las tarjetas laterales llevan `data-cf-inactive`: WCAG 1.4.3 exime el texto de componentes inactivos, y al centrarse tienen contraste completo.
 
 ## 7. i18n
 

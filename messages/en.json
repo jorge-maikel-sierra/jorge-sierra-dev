@@ -46,7 +46,8 @@
     "opensInNewTab": "(opens in a new tab)",
     "closingQuestion": "Do you have a process that still runs on spreadsheets and manual work?",
     "closingAgent": "Ask my agent",
-    "closingGithub": "See GitHub"
+    "closingGithub": "See GitHub",
+    "viewCase": "See the case"
   },
   "experience": {
     "eyebrow": "03 · Experience",

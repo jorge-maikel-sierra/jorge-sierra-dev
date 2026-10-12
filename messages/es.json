@@ -46,7 +46,8 @@
     "opensInNewTab": "(se abre en una pestaña nueva)",
     "closingQuestion": "¿Tienes un proceso que hoy depende de hojas de cálculo y trabajo manual?",
     "closingAgent": "Pregúntale a mi agente",
-    "closingGithub": "Ver GitHub"
+    "closingGithub": "Ver GitHub",
+    "viewCase": "Ver el caso"
   },
   "experience": {
     "eyebrow": "03 · Trayectoria",

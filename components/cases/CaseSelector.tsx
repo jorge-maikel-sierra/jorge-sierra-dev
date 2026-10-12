@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useCallback, useRef, useState, type ReactNode } from "react";
+import { Coverflow } from "@/components/ui/Coverflow";
 import type { CaseStatus } from "@/lib/content/schema";
 
 export type CaseSummary = {
@@ -12,6 +13,8 @@ export type CaseSummary = {
   status: CaseStatus;
   statusBadge: ReactNode;
   announce: string;
+  /** The case's real data flow, shown on the card instead of an image. */
+  flow: { tag: string; name: ReactNode }[];
 };
 
 type Labels = {
@@ -20,98 +23,124 @@ type Labels = {
   next: string;
   previousLabel: string;
   nextLabel: string;
+  viewCase: string;
 };
 
-const statusBorder = "border-accent bg-surface-2";
+/** Top of each card: the case's flow as a small node diagram (no images exist). */
+function MiniFlow({ flow, planned }: { flow: CaseSummary["flow"]; planned: boolean }) {
+  return (
+    <div className="relative flex aspect-[16/7] items-center border-b border-white/10 bg-[radial-gradient(120%_100%_at_0%_0%,rgba(110,240,176,0.10),transparent_60%)] px-4">
+      <span
+        aria-hidden="true"
+        className={`absolute inset-x-8 top-1/2 h-px ${planned ? "border-t border-dashed border-text-muted" : "bg-accent/40"}`}
+      />
+      {/* Labels alternate above and below the line so long tags never collide. */}
+      <ol className="relative flex w-full justify-between">
+        {flow.map((node, i) => (
+          <li key={node.tag} className="relative flex w-0 flex-1 justify-center">
+            <span
+              aria-hidden="true"
+              className={`size-3 rounded-full border ${planned ? "border-dashed border-text-muted bg-bg" : "border-accent bg-accent/30"}`}
+            />
+            <span
+              className={`absolute left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[9px] uppercase tracking-[0.06em] text-text-3 sm:text-[10px] ${i % 2 ? "bottom-[calc(100%+8px)]" : "top-[calc(100%+8px)]"}`}
+            >
+              {node.tag}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
 
-// Cards on desktop, horizontal snap carousel on mobile. Details and stacks are
-// rendered on the server and only toggled here; without JS the first case shows.
+// Cases as a pinned 3D coverflow (grid without JS or with reduced motion).
+// The detail of the centered card is rendered below; details and stacks are
+// rendered on the server and only toggled here.
 export function CaseSelector({
   cases,
   details,
   stacks,
   labels,
+  header,
 }: {
   cases: CaseSummary[];
   details: ReactNode[];
   stacks: ReactNode[];
   labels: Labels;
+  header: ReactNode;
 }) {
   const [selected, setSelected] = useState(0);
   const [announcement, setAnnouncement] = useState("");
-  const buttons = useRef<(HTMLButtonElement | null)[]>([]);
   const total = cases.length;
 
-  const select = (index: number, focus = false) => {
-    const next = (index + total) % total;
-    setSelected(next);
-    setAnnouncement(cases[next].announce);
-    if (focus) {
-      buttons.current[next]?.focus();
-      buttons.current[next]?.scrollIntoView({ block: "nearest", inline: "nearest" });
-    }
-  };
+  const select = useCallback(
+    (index: number) => {
+      const next = (index + total) % total;
+      setSelected(next);
+      setAnnouncement(cases[next].announce);
+    },
+    [cases, total],
+  );
 
-  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const moves: Record<string, number> = {
-      ArrowRight: index + 1,
-      ArrowDown: index + 1,
-      ArrowLeft: index - 1,
-      ArrowUp: index - 1,
-      Home: 0,
-      End: total - 1,
-    };
-    if (!(event.key in moves)) return;
-    event.preventDefault();
-    select(moves[event.key], true);
+  // The detail follows the centered card, except right after an explicit
+  // choice: jumping to the panel scrolls through the rest of the coverflow,
+  // which would otherwise move the selection to the last card.
+  const jumping = useRef(false);
+  const jumpTimer = useRef<number | undefined>(undefined);
+  const choose = (index: number) => {
+    jumping.current = true;
+    window.clearTimeout(jumpTimer.current);
+    jumpTimer.current = window.setTimeout(() => {
+      jumping.current = false;
+    }, 1500);
+    select(index);
   };
+  const follow = useCallback(
+    (index: number) => {
+      if (!jumping.current) select(index);
+    },
+    [select],
+  );
 
   return (
     <>
-      <div
-        role="group"
-        aria-label={labels.selector}
-        className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-2.5 overflow-x-auto px-4 pb-0.5 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))] sm:gap-3 sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden"
-      >
-        {cases.map((item, i) => {
-          const active = i === selected;
-          return (
-            <button
-              key={item.slug}
-              ref={(node) => {
-                buttons.current[i] = node;
-              }}
-              type="button"
-              aria-pressed={active}
-              aria-controls={`case-panel-${item.slug}`}
-              tabIndex={active ? 0 : -1}
-              onClick={() => select(i)}
-              onKeyDown={(event) => onKeyDown(event, i)}
-              className={`flex min-h-[132px] flex-[0_0_232px] snap-start flex-col gap-2 rounded-card border p-4 text-left text-text sm:min-h-[172px] sm:gap-2.5 sm:p-5 ${
-                active ? statusBorder : "border-border bg-transparent"
-              }`}
-            >
+      <Coverflow id="casos-coverflow" header={header} onActiveChange={follow}>
+        {cases.map((item, i) => (
+          <div key={item.slug} data-cf-item="">
+            <article className="group flex h-full flex-col overflow-hidden rounded-card border border-white/10 bg-[rgba(12,13,16,0.78)] shadow-[0_24px_60px_-24px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none">
               <span
-                className={`flex w-full justify-between gap-2 font-mono text-[11px] uppercase tracking-[0.06em] sm:gap-3 sm:text-xs ${
-                  active ? "text-accent" : "text-text-muted"
-                }`}
-              >
-                <span>{item.num}</span>
-                <span>{item.type}</span>
-              </span>
-              <span className="text-lg font-bold leading-[1.15] sm:text-[21px] sm:tracking-[-0.01em]">
-                {item.title}
-              </span>
-              <span className="hidden text-sm leading-[1.4] text-text-3 sm:block">
-                {item.kicker}
-              </span>
-              <span className="mt-auto">{item.statusBadge}</span>
-            </button>
-          );
-        })}
-      </div>
+                aria-hidden="true"
+                className="h-1 bg-gradient-to-r from-chaos via-text to-accent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
+              <MiniFlow flow={item.flow} planned={item.status === "soon"} />
+              <div className="flex flex-1 flex-col gap-2.5 p-5">
+                <p className="flex justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.06em] text-accent sm:text-xs">
+                  <span>{item.num}</span>
+                  <span className="text-right text-text-3">{item.type}</span>
+                </p>
+                <h3 className="text-xl font-bold leading-[1.15] tracking-[-0.01em] text-text sm:text-[22px]">
+                  {item.title}
+                </h3>
+                <p className="text-sm leading-[1.45] text-text-2">{item.kicker}</p>
+                <span>{item.statusBadge}</span>
+                <a
+                  href={`#case-panel-${item.slug}`}
+                  onClick={() => choose(i)}
+                  className="mt-auto inline-flex min-h-11 items-center gap-1.5 self-start pt-2 text-sm font-semibold text-accent underline-offset-4 hover:underline"
+                >
+                  {labels.viewCase}
+                  <span className="sr-only">: {cases[i].announce}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+          </div>
+        ))}
+      </Coverflow>
 
-      <div className="flex flex-col gap-7 rounded-[18px] border border-border bg-surface px-4 py-5 sm:gap-9 sm:rounded-[20px] sm:p-[clamp(20px,3vw,40px)]">
+      <div className="mx-auto w-full max-w-[1280px] px-4 pt-10 sm:px-[clamp(16px,5vw,72px)] sm:pt-14">
+      <div className="flex scroll-mt-6 flex-col gap-7 rounded-[18px] border border-border bg-surface px-4 py-5 sm:gap-9 sm:rounded-[20px] sm:p-[clamp(20px,3vw,40px)]">
         <p aria-live="polite" className="sr-only">
           {announcement}
         </p>
@@ -166,6 +195,7 @@ export function CaseSelector({
           </button>
         </nav>
         </div>
+      </div>
       </div>
     </>
   );
