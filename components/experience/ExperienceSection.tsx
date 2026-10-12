@@ -5,7 +5,6 @@ import type { Messages } from "@/lib/messages";
 import { ExperienceSelector, type ExperienceCard } from "./ExperienceSelector";
 
 const headingClass = "font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-text-3";
-const card = "flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 sm:p-5";
 const button =
   "flex min-h-11 items-center justify-center gap-1 whitespace-nowrap rounded-control px-3 text-[13px] sm:min-h-12 sm:px-5 sm:text-base";
 
