@@ -152,6 +152,9 @@ El sitio es oscuro por diseño; no hay tema claro en v1.
 - Cualquier string que empiece por `[` se renderiza con `Placeholder`.
 - `FlowDiagram`: horizontal en ≥ 820 px, vertical debajo; pulso animado por CSS entre nodos con retraso escalonado de 0,3 s; `prefers-reduced-motion` lo detiene.
 - Los casos con `status: "soon"` usan bordes punteados en los nodos y los rótulos `labels` del JSON.
+- Casos como coverflow 3D anclado, todo en una pantalla (pedido por Jorge, 2026-10-12; reemplaza las tarjetas de `Casos.dc.html` y el carrusel móvil): `components/ui/Coverflow.tsx`, CSS + un hook sin librerías. La sección se ancla a pantalla completa (`position: sticky`) y contiene, de arriba abajo: título con los botones de cierre ("Pregúntale a mi agente", "Ver GitHub"), las cinco tarjetas compactas y el detalle del caso centrado. El scroll vertical mueve las tarjetas (cada paso cuesta 60 % del viewport) y al pasar la última se suelta; un clic en una tarjeta vecina la trae al centro, y el detalle la sigue sin que haya que bajar ni abrir enlaces. La tarjeta centrada mira de frente; las laterales retroceden (`translateZ(−180px × d)`), giran 38° y se atenúan (en móvil se apagan del todo y se navega con el scroll).
+  - Detalle: tres columnas (flujo a todo el ancho; problema, decisiones y resultado debajo; stack al pie) cuando la pantalla mide al menos 900 × 780 px (variante `roomy`); con menos, cuatro pestañas (Flujo, Problema, Decisiones, Resultado; variante `cozy`). Medido: sin recortes en 1280×800, 1440×790, 1920×950, 992×762, 1366×700, tablet y 390×844; en móviles más bajos (360×740) el panel hace scroll interno.
+  - Sin JS o con `prefers-reduced-motion`: grilla normal de tarjetas y el detalle debajo (al elegir una tarjeta se lleva a la vista), sin anclaje ni blobs. Las tarjetas laterales llevan `data-cf-inactive`: WCAG 1.4.3 exime el texto de componentes inactivos, y al centrarse tienen contraste completo.
 
 ## 7. i18n
 

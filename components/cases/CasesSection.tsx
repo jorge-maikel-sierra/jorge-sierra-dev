@@ -1,8 +1,7 @@
 import { ContentText } from "@/components/ui/ContentText";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Case, Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
-import { CaseDetail, CaseStack } from "./CaseDetail";
+import { caseDetailParts } from "./CaseDetail";
 import { CaseSelector, type CaseSummary } from "./CaseSelector";
 import { StatusBadge } from "./StatusBadge";
 
@@ -20,7 +19,6 @@ export function CasesSection({
     num: item.num,
     title: <ContentText value={item.title} />,
     type: <ContentText value={item.type} />,
-    kicker: <ContentText value={item.kicker} />,
     status: item.status,
     statusBadge: (
       <StatusBadge status={item.status} label={item.statusLabel} variant="dot" />
@@ -28,73 +26,59 @@ export function CasesSection({
     announce: `${t.caseLabel} ${item.num}: ${item.title}`,
   }));
 
+  const cta = (
+    <div className="flex flex-wrap items-center gap-2.5">
+      <a
+        href="#agente"
+        className="flex min-h-10 items-center justify-center rounded-control bg-accent px-4 text-sm font-bold text-bg"
+      >
+        {t.closingAgent}
+      </a>
+      <a
+        href={github}
+        target="_blank"
+        rel="noopener"
+        className="flex min-h-10 items-center justify-center gap-1 rounded-control border border-border-strong px-4 text-sm font-semibold text-text hover:text-white"
+      >
+        {t.closingGithub} <span aria-hidden="true">↗</span>
+        <span className="sr-only">{t.opensInNewTab}</span>
+      </a>
+    </div>
+  );
+
   return (
-    <section
-      id="casos"
-      aria-labelledby="casos-title"
-      className="scroll-mt-4 px-4 pb-14 pt-4 sm:px-[clamp(16px,5vw,72px)] sm:pb-24 sm:pt-14"
-    >
-      <div className="mx-auto flex max-w-[1280px] flex-col gap-7 sm:gap-10">
-        <SectionHeader
-          id="casos-title"
-          eyebrow={t.eyebrow}
-          title={[t.titleLine1, t.titleLine2]}
-          intro={
-            <>
-              <p className="sm:hidden">{t.introMobile}</p>
-              <p className="hidden sm:block">{t.intro}</p>
-            </>
-          }
-          aside={
-            <a
-              href="#contenido"
-              className="hidden min-h-11 items-center font-mono text-[13px] tracking-[0.04em] text-text-2 hover:text-white sm:inline-flex"
-            >
-              {t.backToTop}
-            </a>
-          }
-        />
-
-        <CaseSelector
-          cases={summaries}
-          details={cases.map((item) => (
-            <CaseDetail key={item.slug} item={item} t={t} />
-          ))}
-          stacks={cases.map((item) => (
-            <CaseStack key={item.slug} stack={item.stack} label={t.stack} />
-          ))}
-          labels={{
-            selector: t.selectorLabel,
-            previous: t.previous,
-            next: t.next,
-            previousLabel: t.previousLabel,
-            nextLabel: t.nextLabel,
-          }}
-        />
-
-        <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-6 sm:border-t sm:border-[#1c1e22] sm:pt-8">
-          <p className="max-w-[720px] text-2xl font-bold leading-[1.2] tracking-[-0.02em] sm:text-[clamp(22px,2.4vw,32px)]">
-            {t.closingQuestion}
-          </p>
-          <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-3">
-            <a
-              href="#agente"
-              className="flex min-h-[52px] items-center justify-center rounded-xl bg-accent px-5 text-base font-bold text-bg sm:min-h-12 sm:rounded-control"
-            >
-              {t.closingAgent}
-            </a>
-            <a
-              href={github}
-              target="_blank"
-              rel="noopener"
-              className="flex min-h-[52px] items-center justify-center gap-1 rounded-xl border border-border-strong px-5 text-base font-semibold text-text hover:text-white sm:min-h-12 sm:rounded-control"
-            >
-              {t.closingGithub} <span aria-hidden="true">↗</span>
-              <span className="sr-only">{t.opensInNewTab}</span>
-            </a>
+    <section id="casos" aria-labelledby="casos-title" className="scroll-mt-4">
+      <CaseSelector
+        cases={summaries}
+        parts={cases.map((item) => caseDetailParts(item, t))}
+        header={
+          <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+            <div className="flex min-w-0 flex-col gap-1.5">
+              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-text-3">
+                {t.eyebrow}
+              </p>
+              <h2
+                id="casos-title"
+                className="text-[28px] font-extrabold leading-[1] tracking-[-0.03em] sm:text-[clamp(30px,3.4vw,44px)]"
+              >
+                {t.titleLine1} <span className="text-accent">{t.titleLine2}</span>
+              </h2>
+              <p className="cf-intro max-w-[560px] text-sm leading-[1.45] text-text-2">{t.intro}</p>
+            </div>
+            <div className="hidden items-center gap-5 min-[900px]:flex">
+              <p className="hidden max-w-[300px] text-right text-sm font-semibold leading-[1.3] min-[1600px]:block">
+                {t.closingQuestion}
+              </p>
+              {cta}
+            </div>
           </div>
-        </div>
-      </div>
+        }
+        labels={{
+          selector: t.selectorLabel,
+          tabs: t.tabs,
+        }}
+        footer={cta}
+      />
     </section>
   );
 }

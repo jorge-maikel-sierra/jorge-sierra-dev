@@ -76,7 +76,7 @@ html {
 .flow-conn {
   position: relative;
   width: 2px;
-  height: 24px;
+  height: 8px;
   margin-left: 23px;
   background: var(--border);
 }
@@ -97,7 +97,7 @@ html {
 
 @media (min-width: 820px) {
   .flow-conn {
-    flex: 0 0 44px;
+    flex: 0 0 28px;
     align-self: center;
     width: auto;
     height: 2px;
@@ -214,5 +214,167 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .pipeline-blink {
     animation: none;
+  }
+}
+
+/* Case detail: three columns only when the screen is wide AND tall enough for
+   everything to show at once; otherwise tabs (nothing is ever cut off). */
+@custom-variant roomy (@media (min-width: 900px) and (min-height: 780px));
+/* Exactly the negation of roomy (a comma list would lose its second query). */
+@custom-variant cozy (@media not all and (min-width: 900px) and (min-height: 780px));
+
+/* Coverflow (components/ui/Coverflow.tsx). Without JS or with reduced motion
+   this is a plain grid; the script adds .is-3d for the pinned 3D mode. */
+.cf {
+  --header-h: 0px;
+  position: relative;
+}
+.cf-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 1280px;
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) {
+  .cf-container {
+    padding-inline: clamp(16px, 5vw, 72px);
+  }
+}
+.cf-stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .cf-stage {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .cf[data-columns="3"] .cf-stage {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.cf-blobs,
+.cf-dots {
+  display: none;
+}
+
+.cf.is-3d .cf-sticky {
+  position: sticky;
+  top: var(--header-h);
+  height: calc(100svh - var(--header-h));
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-block: 0.75rem;
+}
+/* Pinned screen: heading, cards and the detail share one viewport. */
+.cf.is-3d .cf-container {
+  flex: 1;
+  min-height: 0;
+  gap: 0.5rem;
+}
+.cf.is-3d .cf-after {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+.cf.is-3d .cf-stage {
+  display: block;
+  position: relative;
+  perspective: 1600px;
+}
+.cf.is-3d [data-cf-item] {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--cf-w);
+  margin-left: calc(var(--cf-w) / -2);
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+.cf.is-3d .cf-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.cf-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  transition:
+    width 0.3s,
+    background-color 0.3s;
+}
+.cf-dot.is-active {
+  width: 1.5rem;
+  background: var(--accent);
+}
+
+/* Dark theme: low-opacity glows so the glass cards keep AA contrast. */
+.cf.is-3d .cf-blobs {
+  display: block;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.cf-blob {
+  position: absolute;
+  width: 42vmax;
+  height: 42vmax;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.16;
+  animation: cf-drift 18s ease-in-out infinite alternate;
+}
+.cf-blob:nth-child(1) {
+  left: -10%;
+  top: 5%;
+}
+.cf-blob:nth-child(2) {
+  right: -12%;
+  top: 30%;
+  animation-delay: -6s;
+}
+.cf-blob:nth-child(3) {
+  left: 35%;
+  bottom: -25%;
+  animation-delay: -12s;
+}
+.cf-blob-accent {
+  background: var(--accent);
+}
+.cf-blob-chaos {
+  background: var(--chaos);
+}
+.cf-blob-sky {
+  background: #7cc8ff;
+}
+@keyframes cf-drift {
+  to {
+    translate: 6% -8%;
+    scale: 1.1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cf-blob {
+    animation: none;
+  }
+}
+
+/* Case section intro: only where the pinned screen has height to spare. */
+.cf-intro {
+  display: none;
+}
+@media (min-width: 1280px) and (min-height: 920px) {
+  .cf-intro {
+    display: block;
   }
 }
