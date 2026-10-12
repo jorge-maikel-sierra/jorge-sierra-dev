@@ -70,7 +70,13 @@
     "linkedin": "LinkedIn",
     "closingQuestion": "¿Encajo con lo que buscas? Hablemos.",
     "closingMobile": "¿Encajo con lo que buscas? Hablemos",
-    "closingCta": "Ir a contacto"
+    "closingCta": "Ir a contacto",
+    "tabs": {
+      "roles": "Experiencia",
+      "education": "Formación",
+      "principles": "Cómo trabajo"
+    },
+    "viewsLabel": "Vistas de trayectoria"
   },
   "contact": {
     "eyebrow": "04 · Contacto",

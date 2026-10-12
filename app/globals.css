@@ -369,12 +369,14 @@ html {
   }
 }
 
-/* Case section intro: only where the pinned screen has height to spare. */
-.cf-intro {
+/* Section intro: only where a one-screen section has height to spare. */
+.cf-intro,
+.tall-only {
   display: none;
 }
 @media (min-width: 1280px) and (min-height: 920px) {
-  .cf-intro {
+  .cf-intro,
+  .tall-only {
     display: block;
   }
 }

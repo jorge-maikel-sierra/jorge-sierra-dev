@@ -169,7 +169,7 @@ test("mobile: one card at a time, no horizontal overflow, tabs in the detail", a
     await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth),
   ).toBe(0);
 
-  const tabs = page.getByRole("tab");
+  const tabs = page.locator("#casos").getByRole("tab");
   await expect(tabs).toHaveCount(4);
   await expect(tabs.first()).toHaveAttribute("aria-selected", "true");
   await tabs.nth(2).click();
