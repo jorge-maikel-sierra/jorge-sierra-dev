@@ -3,25 +3,25 @@ import { expect, test, type Page } from "@playwright/test";
 const MUTED = "rgb(138, 144, 153)";
 const TEXT = "rgb(236, 237, 239)";
 
-// Experience: a pinned 3D coverflow (3 roles, education, how I work) with the
-// detail of the centered card below and the closing buttons always in sight.
-const root = (page: Page) => page.locator("#trayectoria-coverflow");
-const cards = (page: Page) => page.locator("#trayectoria-coverflow [data-cf-item]");
-const cardButtons = (page: Page) => page.locator("#trayectoria-coverflow [data-cf-item] button");
-const activeDot = (page: Page) =>
-  page.locator("#trayectoria-coverflow .cf-dot").evaluateAll((dots) => dots.findIndex((dot) => dot.classList.contains("is-active")));
+// Experience: a pinned screen with a vertical rail of cards (3 roles, education,
+// how I work); scrolling walks down the rail and the detail follows the active
+// card, with the closing buttons always in sight.
+const root = (page: Page) => page.locator("#trayectoria-stack");
+const cardButtons = (page: Page) => page.locator("#trayectoria-stack [data-xp-card] button");
+const activeIndex = (page: Page) =>
+  cardButtons(page).evaluateAll((buttons) => buttons.findIndex((button) => button.getAttribute("aria-pressed") === "true"));
 
 async function scrollTravel(page: Page, fraction: number) {
   await page.evaluate((f) => {
-    const section = document.querySelector<HTMLElement>("#trayectoria-coverflow")!;
-    const sticky = section.querySelector<HTMLElement>(".cf-sticky")!;
+    const section = document.querySelector<HTMLElement>("#trayectoria-stack")!;
+    const sticky = section.firstElementChild as HTMLElement;
     const start = section.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top: start + (section.offsetHeight - sticky.offsetHeight) * f, behavior: "instant" });
   }, fraction);
   await page.waitForTimeout(250);
 }
 
-const picker = (page: Page, org: string) => cards(page).filter({ hasText: org });
+const card = (page: Page, text: string) => page.locator("#trayectoria-stack [data-xp-card]").filter({ hasText: text });
 
 test.describe("experience", () => {
   test("lists the three roles, education and how I work as cards", async ({ page }) => {
@@ -30,42 +30,38 @@ test.describe("experience", () => {
     for (const [i, text] of ["SOAINT", "IX Colombia", "SENA", "Formación", "Cómo trabajo"].entries()) {
       await expect(cardButtons(page).nth(i)).toContainText(text);
     }
-    await expect(picker(page, "SOAINT").getByText("Actual")).toBeVisible();
-    const heights = await cards(page).evaluateAll((items) => items.map((item) => (item as HTMLElement).offsetHeight));
-    expect(new Set(heights).size).toBe(1);
-  });
-
-  test("pins, moves the cards with the scroll and the detail follows", async ({ page }) => {
-    await page.goto("/es");
-    await expect(root(page)).toHaveClass(/is-3d/);
-    await scrollTravel(page, 0);
     await expect(page.locator("#exp-panel-soaint")).toBeVisible();
     await expect(page.getByText("Lidero un equipo de 2 a 3 desarrolladores.")).toBeVisible();
-    expect(await root(page).locator(".cf-sticky").evaluate((n) => Math.round(n.getBoundingClientRect().top))).toBe(0);
+  });
+
+  test("pins, walks down the rail with the scroll and the detail follows", async ({ page }) => {
+    await page.goto("/es");
+    await expect(root(page)).toHaveAttribute("data-pinned", "");
+    await scrollTravel(page, 0);
+    expect(await root(page).locator("> div").evaluate((n) => Math.round(n.getBoundingClientRect().top))).toBe(0);
 
     await scrollTravel(page, 0.5);
-    expect(await activeDot(page)).toBe(2);
+    expect(await activeIndex(page)).toBe(2);
     await expect(page.locator("#exp-panel-sena")).toBeVisible();
     await expect(page.locator("#exp-panel-soaint")).toBeHidden();
 
     await scrollTravel(page, 1);
-    expect(await activeDot(page)).toBe(4);
+    expect(await activeIndex(page)).toBe(4);
     await expect(page.locator("#exp-panel-principles").getByText("Spec-Driven Development")).toBeVisible();
 
     await scrollTravel(page, 1.3);
-    expect(await root(page).locator(".cf-sticky").evaluate((n) => n.getBoundingClientRect().top)).toBeLessThan(0);
+    expect(await root(page).locator("> div").evaluate((n) => n.getBoundingClientRect().top)).toBeLessThan(0);
   });
 
-  test("one click on a side card brings it forward", async ({ page, isMobile }) => {
-    test.skip(isMobile, "desktop only");
+  test("one click on a card jumps to it", async ({ page }) => {
     await page.goto("/es");
     await scrollTravel(page, 0);
-    await cardButtons(page).nth(1).click();
-    await expect.poll(() => activeDot(page)).toBe(1);
-    await expect(page.locator("#exp-panel-ix-colombia")).toBeVisible();
+    await cardButtons(page).nth(3).click();
+    await expect.poll(() => activeIndex(page)).toBe(3);
+    await expect(page.locator("#exp-panel-education").getByText("AWS Cloud Architecture")).toBeVisible();
   });
 
-  test("fits one screen: cards, detail and the buttons, nothing cut off", async ({ page }) => {
+  test("fits one screen: rail, detail and the buttons, nothing cut off", async ({ page }) => {
     await page.goto("/es");
     await scrollTravel(page, 0.25);
     const viewport = page.viewportSize()!;
@@ -86,7 +82,7 @@ test.describe("experience", () => {
     await scrollTravel(page, 0.25);
     const filters = page.getByRole("group", { name: "Filtrar por área" });
     const title = (org: string, text: string) =>
-      picker(page, org).locator("span", { hasText: new RegExp(`^${text}$`) });
+      card(page, org).locator("span", { hasText: new RegExp(`^${text}$`) });
 
     await filters.getByRole("button", { name: "Frontend" }).click();
     await expect(filters.getByRole("button", { name: "Frontend" })).toHaveAttribute("aria-pressed", "true");
@@ -121,11 +117,10 @@ test.describe("experience", () => {
     );
   });
 
-  test("reduced motion shows a plain grid: no pinning, no 3D", async ({ page }) => {
+  test("reduced motion does not pin: a click just selects", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/es");
-    await expect(root(page)).not.toHaveClass(/is-3d/);
-    await expect(root(page).locator(".cf-sticky")).toHaveCSS("position", "static");
+    await expect(root(page)).not.toHaveAttribute("data-pinned", "");
     await cardButtons(page).nth(1).click();
     await expect(page.locator("#exp-panel-ix-colombia")).toBeVisible();
   });
