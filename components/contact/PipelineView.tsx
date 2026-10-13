@@ -36,7 +36,7 @@ export function PipelineView({
   return (
     <section
       aria-labelledby="pipeline-title"
-      className="flex min-w-0 flex-col gap-4 rounded-[18px] border border-border bg-surface px-4 py-[18px] sm:flex-[1_1_440px] sm:gap-[18px] sm:rounded-[20px] sm:p-[clamp(20px,2.6vw,32px)]"
+      className="glass flex h-full min-w-0 flex-col gap-3 overflow-y-auto rounded-[20px] p-4 min-[900px]:p-5"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3
@@ -45,7 +45,7 @@ export function PipelineView({
         >
           {t.pipelineTitle}
         </h3>
-        <p className="font-mono text-[10px] tracking-[0.06em] text-text-faint sm:text-[11px]">
+        <p className="font-mono text-[10px] tracking-[0.06em] text-text-3 sm:text-[11px]">
           {t.pipelineNote}
         </p>
       </div>
@@ -77,17 +77,17 @@ export function PipelineView({
                   }`}
                 />
               </div>
-              <div className="flex flex-col gap-1 pb-5">
+              <div className="flex flex-col gap-0.5 pb-3.5">
                 <span
                   className={`text-base font-bold sm:text-[17px] ${
-                    done || active ? "text-text" : "text-text-faint"
+                    done || active ? "text-text" : "text-text-3"
                   }`}
                 >
                   {t.steps[i]}
                 </span>
                 <span
                   className={`font-mono text-xs leading-[1.5] ${
-                    done ? "text-text-2" : active ? "text-accent" : "text-text-faint"
+                    done ? "text-text-2" : active ? "text-accent" : "text-text-3"
                   }`}
                 >
                   {done || active ? fill(t.stepDetails[step], values) : t.waiting}
@@ -101,9 +101,9 @@ export function PipelineView({
       <div
         role="log"
         aria-live="polite"
-        className="mt-auto flex min-h-[132px] flex-col gap-1 rounded-xl border border-[#1c1e22] bg-[#050607] px-4 py-3.5 font-mono text-xs leading-[1.6]"
+        className="mt-auto flex min-h-[84px] flex-col gap-1 rounded-xl border border-white/10 bg-black/40 px-4 py-3 font-mono text-xs leading-[1.6]"
       >
-        {state.status === "idle" && <span className="text-text-faint">{t.logIdle}</span>}
+        {state.status === "idle" && <span className="text-text-3">{t.logIdle}</span>}
         {state.done.map((step) => (
           <span key={step} className="text-text-2">
             <span aria-hidden="true" className="text-accent">

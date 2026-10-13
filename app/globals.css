@@ -380,3 +380,38 @@ html {
     display: block;
   }
 }
+
+/* Contact scene: transparent glass cards over soft glows (components/contact). */
+.glass {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.045);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
+  backdrop-filter: blur(18px) saturate(1.2);
+  box-shadow:
+    0 24px 60px -28px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.scene-stage {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 900px) {
+  .scene-stage {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .scene-stage > [data-slot="channels"] {
+    grid-column: 1 / -1;
+  }
+}
+/* Phones, pinned: the three cards share one spot and crossfade. */
+.scene[data-stack] .scene-stage {
+  grid-template-rows: minmax(0, 1fr);
+}
+.scene[data-stack] .scene-stage > [data-slot] {
+  grid-area: 1 / 1;
+}
+.scene[data-stack] .scene-stage > [data-slot="channels"] {
+  align-self: center;
+}

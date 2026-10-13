@@ -3,7 +3,7 @@ import { isPlaceholder, type Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 
 const card =
-  "flex min-w-0 flex-col gap-1.5 rounded-card border px-5 py-[18px] text-text hover:text-white";
+  "glass flex min-w-0 flex-col gap-1 rounded-card px-4 py-3 text-text transition-colors hover:border-white/25 hover:text-white min-[900px]:px-5 min-[900px]:py-4";
 const cardLabel =
   "font-mono text-[11px] uppercase tracking-[0.08em] text-text-3";
 
@@ -22,12 +22,12 @@ export function Channels({
   const pendingWhatsapp = isPlaceholder(whatsapp);
 
   return (
-    <ul className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
+    <ul className="grid grid-cols-2 gap-2.5 min-[900px]:grid-cols-4 min-[900px]:gap-3">
       <li className="flex">
         {pendingWhatsapp ? (
           <span className={`${card} w-full border-dashed border-border-strong`}>
             <span className={cardLabel}>{t.channels.whatsapp}</span>
-            <span className="text-[17px] font-semibold text-text-muted">
+            <span className="text-[15px] font-semibold min-[900px]:text-[17px] text-text-muted">
               <PendingText value={whatsapp} />
             </span>
           </span>
@@ -36,10 +36,10 @@ export function Channels({
             href={`https://wa.me/${whatsapp}`}
             target="_blank"
             rel="noopener"
-            className={`${card} w-full border-border`}
+            className={`${card} w-full border-transparent`}
           >
             <span className={cardLabel}>{t.channels.whatsapp}</span>
-            <span className="text-[17px] font-semibold">
+            <span className="text-[15px] font-semibold min-[900px]:text-[17px]">
               +{whatsapp.slice(0, 2)} {whatsapp.slice(2, 5)} {whatsapp.slice(5, 8)}{" "}
               {whatsapp.slice(8)} <span aria-hidden="true">↗</span>
               <span className="sr-only">{opensInNewTab}</span>
@@ -48,9 +48,9 @@ export function Channels({
         )}
       </li>
       <li className="flex">
-        <a href={`mailto:${email}`} className={`${card} w-full border-border`}>
+        <a href={`mailto:${email}`} className={`${card} w-full border-transparent`}>
           <span className={cardLabel}>{t.channels.email}</span>
-          <span className="text-base font-semibold [overflow-wrap:anywhere]">
+          <span className="text-sm font-semibold [overflow-wrap:anywhere] min-[900px]:text-base">
             {email}
           </span>
         </a>
@@ -60,10 +60,10 @@ export function Channels({
           href={linkedin}
           target="_blank"
           rel="noopener"
-          className={`${card} w-full border-border`}
+          className={`${card} w-full border-transparent`}
         >
           <span className={cardLabel}>{t.channels.linkedin}</span>
-          <span className="text-[17px] font-semibold">
+          <span className="text-[15px] font-semibold min-[900px]:text-[17px]">
             in/{lastSegment(linkedin)} <span aria-hidden="true">↗</span>
             <span className="sr-only">{opensInNewTab}</span>
           </span>
@@ -74,10 +74,10 @@ export function Channels({
           href={github}
           target="_blank"
           rel="noopener"
-          className={`${card} w-full border-border`}
+          className={`${card} w-full border-transparent`}
         >
           <span className={cardLabel}>{t.channels.github}</span>
-          <span className="text-[17px] font-semibold">
+          <span className="text-[15px] font-semibold min-[900px]:text-[17px]">
             {lastSegment(github)} <span aria-hidden="true">↗</span>
             <span className="sr-only">{opensInNewTab}</span>
           </span>

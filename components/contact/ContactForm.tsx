@@ -16,7 +16,7 @@ type FormError = { field: Field | "form"; text: string };
 const FIELD_ORDER: Field[] = ["name", "email", "company", "message"];
 
 const input =
-  "h-12 rounded-control border border-border-strong bg-bg px-3.5 text-base text-text placeholder:text-text-faint aria-[invalid=true]:border-warn";
+  "h-11 rounded-control border border-white/10 bg-black/30 px-3.5 text-base text-text placeholder:text-text-faint aria-[invalid=true]:border-warn min-[900px]:h-12";
 const label = "text-sm text-text-2";
 
 // Validates on the client with the server's schema, then posts to
@@ -127,7 +127,7 @@ export function ContactForm({
       onSubmit={onSubmit}
       aria-label={t.title}
       aria-busy={sending}
-      className="relative flex min-w-0 flex-col gap-4 rounded-[18px] border border-border bg-surface px-4 py-[18px] sm:flex-[1_1_440px] sm:gap-[18px] sm:rounded-[20px] sm:p-[clamp(20px,2.6vw,32px)]"
+      className="glass relative flex h-full min-w-0 flex-col gap-3 overflow-y-auto rounded-[20px] p-4 sm:gap-3.5 min-[900px]:p-5"
     >
       <fieldset className="flex flex-col gap-2.5">
         <legend className="mb-2.5 font-mono text-xs uppercase tracking-[0.08em] text-text-3">
@@ -147,7 +147,7 @@ export function ContactForm({
                 className={`min-h-11 rounded-control border px-1.5 text-sm font-semibold sm:flex-[1_1_120px] sm:px-3.5 sm:text-[15px] ${
                   active
                     ? "border-accent bg-white/[0.04] text-accent"
-                    : "border-border-strong bg-transparent text-text"
+                    : "border-white/10 bg-black/20 text-text"
                 }`}
               >
                 {t.kinds[option]}
@@ -157,8 +157,8 @@ export function ContactForm({
         </div>
       </fieldset>
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:gap-3.5">
-        <p className="flex flex-col gap-1.5 sm:flex-[1_1_200px]">
+      <div className="grid gap-3 sm:grid-cols-2 min-[1100px]:grid-cols-3">
+        <p className="flex flex-col gap-1.5">
           <label htmlFor="contact-name" className={label}>
             {t.name}
           </label>
@@ -174,7 +174,7 @@ export function ContactForm({
             className={input}
           />
         </p>
-        <p className="flex flex-col gap-1.5 sm:flex-[1_1_200px]">
+        <p className="flex flex-col gap-1.5">
           <label htmlFor="contact-email" className={label}>
             {t.email}
           </label>
@@ -190,24 +190,24 @@ export function ContactForm({
             className={input}
           />
         </p>
+        <p className="flex flex-col gap-1.5 sm:col-span-2 min-[1100px]:col-span-1">
+          <label htmlFor="contact-company" className={label}>
+            {t.company} <span className="text-text-3">{t.optional}</span>
+          </label>
+          <input
+            id="contact-company"
+            name="company"
+            type="text"
+            autoComplete="organization"
+            maxLength={CONTACT_LIMITS.company}
+            placeholder={t.companyPlaceholder}
+            aria-invalid={invalid("company")}
+            aria-describedby={describedBy("company")}
+            className={input}
+          />
+        </p>
       </div>
 
-      <p className="flex flex-col gap-1.5">
-        <label htmlFor="contact-company" className={label}>
-          {t.company} <span className="text-text-faint">{t.optional}</span>
-        </label>
-        <input
-          id="contact-company"
-          name="company"
-          type="text"
-          autoComplete="organization"
-          maxLength={CONTACT_LIMITS.company}
-          placeholder={t.companyPlaceholder}
-          aria-invalid={invalid("company")}
-          aria-describedby={describedBy("company")}
-          className={input}
-        />
-      </p>
 
       <p className="flex flex-col gap-1.5">
         <label htmlFor="contact-message" className={label}>
@@ -216,12 +216,12 @@ export function ContactForm({
         <textarea
           id="contact-message"
           name="message"
-          rows={4}
+          rows={3}
           maxLength={CONTACT_LIMITS.message}
           placeholder={t.messagePlaceholder}
           aria-invalid={invalid("message")}
           aria-describedby={describedBy("message")}
-          className={`${input} h-auto min-h-[120px] resize-y py-3 leading-[1.5]`}
+          className={`${input} h-auto min-h-[84px] resize-y py-3 leading-[1.5]`}
         />
       </p>
 
@@ -244,7 +244,7 @@ export function ContactForm({
       <button
         type="submit"
         disabled={sending || locked}
-        className="flex h-[52px] items-center justify-center gap-2 rounded-xl bg-accent text-[17px] font-bold text-bg disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-accent text-[17px] font-bold text-bg disabled:cursor-not-allowed disabled:opacity-60"
       >
         {sending ? t.sending : t.send}
         <svg

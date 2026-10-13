@@ -66,4 +66,33 @@ test.describe("contact", () => {
       page.getByRole("link", { name: "jorgemaikelsierraamaya@gmail.com" }),
     ).toHaveAttribute("href", "mailto:jorgemaikelsierraamaya@gmail.com");
   });
+
+  test("pins and reveals the glass cards as the page scrolls", async ({ page, isMobile }) => {
+    await page.goto("/es");
+    const scene = page.locator("#contacto .scene");
+    await expect(scene).toHaveAttribute("data-pinned", "");
+    const opacity = (slot: string) =>
+      page.locator(`[data-slot=${slot}]`).evaluate((node) => Number(getComputedStyle(node).opacity));
+    const travel = async (fraction: number) => {
+      await page.evaluate((f) => {
+        const root = document.querySelector<HTMLElement>("#contacto .scene")!;
+        const sticky = root.firstElementChild as HTMLElement;
+        const start = root.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top: start + (root.offsetHeight - sticky.offsetHeight) * f, behavior: "instant" });
+      }, fraction);
+      await page.waitForTimeout(250);
+    };
+
+    await travel(0);
+    expect(await opacity("form")).toBe(1);
+    expect(await opacity("pipeline")).toBe(0);
+    expect(await opacity("channels")).toBe(0);
+    await travel(0.5);
+    expect(await opacity("pipeline")).toBe(1);
+    expect(await opacity("form")).toBe(isMobile ? 0 : 1);
+    await travel(1);
+    expect(await opacity("channels")).toBe(1);
+    // The direct channels are real links once revealed.
+    await expect(page.getByRole("link", { name: /LinkedIn|in\/jorgemaikelsierra/ }).first()).toBeVisible();
+  });
 });
