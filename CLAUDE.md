@@ -52,7 +52,7 @@ Ver `docs/design.md` → "Estructura del proyecto". No crees carpetas fuera de e
 
 ## Contexto que debes conocer
 
-- La v2 en Next.js reemplazó al portafolio en Nuxt en la Fase 6. El código Nuxt quedó archivado en la rama `legacy-nuxt`. Las notas de `docs/tasks.md` anteriores al corte mencionan `web/`: esa carpeta es hoy la raíz del repo.
+- La v2 en Next.js reemplazó al portafolio en Nuxt en la Fase 6. El código Nuxt ya no se conserva: la rama `legacy-nuxt` se eliminó el 2026-10-16 (último commit `bd808c8`). Las notas de `docs/tasks.md` anteriores al corte mencionan `web/`: esa carpeta es hoy la raíz del repo.
 - Metodología: Spec-Driven Development. Si una tarea es ambigua o contradice la especificación, detente y pregunta en vez de suponer.
 - Idioma de la UI y del contenido: español primero. El inglés se agrega en la Fase 6.
 

@@ -29,4 +29,4 @@ Las variables de entorno están documentadas en `.env.example` y se validan al a
 
 ## Documentación
 
-La especificación está en `docs/`: requisitos, diseño, especificación del agente y el plan de tareas con las decisiones de cada una. El sitio anterior en Nuxt quedó archivado en la rama [`legacy-nuxt`](https://github.com/jorge-maikel-sierra/jorge-sierra-dev/tree/legacy-nuxt).
+La especificación está en `docs/`: requisitos, diseño, especificación del agente y el plan de tareas con las decisiones de cada una. El sitio anterior en Nuxt ya no se conserva: la rama `legacy-nuxt` se eliminó el 2026-10-16 (último commit `bd808c8`).
