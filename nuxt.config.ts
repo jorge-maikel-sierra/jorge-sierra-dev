@@ -78,10 +78,6 @@ export default defineNuxtConfig({
     }
   },
 
-  sitemap: {
-    strictNuxtContentAds: true
-  },
-
   robots: {
     disallow: ['/admin', '/_nuxt']
   }
