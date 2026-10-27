@@ -19,26 +19,12 @@ const statusDot: Record<CaseStatus, string> = {
 export function StatusBadge({
   status,
   label,
-  variant,
 }: {
   status: CaseStatus;
   label: string;
-  variant: "dot" | "pill";
 }) {
-  if (variant === "pill") {
-    return (
-      <span
-        className={`rounded-full border border-current px-[9px] py-[3px] sm:px-2.5 sm:py-1 ${statusText[status]}`}
-      >
-        <ContentText value={label} />
-      </span>
-    );
-  }
-
   return (
-    <span
-      className={`flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.06em] sm:text-[11px] ${statusText[status]}`}
-    >
+    <span className={`flex items-center gap-2 text-[13px] font-semibold ${statusText[status]}`}>
       <span aria-hidden="true" className={`size-1.5 shrink-0 rounded-full ${statusDot[status]}`} />
       <ContentText value={label} />
     </span>

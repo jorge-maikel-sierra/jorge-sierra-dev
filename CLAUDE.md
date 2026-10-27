@@ -37,7 +37,7 @@ Antes de dar por terminada cualquier tarea: `pnpm lint && pnpm typecheck && pnpm
 
 1. **El contenido vive en `content/`.** Ningún texto de casos, trayectoria o perfil se escribe a mano en componentes. Los componentes leen los JSON validados con zod (`lib/content/schema.ts`).
 2. **No inventes datos.** Los textos entre corchetes (`[AÑO]`, `[MÉTRICA: …]`) son datos que Jorge aún no ha dado. Muéstralos en la UI con el estilo de marcador (borde punteado, color `--text-muted`). Nunca los reemplaces por cifras plausibles. Lo mismo aplica al agente: si un dato no está en la base de conocimiento, el agente dice que no lo tiene.
-3. **`design-reference/` es la fuente de verdad visual y de copy.** Replica colores, tipografía, espaciados, textos y comportamiento de los prototipos `.dc.html`. No copies su código: está escrito para otro runtime. Las versiones `Mobile-*.dc.html` definen el comportamiento bajo 640 px.
+3. **El lenguaje visual vive en `docs/design.md` §3.** Desde el rediseño de la home (tarea 6.5) manda sobre `design-reference/` en lo visual: paleta, regla semántica del color, riel de etapas, tipografía y radios. Los prototipos `.dc.html` siguen siendo la referencia de copy y comportamiento (las versiones `Mobile-*.dc.html` definen lo que pasa bajo 640 px). No copies su código: está escrito para otro runtime.
 4. **Server Components por defecto.** Usa `"use client"` solo donde haya interacción o WebGL.
 5. **Secretos solo en el servidor.** Nada de llaves en `NEXT_PUBLIC_*` salvo las públicas de Supabase. Valida las variables de entorno al arrancar (`lib/env.ts`).
 6. **El 3D nunca bloquea el contenido.** El hero se lee completo antes de que cargue WebGL. Ver presupuesto de rendimiento en `docs/design.md`.

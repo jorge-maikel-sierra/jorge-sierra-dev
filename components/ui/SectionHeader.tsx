@@ -1,54 +1,32 @@
 import type { ReactNode } from "react";
+import { StageNode } from "./StageNode";
 
-// Eyebrow + title (last word in accent, desktop line break between lines) + intro.
+// Heading of a pinned section: the stage node, the real <h2> and a one-line
+// intro shown only where the screen has height to spare. The aside (calls to
+// action, back to top) sits at the right from 900 px.
 export function SectionHeader({
   id,
-  eyebrow,
   title,
   intro,
   aside,
-  compact = false,
 }: {
   id: string;
-  eyebrow: string;
-  title: [string] | [string, string];
-  intro: ReactNode;
+  title: ReactNode;
+  intro?: ReactNode;
   aside?: ReactNode;
-  /** Smaller heading, and the intro only where the screen has height to spare. */
-  compact?: boolean;
 }) {
-  const last = title[title.length - 1];
-  const cut = last.lastIndexOf(" ") + 1;
-
   return (
-    <div
-      className={`flex flex-col gap-3.5 sm:flex-row sm:items-end sm:justify-between sm:gap-6 ${compact ? "" : "sm:flex-wrap"}`}
-    >
-      <div className={`flex flex-col ${compact ? "max-w-[980px] gap-2" : "max-w-[760px] gap-3.5 sm:gap-4"}`}>
-        <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-text-3 sm:text-xs">
-          {eyebrow}
-        </p>
+    <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-2">
+      <div className="flex min-w-0 max-w-[880px] flex-col gap-1.5">
+        {/* The node sits inside the heading so its em offset follows the type size. */}
         <h2
           id={id}
-          className={`font-extrabold leading-[0.98] tracking-[-0.03em] ${
-            compact ? "text-[clamp(26px,7vw,34px)] sm:text-[clamp(30px,3.6vw,52px)]" : "text-[40px] sm:text-h2"
-          }`}
+          className="relative text-[24px] font-extrabold leading-[1.04] tracking-[-0.03em] text-balance sm:text-[clamp(28px,3.2vw,42px)]"
         >
-          {title.length === 2 && (
-            <>
-              {title[0]} <br className="hidden sm:block" />
-            </>
-          )}
-          {last.slice(0, cut)}
-          <span className="text-accent">{last.slice(cut)}</span>
+          <StageNode />
+          {title}
         </h2>
-        <div
-          className={`max-w-[620px] text-base leading-[1.55] text-text-2 sm:text-[clamp(17px,1.4vw,19px)] ${
-            compact ? "tall-only" : ""
-          }`}
-        >
-          {intro}
-        </div>
+        {intro && <p className="tall-only max-w-[62ch] text-[15px] leading-[1.5] text-text-2">{intro}</p>}
       </div>
       {aside}
     </div>

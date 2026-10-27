@@ -2,8 +2,6 @@
 
 import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
-type BlobColor = "accent" | "chaos" | "sky";
-
 /**
  * Scroll-driven 3D coverflow, pinned full screen (task requested by Jorge,
  * 2026-10-12). While the section is pinned, vertical scroll moves the cards
@@ -17,7 +15,6 @@ export function Coverflow({
   header,
   after,
   children,
-  palette = ["accent", "chaos", "sky"],
   cardWidth = "min(82vw, 23rem)",
   columns = 3,
   onActiveChange,
@@ -27,7 +24,6 @@ export function Coverflow({
   header: ReactNode;
   after?: ReactNode;
   children: ReactNode;
-  palette?: [BlobColor, BlobColor, BlobColor];
   cardWidth?: string;
   columns?: 2 | 3;
   /** The nearest card changed (Math.round(position)). */
@@ -49,7 +45,7 @@ export function Coverflow({
     const cards = stage.current;
     const dotRow = dots.current;
     if (!section || !box || !cards || !dotRow) return;
-    // Reduced motion keeps the fallback grid: no class, no pinning, no blobs.
+    // Reduced motion keeps the fallback grid: no class, no pinning.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const items = [...cards.querySelectorAll<HTMLElement>("[data-cf-item]")];
@@ -206,12 +202,7 @@ export function Coverflow({
       className="cf"
     >
       <div ref={sticky} className="cf-sticky">
-        <div className="cf-blobs" aria-hidden="true">
-          {palette.map((color, i) => (
-            <span key={i} className={`cf-blob cf-blob-${color}`} />
-          ))}
-        </div>
-        <div className="cf-container">
+        <div className="cf-container stage">
           {header}
           <div ref={stage} className="cf-stage">
             {children}

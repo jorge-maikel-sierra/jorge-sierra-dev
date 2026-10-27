@@ -306,9 +306,9 @@
       "kicker": "Un agente de soporte que clasifica, responde y actúa",
       "problem": "Una plataforma que recibe tickets de soporte, los clasifica por tema y urgencia, responde con RAG sobre una base de conocimiento y ejecuta acciones con tool calling. Cuando el agente no está seguro, escala a un humano.",
       "labels": {
-        "flow": "FLUJO PLANEADO",
-        "decisions": "DECISIONES DE DISEÑO",
-        "results": "CÓMO SE VA A MEDIR"
+        "flow": "Flujo planeado",
+        "decisions": "Decisiones de diseño",
+        "results": "Cómo se va a medir"
       },
       "flow": [
         {

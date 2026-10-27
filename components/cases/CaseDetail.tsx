@@ -6,8 +6,7 @@ import type { Messages } from "@/lib/messages";
 import { FlowDiagram } from "./FlowDiagram";
 import { StatusBadge } from "./StatusBadge";
 
-const heading =
-  "font-mono text-[11px] font-medium uppercase tracking-[0.08em] text-text-3";
+const heading = "text-[13px] font-semibold text-text-2";
 
 /** The pieces of one case detail, laid out together by CaseSelector so the
  * whole case fits one screen (columns from 900 px, tabs below). */
@@ -31,21 +30,18 @@ export function caseDetailParts(item: Case, t: Messages["cases"]): CaseParts {
   const head = (
     <header className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
       <div className="flex min-w-0 max-w-[860px] flex-col gap-1.5">
-        <span className="flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-accent">
-          <span>
-            {t.caseLabel} {item.num}
-            {" · "}
+        <span className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
+          <span className="font-semibold text-text">
             <ContentText value={item.title} />
-            {item.context && (
-              <span className="hidden sm:inline">
-                {" · "}
-                <ContentText value={item.context} />
-              </span>
-            )}
           </span>
+          {item.context && (
+            <span className="hidden text-text-3 sm:inline">
+              <ContentText value={item.context} />
+            </span>
+          )}
           {/* The card already shows the status; on phones the room is for the detail. */}
           <span className="hidden sm:inline-flex">
-            <StatusBadge status={item.status} label={item.statusLabel} variant="pill" />
+            <StatusBadge status={item.status} label={item.statusLabel} />
           </span>
         </span>
         <h3
@@ -64,14 +60,14 @@ export function caseDetailParts(item: Case, t: Messages["cases"]): CaseParts {
               href={link.href}
               target="_blank"
               rel="noopener"
-              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-border-strong px-4 font-mono text-[13px] text-text hover:text-white"
+              className="inline-flex min-h-10 items-center justify-center gap-1.5 rounded-control border border-border-strong px-3.5 text-sm font-semibold text-text hover:border-text-3 hover:text-white"
             >
               <ContentText value={link.label} /> <span aria-hidden="true">↗</span>
               <span className="sr-only">{t.opensInNewTab}</span>
             </a>
           ))}
           {item.note && (
-            <span className="inline-flex min-h-10 items-center justify-center rounded-full border border-dashed border-border-strong px-4 font-mono text-xs text-text-muted">
+            <span className="inline-flex min-h-10 items-center justify-center rounded-control border border-dashed border-border-strong px-3.5 text-[13px] text-text-muted">
               <PendingText value={item.note} />
             </span>
           )}
@@ -92,7 +88,7 @@ export function caseDetailParts(item: Case, t: Messages["cases"]): CaseParts {
   const problem = (
     <section className="flex flex-col gap-2">
       <h4 className={heading}>{t.problem}</h4>
-      <p className="text-sm leading-[1.5] text-[#d5d8dd]">
+      <p className="max-w-[62ch] text-sm leading-[1.55] text-text-2">
         <ContentText value={item.problem} />
       </p>
     </section>
@@ -103,23 +99,19 @@ export function caseDetailParts(item: Case, t: Messages["cases"]): CaseParts {
       <h4 className={heading}>
         <ContentText value={labels.decisions} />
       </h4>
-      <ol className="flex flex-col gap-2.5">
-        {item.decisions.map((decision, i) => (
-          <li key={decision.title} className="flex gap-2.5">
-            <span aria-hidden="true" className="shrink-0 font-mono text-xs leading-[1.5] text-accent">
-              {String(i + 1).padStart(2, "0")}
+      {/* Decisions are not a sequence: a plain list, each one on its own rule. */}
+      <ul className="flex flex-col gap-2.5">
+        {item.decisions.map((decision) => (
+          <li key={decision.title} className="flex flex-col gap-0.5 border-l border-border-strong pl-3">
+            <span className="text-sm font-bold">
+              <ContentText value={decision.title} />
             </span>
-            <span className="flex flex-col gap-0.5">
-              <span className="text-sm font-bold">
-                <ContentText value={decision.title} />
-              </span>
-              <span className="text-[13px] leading-[1.45] text-text-3">
-                <ContentText value={decision.text} />
-              </span>
+            <span className="text-[13px] leading-[1.45] text-text-3">
+              <ContentText value={decision.text} />
             </span>
           </li>
         ))}
-      </ol>
+      </ul>
     </section>
   );
 
@@ -168,15 +160,18 @@ export function CaseStack({
   label: string;
 }) {
   return (
-    <ul aria-label={label} className="flex flex-wrap gap-1.5">
-      {stack.map((tech) => (
-        <li
-          key={tech}
-          className="rounded-full border border-border px-2.5 py-1 font-mono text-[11px] text-text-2"
-        >
-          <ContentText value={tech} />
-        </li>
-      ))}
-    </ul>
+    <div className="text-[13px] leading-[1.5] text-text-3">
+      <span aria-hidden="true" className="font-semibold text-text-2">
+        {label}:{" "}
+      </span>
+      <ul aria-label={label} className="inline">
+        {stack.map((tech, i) => (
+          <li key={tech} className="inline">
+            <ContentText value={tech} />
+            {i < stack.length - 1 && ", "}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

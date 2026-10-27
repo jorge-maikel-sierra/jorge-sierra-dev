@@ -1,12 +1,14 @@
 import { AgentBox } from "@/components/agent/AgentBox";
 import { ContentText } from "@/components/ui/ContentText";
+import { StageNode } from "@/components/ui/StageNode";
 import type { Locale } from "@/lib/content/load";
 import type { Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 import { HeroFallback } from "./HeroFallback";
 import { HeroVisual } from "./HeroVisual";
 
-// Colors the last word of each title line: "caos" in chaos, "arquitectura." in accent.
+// Colors the last word of each title line: "caos" in chaos, "arquitectura." in
+// accent. The only accented words on the page: they are the site's two colors.
 function TitleLine({ text, color }: { text: string; color: string }) {
   const cut = text.lastIndexOf(" ") + 1;
   return (
@@ -18,7 +20,7 @@ function TitleLine({ text, color }: { text: string; color: string }) {
 }
 
 const ctaClass =
-  "flex min-h-[52px] items-center justify-between border-b border-[#1c1e22] px-1 text-[17px] font-semibold text-text hover:text-white sm:inline-flex sm:min-h-11 sm:border-0 sm:px-0 sm:text-base sm:underline sm:decoration-[#4a4f57] sm:underline-offset-[6px]";
+  "inline-flex min-h-11 items-center self-start text-base font-semibold text-text underline decoration-underline underline-offset-[6px] hover:text-white hover:decoration-accent";
 
 export function Hero({
   profile,
@@ -52,16 +54,17 @@ export function Hero({
       />
 
       <div className="relative flex flex-1 items-center px-4 pb-10 pt-2 sm:px-[clamp(16px,5vw,72px)] sm:pb-[150px] sm:pt-6">
-        <div data-hero-content className="flex w-full max-w-[640px] flex-col gap-[22px] sm:gap-7">
-          <p className="inline-flex items-center gap-2.5 self-start rounded-full border border-border bg-[rgba(7,8,10,0.7)] px-3 py-2 font-mono text-[11px] uppercase tracking-[0.06em] text-text-2 sm:px-3.5 sm:text-xs">
+        <div data-hero-content className="stage flex w-full max-w-[640px] flex-col gap-[22px] sm:gap-7">
+          <p className="inline-flex items-center gap-2.5 self-start text-sm font-medium text-text-2 sm:text-[15px]">
             <span aria-hidden="true" className="size-2 rounded-full bg-accent" />
             <ContentText value={profile.availability} />
           </p>
 
           <h1
             id="hero-title"
-            className="text-[50px] font-extrabold leading-[0.94] tracking-[-0.035em] sm:text-h1"
+            className="relative text-[50px] font-extrabold leading-[0.94] tracking-[-0.035em] sm:text-h1"
           >
+            <StageNode />
             <TitleLine text={hero.titleLine1} color="text-chaos" />
             <br />
             <TitleLine text={hero.titleLine2} color="text-accent" />
@@ -73,7 +76,7 @@ export function Hero({
 
           {/* Below 640 px the scene lives in its own strip (RF-1.5). */}
           <div className="-mx-4 flex flex-col gap-2.5 sm:hidden">
-            <div className="relative h-[300px] border-y border-[#15171b]">
+            <div className="relative h-[300px] border-y border-hairline">
               <HeroVisual
                 variant="mobile"
                 layers={hero.graphLayers}
@@ -97,15 +100,9 @@ export function Hero({
           <div className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-7 sm:gap-y-1">
             <a href="#casos" className={ctaClass}>
               {t.ctaCases}
-              <span aria-hidden="true" className="sm:hidden">
-                →
-              </span>
             </a>
             <a href="#contacto" className={ctaClass}>
               {t.ctaContact}
-              <span aria-hidden="true" className="sm:hidden">
-                →
-              </span>
             </a>
             <p className="pt-3 font-mono text-xs leading-[1.7] tracking-[0.04em] text-text-muted sm:pt-0">
               <ContentText value={hero.stackLine.join(" · ")} />

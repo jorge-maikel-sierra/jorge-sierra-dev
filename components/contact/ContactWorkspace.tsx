@@ -18,7 +18,7 @@ import { PipelineView } from "./PipelineView";
 const ramp = (value: number, from: number, to: number) =>
   Math.min(1, Math.max(0, (value - from) / (to - from)));
 
-// The contact screen is pinned: scrolling reveals the glass cards (form first,
+// The contact screen is pinned: scrolling reveals the cards (form first,
 // then the pipeline, then the direct channels). Beside each other from 900 px,
 // one at a time (crossfading in the same spot) on phones. Without motion
 // everything is simply there.
@@ -186,12 +186,7 @@ export function ContactWorkspace({
         ref={box}
         className="relative flex flex-col overflow-hidden px-4 py-4 sm:px-[clamp(16px,5vw,72px)] sm:py-6"
       >
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-          <span className="cf-blob cf-blob-accent" style={{ left: "-8%", top: "10%" }} />
-          <span className="cf-blob cf-blob-sky" style={{ right: "-10%", top: "25%" }} />
-          <span className="cf-blob cf-blob-chaos" style={{ left: "35%", bottom: "-25%" }} />
-        </div>
-        <div className="relative mx-auto flex min-h-0 w-full max-w-[1280px] flex-1 flex-col gap-3 sm:gap-4">
+        <div className="stage relative mx-auto flex min-h-0 w-full max-w-[1280px] flex-1 flex-col gap-3 sm:gap-4">
           {heading}
           <div className="scene-stage min-h-0 flex-1">
             <div data-slot="form" className="min-h-0 will-change-transform">

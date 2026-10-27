@@ -126,7 +126,7 @@ export function ExperienceStack({
       className="relative"
     >
       <div ref={sticky} className="flex flex-col gap-2.5 overflow-hidden px-4 py-3 sm:px-[clamp(16px,5vw,72px)] sm:py-5">
-        <div className="mx-auto flex min-h-0 w-full max-w-[1280px] flex-1 flex-col gap-2.5 sm:gap-3">
+        <div className="stage mx-auto flex min-h-0 w-full max-w-[1280px] flex-1 flex-col gap-2.5 sm:gap-3">
           {heading}
           <div
             role="group"
@@ -139,7 +139,7 @@ export function ExperienceStack({
                 type="button"
                 aria-pressed={option.id === filter}
                 onClick={() => setFilter(option.id)}
-                className={`min-h-10 shrink-0 whitespace-nowrap rounded-full border px-3.5 font-mono text-xs tracking-[0.04em] sm:px-[18px] sm:text-[13px] ${
+                className={`min-h-10 shrink-0 whitespace-nowrap rounded-control border px-3.5 text-sm font-semibold sm:px-4 ${
                   option.id === filter
                     ? "border-accent bg-accent text-bg"
                     : "border-border-strong bg-transparent text-text"
@@ -186,14 +186,14 @@ export function ExperienceStack({
                       aria-controls={`exp-panel-${card.id}`}
                       onClick={() => choose(i)}
                       onFocus={() => goToRef.current?.(i, "auto")}
-                      className={`flex w-[10.5rem] items-center gap-2 rounded-card border p-2 text-left transition-all duration-300 motion-reduce:transition-none min-[700px]:w-full min-[700px]:gap-3 min-[700px]:p-3 ${
+                      className={`flex w-[10.5rem] items-center gap-2 rounded-card border p-2 text-left transition-colors duration-300 motion-reduce:transition-none min-[700px]:w-full min-[700px]:gap-3 min-[700px]:p-3 ${
                         i === selected
-                          ? "border-accent bg-surface-2 shadow-[0_0_0_1px_var(--accent),0_18px_40px_-20px_rgba(110,240,176,0.45)] min-[700px]:translate-x-1.5"
+                          ? "border-accent bg-surface-2"
                           : "border-border bg-surface hover:border-border-strong"
                       }`}
                     >
                       <span
-                        className={`grid size-9 shrink-0 place-items-center rounded-xl border min-[700px]:size-11 ${
+                        className={`grid size-9 shrink-0 place-items-center rounded-control border min-[700px]:size-11 ${
                           i === selected
                             ? "border-accent bg-accent text-bg"
                             : "border-border-strong bg-bg text-text-2"
@@ -203,16 +203,10 @@ export function ExperienceStack({
                       </span>
                       <span className="flex min-w-0 flex-col gap-0.5">
                         <span
-                          className={`hidden flex-wrap items-center gap-x-2 font-mono text-[10px] uppercase tracking-[0.05em] min-[700px]:flex min-[700px]:text-[11px] ${
-                            card.current ? "text-accent" : "text-text-3"
-                          }`}
+                          className="hidden flex-wrap items-center gap-x-2.5 text-xs text-text-3 min-[700px]:flex"
                         >
                           <span>{card.meta}</span>
-                          {card.current && (
-                            <span data-current-badge="" className="rounded-full bg-accent px-1.5 py-px text-bg">
-                              {labels.current}
-                            </span>
-                          )}
+                          {card.current && <span className="font-semibold text-accent">{labels.current}</span>}
                         </span>
                         <span className="line-clamp-2 text-[13px] font-bold leading-[1.15] text-text min-[700px]:text-base">
                           {card.title}
@@ -225,7 +219,7 @@ export function ExperienceStack({
               </ol>
             </div>
 
-            <div className="min-h-0 overflow-y-auto rounded-[20px] border border-border bg-[radial-gradient(120%_80%_at_0%_0%,rgba(110,240,176,0.07),transparent_55%),var(--surface)] p-4 min-[700px]:p-5">
+            <div className="min-h-0 overflow-y-auto rounded-panel border border-border bg-surface p-4 min-[700px]:p-5">
               <p aria-live="polite" className="sr-only">
                 {cards[selected].announce}
               </p>

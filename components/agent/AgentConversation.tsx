@@ -110,7 +110,7 @@ function AssistantMessage({ message, t }: { message: AgentUIMessage; t: T }) {
                 >
                   <span className="font-semibold text-text">{output.title}</span>
                   <span className="text-text-3">{output.kicker}</span>
-                  <span className="font-mono text-[11px] text-accent">{t.caseCard} →</span>
+                  <span className="text-xs font-semibold text-accent">{t.caseCard}</span>
                 </a>
               ) : null;
             }
@@ -209,7 +209,7 @@ export default function AgentConversation({
       {messages.map((message) =>
         message.role === "user" ? (
           <p key={message.id} className="line-clamp-3 text-sm text-text-3">
-            <span className="font-mono text-[11px] uppercase tracking-[0.08em]">{t.you}: </span>
+            <span className="font-semibold text-text">{t.you}: </span>
             {message.parts.map((part) => (part.type === "text" ? part.text : "")).join("")}
           </p>
         ) : (

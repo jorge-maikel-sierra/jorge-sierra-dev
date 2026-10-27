@@ -116,11 +116,11 @@ test.describe("case studies", () => {
     await scrollTravel(page, 1);
     const panel = page.locator("#case-panel-ai-support-platform");
     await expect(panel).toBeVisible();
-    await expect(panel.getByText("FLUJO PLANEADO")).toBeVisible();
+    await expect(panel.getByText("Flujo planeado")).toBeVisible();
     await openTab(page, "Decisiones");
-    await expect(panel.getByText("DECISIONES DE DISEÑO")).toBeVisible();
+    await expect(panel.getByText("Decisiones de diseño")).toBeVisible();
     await openTab(page, "Resultado");
-    await expect(panel.getByText("CÓMO SE VA A MEDIR")).toBeVisible();
+    await expect(panel.getByText("Cómo se va a medir")).toBeVisible();
     await openTab(page, "Flujo");
     const firstNode = panel.locator("ol").first().locator("li").first();
     await expect(firstNode).toHaveCSS("border-top-style", "dashed");
