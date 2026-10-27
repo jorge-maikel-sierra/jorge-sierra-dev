@@ -3,7 +3,7 @@ import type { MatchReport as Report } from "@/lib/ai/mode";
 import type { Messages } from "@/lib/messages";
 import { inline } from "./AgentMessage";
 
-const heading = "font-mono text-[11px] uppercase tracking-[0.08em] text-text-3";
+const heading = "text-[13px] font-semibold text-text-2";
 
 // §7: fit report without a numeric score. Evidence links to its sources.
 export function MatchReport({

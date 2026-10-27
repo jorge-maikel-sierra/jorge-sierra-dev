@@ -22,6 +22,15 @@ type Labels = {
 
 type Tab = "flow" | "problem" | "decisions" | "results";
 
+// The card's border says how far the system got (docs/design.md §3): solid
+// accent when it is done, dashed while it is being built or only planned.
+const statusBorder: Record<CaseStatus, string> = {
+  done: "border-accent/70",
+  partial: "border-border-strong",
+  building: "border-dashed border-warn/70",
+  soon: "border-dashed border-border",
+};
+
 // Cases as a pinned 3D coverflow with the whole detail on the same screen:
 // cards on top (scroll or click to bring one forward), detail below. Columns on
 // desktop; tabs below 900 px. Without JS or with reduced motion it is a grid
@@ -94,7 +103,7 @@ export function CaseSelector({
           <p aria-live="polite" className="sr-only">
             {announcement}
           </p>
-          <div className="min-h-0 flex-1 overflow-y-auto rounded-[18px] border border-border bg-surface/90 p-4 backdrop-blur-sm min-[900px]:p-5">
+          <div className="min-h-0 flex-1 overflow-y-auto rounded-panel border border-border bg-surface p-4 min-[900px]:p-5">
             {parts.map((part, i) => (
               <div
                 key={cases[i].slug}
@@ -104,7 +113,11 @@ export function CaseSelector({
               >
                 {part.head}
 
-                <div role="tablist" aria-label={labels.selector} className="flex gap-1.5 roomy:hidden">
+                <div
+                  role="tablist"
+                  aria-label={labels.selector}
+                  className="flex gap-1 rounded-control border border-border bg-bg p-1 roomy:hidden"
+                >
                   {tabs.map((item) => (
                     <button
                       key={item.id}
@@ -112,10 +125,8 @@ export function CaseSelector({
                       role="tab"
                       aria-selected={tab === item.id}
                       onClick={() => setTab(item.id)}
-                      className={`min-h-10 flex-1 rounded-full border px-1 font-mono text-[10px] uppercase tracking-[0.02em] ${
-                        tab === item.id
-                          ? "border-accent bg-surface-2 text-accent"
-                          : "border-border text-text-3"
+                      className={`min-h-10 flex-1 rounded-[6px] px-1 text-[13px] font-semibold ${
+                        tab === item.id ? "bg-surface-2 text-text" : "text-text-3 hover:text-text"
                       }`}
                     >
                       {item.label}
@@ -144,17 +155,14 @@ export function CaseSelector({
             aria-pressed={i === selected}
             aria-controls={`case-panel-${item.slug}`}
             onClick={() => choose(i)}
-            className={`group flex h-full w-full flex-col gap-1.5 rounded-card border p-3 text-left shadow-[0_24px_60px_-24px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-colors duration-300 motion-reduce:transition-none ${
+            className={`group flex h-full w-full flex-col gap-1.5 rounded-card border p-3.5 text-left ${statusBorder[item.status]} ${
               i === selected
-                ? "border-accent bg-[rgba(15,17,20,0.9)]"
-                : "border-white/10 bg-[rgba(12,13,16,0.78)] hover:border-border-strong"
+                ? "bg-surface-2 ring-1 ring-text-3 ring-offset-2 ring-offset-bg"
+                : "bg-surface hover:bg-surface-2"
             }`}
           >
-            <span className="flex w-full justify-between gap-3 font-mono text-[11px] uppercase tracking-[0.06em]">
-              <span className="text-accent">{item.num}</span>
-              <span className="text-right text-text-3">{item.type}</span>
-            </span>
-            <span className="text-base font-bold leading-[1.15] tracking-[-0.01em] text-text">
+            <span className="text-[13px] leading-[1.3] text-text-3">{item.type}</span>
+            <span className="text-[17px] font-bold leading-[1.15] tracking-[-0.01em] text-text">
               {item.title}
             </span>
             <span className="mt-auto">{item.statusBadge}</span>

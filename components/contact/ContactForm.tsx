@@ -16,7 +16,7 @@ type FormError = { field: Field | "form"; text: string };
 const FIELD_ORDER: Field[] = ["name", "email", "company", "message"];
 
 const input =
-  "h-11 rounded-control border border-white/10 bg-black/30 px-3.5 text-base text-text placeholder:text-text-faint aria-[invalid=true]:border-warn min-[900px]:h-12";
+  "h-11 rounded-control border border-border bg-bg px-3.5 text-base text-text placeholder:text-text-faint hover:border-border-strong aria-[invalid=true]:border-warn min-[900px]:h-12";
 const label = "text-sm text-text-2";
 
 // Validates on the client with the server's schema, then posts to
@@ -127,10 +127,10 @@ export function ContactForm({
       onSubmit={onSubmit}
       aria-label={t.title}
       aria-busy={sending}
-      className="glass relative flex h-full min-w-0 flex-col gap-3 overflow-y-auto rounded-[20px] p-4 sm:gap-3.5 min-[900px]:p-5"
+      className="panel relative flex h-full min-w-0 flex-col gap-3 overflow-y-auto rounded-panel p-4 sm:gap-3.5 min-[900px]:p-5"
     >
       <fieldset className="flex flex-col gap-2.5">
-        <legend className="mb-2.5 font-mono text-xs uppercase tracking-[0.08em] text-text-3">
+        <legend className="mb-2.5 text-sm font-semibold text-text">
           {t.kindLabel}
         </legend>
         <div
@@ -146,8 +146,8 @@ export function ContactForm({
                 onClick={() => setKind(option)}
                 className={`min-h-11 rounded-control border px-1.5 text-sm font-semibold sm:flex-[1_1_120px] sm:px-3.5 sm:text-[15px] ${
                   active
-                    ? "border-accent bg-white/[0.04] text-accent"
-                    : "border-white/10 bg-black/20 text-text"
+                    ? "border-accent bg-surface-2 text-accent"
+                    : "border-border bg-bg text-text hover:border-border-strong"
                 }`}
               >
                 {t.kinds[option]}
@@ -244,23 +244,9 @@ export function ContactForm({
       <button
         type="submit"
         disabled={sending || locked}
-        className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-xl bg-accent text-[17px] font-bold text-bg disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex h-12 shrink-0 items-center justify-center rounded-control bg-accent text-[17px] font-bold text-bg disabled:cursor-not-allowed disabled:opacity-60"
       >
         {sending ? t.sending : t.send}
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M5 12h14" />
-          <path d="M13 6l6 6-6 6" />
-        </svg>
       </button>
     </form>
   );

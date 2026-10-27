@@ -76,26 +76,35 @@ design-reference/                     # prototipos (solo lectura)
 | `--surface` | `#0B0C0F` | tarjetas y paneles |
 | `--surface-2` | `#0F1114` | nodos, tarjeta seleccionada |
 | `--rail` | `#1F2226` | rieles de líneas de tiempo, separadores sutiles |
-| `--border` | `#2A2D33` | bordes por defecto |
+| `--hairline` | `#1C1E22` | filas dentro de un panel |
+| `--border` | `#2A2D33` | bordes por defecto, riel de etapas |
 | `--border-strong` | `#33373E` | inputs, botones secundarios |
+| `--underline` | `#4A4F57` | subrayado de enlaces de texto |
 | `--text` | `#ECEDEF` | texto principal |
-| `--text-2` | `#B4B9C1` | texto secundario |
-| `--text-3` | `#9BA1AA` | etiquetas mono |
+| `--text-2` | `#B4B9C1` | texto secundario, etiquetas |
+| `--text-3` | `#9BA1AA` | metadatos |
 | `--text-muted` | `#8A9099` | marcadores de datos faltantes |
 | `--text-faint` | `#7A808A` | placeholders, estados pendientes |
 | `--accent` | `#6EF0B0` | orden, éxito, CTA principal |
 | `--chaos` | `#FF9F5A` | caos (hero) |
 | `--warn` | `#FFB27A` | errores de formulario, "en construcción" |
+| `--sky` / `--amber` / `--violet` | `#7CC8FF` / `#FFB86B` / `#C4A1FF` | áreas backend / frontend / cloud (IA usa `--accent`) |
 
 El sitio es oscuro por diseño; no hay tema claro en v1.
 
+**Regla semántica del color:** verde = algo construido o en marcha; naranja = entrada cruda, pendiente o en construcción. Nada se colorea por decoración: no hay gradientes, glows ni vidrio. La única palabra acentuada del sitio es la del H1 ("caos" / "arquitectura"), porque es el concepto.
+
+### Riel de etapas
+La home se lee como un pipeline: entrada (hero y agente) → sistemas (casos) → trayectoria → contacto. Desde 900 px cada sección lleva una línea de 1 px en el centro del margen lateral (`.stage`) y un nodo junto a su encabezado (`StageNode`), que se enciende en `--accent` mientras la sección cruza el centro del viewport. No hay eyebrows numerados: el H2 nombra la etapa.
+
 ### Tipografía
-- **Bricolage Grotesque** (display y cuerpo), pesos 400/500/700/800, `next/font/google` con `display: swap`.
-- **JetBrains Mono** (etiquetas, estados, logs), pesos 400/500.
-- Escala: H1 `clamp(48px, 7.2vw, 104px)` / line-height 0,94 / tracking −0,035em; H2 `clamp(40px, 5.2vw, 72px)`; H3 `clamp(24px, 2.4vw, 48px)`; cuerpo 16–19 px / 1,55; etiquetas mono 11–13 px, tracking 0,06–0,08em, mayúsculas.
+- **Bricolage Grotesque** (display, cuerpo y etiquetas), pesos 400/500/700/800, `next/font/google` con `display: swap`. Etiquetas en sentence case, 13–15 px, sin tracking ni mayúsculas.
+- **JetBrains Mono** solo para salida de máquina: eventos y log del pipeline, traza del agente, estado de la escena 3D, stack line del hero.
+- Escala: H1 `clamp(48px, 7.2vw, 104px)` / line-height 0,94 / tracking −0,035em; H2 de sección `clamp(28px, 3.2vw, 42px)` (las secciones fijadas comparten pantalla); H3 `clamp(24px, 2.4vw, 48px)`; cuerpo 16–19 px / 1,55, líneas ≤ 72 caracteres.
 
 ### Componentes base
-- Radios: 10 (inputs, botones), 12–14 (nodos, tarjetas), 16–20 (paneles), 999 (chips y pills).
+- Radios según jerarquía: 8 (controles), 12 (tarjetas), 16 (paneles). Sin pills.
+- Estructura con información: el borde de una tarjeta de caso dice su estado (sólido verde = terminado, sólido neutro = parcial, punteado naranja = en construcción, punteado tenue = pronto). Numeración solo donde hay secuencia real (trayectoria, pasos del pipeline). `↗` marca solo los enlaces que salen del sitio.
 - Objetivos táctiles ≥ 44 px.
 - `Placeholder`: borde punteado `--border-strong`, texto `--text-muted`. Se usa para todo texto entre corchetes del contenido.
 - `StatusBadge`: `done` → accent, `partial` → text, `building` → warn, `soon` → muted.

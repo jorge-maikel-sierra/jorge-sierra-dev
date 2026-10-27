@@ -155,7 +155,7 @@ export function HeroVisual({
             <button
               type="button"
               onClick={reset}
-              className="min-h-11 rounded-full border border-border-strong bg-[rgba(7,8,10,0.75)] px-3.5 text-[11px] tracking-[0.06em] text-text"
+              className="min-h-11 rounded-control border border-border-strong bg-bg/75 px-3.5 font-sans text-[13px] font-semibold text-text"
             >
               {labels.backToChaos}
             </button>
@@ -200,7 +200,7 @@ export function HeroVisual({
             <button
               type="button"
               onClick={reset}
-              className="min-h-11 rounded-full border border-border-strong px-4 text-xs tracking-[0.06em] text-text hover:border-accent"
+              className="min-h-11 rounded-control border border-border-strong px-4 font-sans text-[13px] font-semibold text-text hover:border-accent"
             >
               {labels.backToChaos}
             </button>

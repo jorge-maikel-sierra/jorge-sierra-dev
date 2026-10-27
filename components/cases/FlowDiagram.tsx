@@ -23,14 +23,14 @@ export function FlowDiagram({
             />
           )}
           <li
-            className={`flex min-w-0 flex-row-reverse items-center justify-between gap-3 rounded-xl border bg-surface-2 px-3 py-1.5 min-[820px]:flex-[1_1_0] min-[820px]:flex-col min-[820px]:items-stretch min-[820px]:justify-start min-[820px]:gap-1 min-[820px]:p-2.5 ${
+            className={`flex min-w-0 flex-row-reverse items-center justify-between gap-3 rounded-control border bg-surface-2 px-3 py-1.5 min-[820px]:flex-[1_1_0] min-[820px]:flex-col min-[820px]:items-stretch min-[820px]:justify-start min-[820px]:gap-1 min-[820px]:p-2.5 ${
               planned ? "border-dashed" : "border-solid"
             } ${node.badge ? "border-accent" : "border-border"}`}
           >
-            <span className="flex items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-[0.08em] text-text-muted min-[820px]:text-[11px]">
+            <span className="flex items-center justify-between gap-2 text-xs font-semibold text-text-muted">
               <ContentText value={node.tag} />
               {node.badge && (
-                <span className="rounded-full bg-accent px-2 py-0.5 font-medium text-bg">
+                <span className="rounded-[4px] bg-accent px-1.5 py-0.5 text-[11px] font-bold text-bg">
                   <ContentText value={node.badge} />
                 </span>
               )}

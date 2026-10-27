@@ -27,7 +27,6 @@
     "pending": "Pending detail:"
   },
   "cases": {
-    "eyebrow": "02 · Case studies",
     "titleLine1": "Real problems,",
     "titleLine2": "visible architecture.",
     "intro": "Five systems, from the most finished to the one on its way. For each: the problem, the data flow and the decisions I made, not just the stack.",
@@ -57,7 +56,6 @@
     }
   },
   "experience": {
-    "eyebrow": "03 · Experience",
     "title": "Over five years turning processes into systems.",
     "intro": "Backend, frontend, cloud and now AI agents. Filter by area to see where I used each one.",
     "filterLabel": "Filter by area",
@@ -79,7 +77,6 @@
     "viewsLabel": "Experience views"
   },
   "contact": {
-    "eyebrow": "04 · Contact",
     "title": "Tell me about your business problem.",
     "intro": "Write to me and watch what happens to your message: it is the same kind of automation I build for others.",
     "kindLabel": "What brings you here?",
@@ -106,7 +103,7 @@
       "tooLong": "It's a bit long: please shorten it."
     },
     "pipelineTitle": "What happens when you send",
-    "pipelineNote": "DEMO · IN PRODUCTION IT RUNS ON n8n",
+    "pipelineNote": "Demo: in production it runs on n8n",
     "waiting": "Waiting",
     "logIdle": "$ waiting for a message…",
     "steps": [

@@ -1,4 +1,5 @@
 import { ContentText } from "@/components/ui/ContentText";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import type { Case, Profile } from "@/lib/content/schema";
 import type { Messages } from "@/lib/messages";
 import { caseDetailParts } from "./CaseDetail";
@@ -20,9 +21,7 @@ export function CasesSection({
     title: <ContentText value={item.title} />,
     type: <ContentText value={item.type} />,
     status: item.status,
-    statusBadge: (
-      <StatusBadge status={item.status} label={item.statusLabel} variant="dot" />
-    ),
+    statusBadge: <StatusBadge status={item.status} label={item.statusLabel} />,
     announce: `${t.caseLabel} ${item.num}: ${item.title}`,
   }));
 
@@ -38,8 +37,9 @@ export function CasesSection({
         href={github}
         target="_blank"
         rel="noopener"
-        className="flex min-h-10 items-center justify-center gap-1 rounded-control border border-border-strong px-4 text-sm font-semibold text-text hover:text-white"
+        className="flex min-h-10 items-center justify-center gap-1 rounded-control border border-border-strong px-4 text-sm font-semibold text-text hover:border-text-3 hover:text-white"
       >
+        {/* ↗ marks the only links that leave the site. */}
         {t.closingGithub} <span aria-hidden="true">↗</span>
         <span className="sr-only">{t.opensInNewTab}</span>
       </a>
@@ -52,26 +52,19 @@ export function CasesSection({
         cases={summaries}
         parts={cases.map((item) => caseDetailParts(item, t))}
         header={
-          <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
-            <div className="flex min-w-0 flex-col gap-1.5">
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-text-3">
-                {t.eyebrow}
-              </p>
-              <h2
-                id="casos-title"
-                className="text-[28px] font-extrabold leading-[1] tracking-[-0.03em] sm:text-[clamp(30px,3.4vw,44px)]"
-              >
-                {t.titleLine1} <span className="text-accent">{t.titleLine2}</span>
-              </h2>
-              <p className="cf-intro max-w-[560px] text-sm leading-[1.45] text-text-2">{t.intro}</p>
-            </div>
-            <div className="hidden items-center gap-5 min-[900px]:flex">
-              <p className="hidden max-w-[300px] text-right text-sm font-semibold leading-[1.3] min-[1600px]:block">
-                {t.closingQuestion}
-              </p>
-              {cta}
-            </div>
-          </div>
+          <SectionHeader
+            id="casos-title"
+            title={`${t.titleLine1} ${t.titleLine2}`}
+            intro={t.intro}
+            aside={
+              <div className="hidden items-center gap-5 min-[900px]:flex">
+                <p className="hidden max-w-[300px] text-right text-sm font-semibold leading-[1.3] min-[1600px]:block">
+                  {t.closingQuestion}
+                </p>
+                {cta}
+              </div>
+            }
+          />
         }
         labels={{
           selector: t.selectorLabel,

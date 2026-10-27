@@ -27,7 +27,6 @@
     "pending": "Dato pendiente:"
   },
   "cases": {
-    "eyebrow": "02 · Casos de estudio",
     "titleLine1": "Problemas reales,",
     "titleLine2": "arquitectura visible.",
     "intro": "Cinco sistemas, del más terminado al que viene en camino. En cada uno: el problema, el flujo de datos y las decisiones que tomé, no solo el stack.",
@@ -57,7 +56,6 @@
     }
   },
   "experience": {
-    "eyebrow": "03 · Trayectoria",
     "title": "Más de cinco años convirtiendo procesos en sistemas.",
     "intro": "Backend, frontend, nube y ahora agentes de IA. Filtra por área para ver dónde usé cada cosa.",
     "filterLabel": "Filtrar por área",
@@ -79,7 +77,6 @@
     "viewsLabel": "Vistas de trayectoria"
   },
   "contact": {
-    "eyebrow": "04 · Contacto",
     "title": "Cuéntame tu problema de negocio.",
     "intro": "Escríbeme y mira lo que pasa con tu mensaje: es el mismo tipo de automatización que construyo para otros.",
     "kindLabel": "¿Qué traes?",
@@ -106,7 +103,7 @@
       "tooLong": "Es un poco largo: acórtalo, por favor."
     },
     "pipelineTitle": "Lo que pasa cuando envías",
-    "pipelineNote": "DEMO · EN PRODUCCIÓN CORRE EN n8n",
+    "pipelineNote": "Demo: en producción corre en n8n",
     "waiting": "En espera",
     "logIdle": "$ esperando un mensaje…",
     "steps": [

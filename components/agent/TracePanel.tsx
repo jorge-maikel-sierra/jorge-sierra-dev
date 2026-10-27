@@ -6,7 +6,7 @@ export function TracePanel({ trace, t }: { trace: TraceData; t: Messages["agent"
   const row = "flex justify-between gap-4 border-b border-rail py-1.5 last:border-0";
   return (
     <details className="group rounded-control border border-border bg-bg/60 font-mono text-xs text-text-2">
-      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-3 uppercase tracking-[0.08em] text-text-3 [&::-webkit-details-marker]:hidden">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-3 text-text-3 [&::-webkit-details-marker]:hidden">
         <span>{t.summary}</span>
         <span aria-hidden="true" className="transition-transform group-open:rotate-90">
           ›
@@ -38,7 +38,7 @@ export function TracePanel({ trace, t }: { trace: TraceData; t: Messages["agent"
           </div>
         </dl>
         <div>
-          <p className="pb-1 uppercase tracking-[0.08em] text-text-3">{t.steps}</p>
+          <p className="pb-1 text-text-3">{t.steps}</p>
           <ol className="flex flex-col gap-0.5">
             {trace.steps.map((step) => (
               <li key={step.name} className="flex justify-between gap-4">
@@ -50,7 +50,7 @@ export function TracePanel({ trace, t }: { trace: TraceData; t: Messages["agent"
         </div>
         {trace.retrieved.length > 0 && (
           <div>
-            <p className="pb-1 uppercase tracking-[0.08em] text-text-3">{t.retrieved}</p>
+            <p className="pb-1 text-text-3">{t.retrieved}</p>
             <ol className="flex flex-col gap-0.5">
               {trace.retrieved.map((source) => (
                 <li key={source.id} className="flex justify-between gap-4">

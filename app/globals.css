@@ -13,9 +13,18 @@
   --text-3: #9ba1aa;
   --text-muted: #8a9099;
   --text-faint: #7a808a;
+  --hairline: #1c1e22;
+  --underline: #4a4f57;
   --accent: #6ef0b0;
   --chaos: #ff9f5a;
   --warn: #ffb27a;
+  /* Area colors (experience stack chips); ia reuses the accent. */
+  --sky: #7cc8ff;
+  --amber: #ffb86b;
+  --violet: #c4a1ff;
+
+  /* Side gutter shared by every section; the stage rail sits in its middle. */
+  --gutter: clamp(16px, 5vw, 72px);
 
   color-scheme: dark;
 }
@@ -27,6 +36,11 @@
   --color-rail: var(--rail);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
+  --color-hairline: var(--hairline);
+  --color-underline: var(--underline);
+  --color-sky: var(--sky);
+  --color-amber: var(--amber);
+  --color-violet: var(--violet);
   --color-text: var(--text);
   --color-text-2: var(--text-2);
   --color-text-3: var(--text-3);
@@ -45,9 +59,10 @@
   --text-h2: clamp(40px, 5.2vw, 72px);
   --text-h3: clamp(24px, 2.4vw, 48px);
 
-  --radius-control: 10px;
-  --radius-card: 14px;
-  --radius-panel: 20px;
+  /* Radius grows with the size of the thing: controls < cards < panels. */
+  --radius-control: 8px;
+  --radius-card: 12px;
+  --radius-panel: 16px;
 }
 
 body {
@@ -70,6 +85,65 @@ html {
   html {
     scroll-behavior: auto;
   }
+}
+
+/* Stage rail: the page reads as one pipeline (entry → systems → experience →
+   contact). Each section's content box carries a 1px line in the middle of the
+   gutter, and its heading carries the node, lit while the section is on screen
+   (StageNode). Desktop only; on phones the gutter is too narrow. */
+.stage-node {
+  display: none;
+}
+@media (min-width: 900px) {
+  .stage {
+    position: relative;
+  }
+  .stage::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--gutter) / -2);
+    width: 1px;
+    /* --rail is too faint on --bg at 1px; the border tone keeps it visible. */
+    background: var(--border);
+    pointer-events: none;
+  }
+  /* The coverflow container holds the gutter as its own padding. */
+  .cf-container.stage::before {
+    left: calc(var(--gutter) / 2);
+  }
+  .stage-node {
+    display: block;
+    position: absolute;
+    /* Centered on the first line of the heading it sits in (em = heading size). */
+    top: 0.4em;
+    left: calc(var(--gutter) / -2);
+    width: 11px;
+    height: 11px;
+    margin-left: -5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 50%;
+    background: var(--bg);
+    transition:
+      background-color 0.3s ease,
+      border-color 0.3s ease;
+  }
+  .stage-node[data-active] {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stage-node {
+    transition: none;
+  }
+}
+
+/* Solid surface for the contact cards (no blur, no glow). */
+.panel {
+  border: 1px solid var(--border);
+  background: var(--surface);
 }
 
 /* FlowDiagram connector with a data pulse (design-reference/Casos.dc.html). */
@@ -177,26 +251,10 @@ html {
   background-color: var(--surface-2);
 }
 
-[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-current-badge],
-[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-current-badge],
-[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-current-badge],
-[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-current-badge] {
-  background-color: transparent;
-  box-shadow: inset 0 0 0 1px var(--border-strong);
-}
-
-[data-filter="ia"] [data-role]:not([data-areas~="ia"]) [data-chip],
-[data-filter="backend"] [data-role]:not([data-areas~="backend"]) [data-chip],
-[data-filter="frontend"] [data-role]:not([data-areas~="frontend"]) [data-chip],
-[data-filter="cloud"] [data-role]:not([data-areas~="cloud"]) [data-chip] {
-  border-color: var(--rail);
-}
-
 [data-filter="ia"] [data-chip="ia"],
 [data-filter="backend"] [data-chip="backend"],
 [data-filter="frontend"] [data-chip="frontend"],
 [data-filter="cloud"] [data-chip="cloud"] {
-  border-color: var(--accent);
   color: var(--accent);
 }
 
@@ -259,7 +317,6 @@ html {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-.cf-blobs,
 .cf-dots {
   display: none;
 }
@@ -318,57 +375,6 @@ html {
   background: var(--accent);
 }
 
-/* Dark theme: low-opacity glows so the glass cards keep AA contrast. */
-.cf.is-3d .cf-blobs {
-  display: block;
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.cf-blob {
-  position: absolute;
-  width: 42vmax;
-  height: 42vmax;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.16;
-  animation: cf-drift 18s ease-in-out infinite alternate;
-}
-.cf-blob:nth-child(1) {
-  left: -10%;
-  top: 5%;
-}
-.cf-blob:nth-child(2) {
-  right: -12%;
-  top: 30%;
-  animation-delay: -6s;
-}
-.cf-blob:nth-child(3) {
-  left: 35%;
-  bottom: -25%;
-  animation-delay: -12s;
-}
-.cf-blob-accent {
-  background: var(--accent);
-}
-.cf-blob-chaos {
-  background: var(--chaos);
-}
-.cf-blob-sky {
-  background: #7cc8ff;
-}
-@keyframes cf-drift {
-  to {
-    translate: 6% -8%;
-    scale: 1.1;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cf-blob {
-    animation: none;
-  }
-}
-
 /* Section intro: only where a one-screen section has height to spare. */
 .cf-intro,
 .tall-only {
@@ -381,16 +387,7 @@ html {
   }
 }
 
-/* Contact scene: transparent glass cards over soft glows (components/contact). */
-.glass {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.045);
-  -webkit-backdrop-filter: blur(18px) saturate(1.2);
-  backdrop-filter: blur(18px) saturate(1.2);
-  box-shadow:
-    0 24px 60px -28px rgba(0, 0, 0, 0.9),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
+/* Contact scene (components/contact). */
 .scene-stage {
   display: grid;
   gap: 1rem;

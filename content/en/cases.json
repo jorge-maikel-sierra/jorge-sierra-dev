@@ -306,9 +306,9 @@
       "kicker": "A support agent that classifies, answers and acts",
       "problem": "A platform that receives support tickets, classifies them by topic and urgency, answers with RAG over a knowledge base and takes actions with tool calling. When the agent is not sure, it escalates to a human.",
       "labels": {
-        "flow": "PLANNED FLOW",
-        "decisions": "DESIGN DECISIONS",
-        "results": "HOW IT WILL BE MEASURED"
+        "flow": "Planned flow",
+        "decisions": "Design decisions",
+        "results": "How it will be measured"
       },
       "flow": [
         {

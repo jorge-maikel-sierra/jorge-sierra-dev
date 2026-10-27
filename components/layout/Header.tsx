@@ -33,7 +33,7 @@ export function Header({ locale }: { locale: Locale }) {
         >
           <span
             aria-hidden="true"
-            className="flex size-9 items-center justify-center rounded-control border border-border-strong font-mono text-[13px] font-medium sm:size-10 sm:text-sm"
+            className="flex size-9 items-center justify-center rounded-control border border-border-strong text-[13px] font-bold sm:size-10 sm:text-sm"
           >
             {initials(name)}
           </span>
@@ -44,7 +44,7 @@ export function Header({ locale }: { locale: Locale }) {
 
         <nav
           aria-label={nav.label}
-          className="hidden flex-wrap items-center gap-x-7 gap-y-1 font-mono text-[13px] tracking-[0.04em] sm:flex"
+          className="hidden flex-wrap items-center gap-x-7 gap-y-1 text-[15px] font-medium sm:flex"
         >
           {items.map((item) => (
             <a
@@ -61,7 +61,7 @@ export function Header({ locale }: { locale: Locale }) {
             lang={language.hrefLang}
             aria-label={language.title}
             title={language.title}
-            className="rounded-full border border-border-strong px-3.5 py-3 text-text hover:border-accent hover:text-white"
+            className="rounded-control border border-border-strong px-3.5 py-2.5 text-text hover:border-accent hover:text-white"
           >
             {language.label}
           </a>

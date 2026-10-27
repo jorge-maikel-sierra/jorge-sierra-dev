@@ -36,16 +36,13 @@ export function PipelineView({
   return (
     <section
       aria-labelledby="pipeline-title"
-      className="glass flex h-full min-w-0 flex-col gap-3 overflow-y-auto rounded-[20px] p-4 min-[900px]:p-5"
+      className="panel flex h-full min-w-0 flex-col gap-3 overflow-y-auto rounded-panel p-4 min-[900px]:p-5"
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3
-          id="pipeline-title"
-          className="font-mono text-[11px] font-normal uppercase tracking-[0.08em] text-text-3 sm:text-xs"
-        >
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h3 id="pipeline-title" className="text-base font-bold text-text">
           {t.pipelineTitle}
         </h3>
-        <p className="font-mono text-[10px] tracking-[0.06em] text-text-3 sm:text-[11px]">
+        <p className="text-xs text-text-3">
           {t.pipelineNote}
         </p>
       </div>
@@ -101,7 +98,7 @@ export function PipelineView({
       <div
         role="log"
         aria-live="polite"
-        className="mt-auto flex min-h-[84px] flex-col gap-1 rounded-xl border border-white/10 bg-black/40 px-4 py-3 font-mono text-xs leading-[1.6]"
+        className="mt-auto flex min-h-[84px] flex-col gap-1 rounded-control border border-border bg-bg px-4 py-3 font-mono text-xs leading-[1.6]"
       >
         {state.status === "idle" && <span className="text-text-3">{t.logIdle}</span>}
         {state.done.map((step) => (
@@ -120,7 +117,7 @@ export function PipelineView({
         <button
           type="button"
           onClick={onAgain}
-          className="min-h-11 rounded-full border border-border-strong font-mono text-xs uppercase tracking-[0.06em] text-text"
+          className="min-h-11 rounded-control border border-border-strong text-sm font-semibold text-text hover:border-text-3"
         >
           {t.sendAnother}
         </button>

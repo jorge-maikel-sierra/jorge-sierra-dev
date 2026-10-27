@@ -74,7 +74,7 @@ export function MobileMenu({
         id={panelId}
         aria-label={label}
         hidden={!open}
-        className="flex w-full flex-col rounded-2xl border border-border bg-surface p-1.5 font-mono text-sm tracking-[0.04em] sm:hidden"
+        className="flex w-full flex-col rounded-panel border border-border bg-surface p-1.5 text-[15px] font-medium sm:hidden"
       >
         {items.map((item) => (
           <a
